@@ -11,7 +11,7 @@ export const bgColorStyles = {
 
 export const buttonStyles = {
     primary: "bg-blue-600 text-white hover:bg-rose-600 transition-all duration-300 ease-linear rounded-xl px-4 py-2 drop-shadow-md hover:drop-shadow-2xl",
-    secondary: "bg-emerald-600 text-white hover:bg-indigo-600 transition-all duration-300 ease-linear rounded-xl px-4 py-2 drop-shadow-md hover:drop-shadow-2xl"
+    secondary: "bg-indigo-600 text-white hover:bg-fuchsia-600 transition-all duration-300 ease-linear rounded-xl px-4 py-2 drop-shadow-md hover:drop-shadow-2xl"
 }
 
 export const cardStyles = {
