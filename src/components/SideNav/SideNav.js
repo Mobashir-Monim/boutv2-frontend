@@ -86,12 +86,20 @@ const SideNav = ({ showNav, toggleNav, collapseNav }) => {
 
         <div className="mt-10 lg:mt-0 pl-5 lg:pl-0">
             {navOptions.map((navOpt, navOptIndex) => {
-                return <Link to={navOpt.action} className={`flex flex-row transition-all duration-300 ease-linear`} key={`nav-opt-${navOptIndex}`} onClick={collapseNav}>
-                    <span className={`rounded-full flex cursor-pointer relative p-3 text-center transition-all duration-500 ease-linear`}>
-                        <span className={`material-icons-round my-auto font-bold transition-all duration-300 ease-linear text-white ${navOpt.classses.icon}`}>{navOpt.icon}</span>
-                        <span className={`text-white my-auto transition-all duration-300 ease-linear ${showNav ? "text-[0.8rem] opacity-100 ml-4" : "opacity-0 ml-0 text-[0rem]"} ${navOpt.classses.name}`}>{navOpt.name}</span>
-                    </span>
-                </Link>
+                return <div key={`nav-opt-${navOptIndex}`}>
+                    <Link to={navOpt.action} className={`flex flex-row transition-all duration-300 ease-linear lg:hidden`} onClick={collapseNav}>
+                        <span className={`rounded-full flex cursor-pointer relative p-3 text-center transition-all duration-500 ease-linear`}>
+                            <span className={`material-icons-round my-auto font-bold transition-all duration-300 ease-linear text-white ${navOpt.classses.icon}`}>{navOpt.icon}</span>
+                            <span className={`text-white my-auto transition-all duration-300 ease-linear ${showNav ? "text-[0.8rem] opacity-100 ml-4" : "opacity-0 ml-0 text-[0rem]"} ${navOpt.classses.name}`}>{navOpt.name}</span>
+                        </span>
+                    </Link>
+                    <Link to={navOpt.action} className={`hidden lg:flex flex-row transition-all duration-300 ease-linear`}>
+                        <span className={`rounded-full flex cursor-pointer relative p-3 text-center transition-all duration-500 ease-linear`}>
+                            <span className={`material-icons-round my-auto font-bold transition-all duration-300 ease-linear text-white ${navOpt.classses.icon}`}>{navOpt.icon}</span>
+                            <span className={`text-white my-auto transition-all duration-300 ease-linear ${showNav ? "text-[0.8rem] opacity-100 ml-4" : "opacity-0 ml-0 text-[0rem]"} ${navOpt.classses.name}`}>{navOpt.name}</span>
+                        </span>
+                    </Link>
+                </div>
             })}
         </div>
     </div>
