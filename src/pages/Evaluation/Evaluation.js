@@ -49,10 +49,14 @@ const Evaluation = () => {
                     <PrimaryButton text="Confirm semester" type="submit" />
                 </div>
             </form>
-            <SimpleCard title="Evaluation Admin" width="w-[100%] lg:w-[35%]">
-                <SecondaryButton text={"Dates"} link={"/evaluation/dates"} />
-                <SecondaryButton text={"Questions"} link={"/evaluation/questions"} />
-                <SecondaryButton text={"Analysis"} link={"/evaluation/analysis"} />
+            <SimpleCard title="Evaluation Admin Checklist" width="w-[100%] lg:w-[35%]">
+                <div className="flex flex-row flex-wrap mt-5 gap-5 mx-auto">
+                    <SecondaryButton text={"Set Questions"} link={"/evaluation/questions"} />
+                    <SecondaryButton text={"Set Dates"} link={"/evaluation/dates"} />
+                    <SecondaryButton text={"Set Matrix"} link={"/evaluation/analysis"} />
+                    <SecondaryButton text={"Initiate Collection"} link={"/evaluation/initiate"} />
+                    <SecondaryButton text={"Publish Results"} link={"/evaluation/publish"} />
+                </div>
             </SimpleCard>
         </div>
     </div>
