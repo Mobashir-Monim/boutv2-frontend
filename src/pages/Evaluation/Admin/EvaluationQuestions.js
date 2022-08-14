@@ -245,9 +245,14 @@ const EvaluationQuestions = () => {
             }
         </div>
 
-        <span className={`${buttonStyles.primary} fixed bottom-5 left-[calc(50vw-3.5rem/2)] lg:left-[calc(50vw+50px-3.5rem/2)] rounded-full material-icons-round text-[3rem] !p-[0.25rem] w-[3.5rem] h-[3.5rem] flex flex-col justify-center`} onClick={addQuestion}>
-            add
-        </span>
+        <div className="fixed bg-[#444]/[0.7] bottom-0 dark:bg-[#ccc]/[0.7] w-[100%] h-[10vh] left-0">
+            <span className={`${buttonStyles.primary} fixed bottom-[calc(5vh-3.5rem/2)] left-[calc(50vw-50px-3.5rem/2)] lg:left-[calc(50vw-3.5rem/2)] rounded-full material-icons-round text-[3rem] !p-[0.25rem] w-[3.5rem] h-[3.5rem] flex flex-col justify-center`} onClick={addQuestion}>
+                add
+            </span>
+            <span className={`${buttonStyles.secondary} fixed bottom-[calc(5vh-3.5rem/2)] left-[calc(50vw+50px-3.5rem/2)] lg:left-[calc(50vw+100px-3.5rem/2)] rounded-full material-icons-round text-[3rem] !p-[0.25rem] w-[3.5rem] h-[3.5rem] flex flex-col justify-center`} onClick={addQuestion}>
+                done
+            </span>
+        </div>
     </div>
 }
 
