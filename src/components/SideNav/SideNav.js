@@ -1,15 +1,24 @@
 import { Link } from "react-router-dom";
+import { getUser } from "../../db/local/user";
+import { useAuth } from "../../utils/hooks/useAuth";
 import { transitioner } from "../../utils/styles/styles";
 
 const SideNav = ({ showNav, toggleNav, collapseNav }) => {
-    let widthClasses = "w-[100%] lg:w-[calc(70px+1rem)] h-[70px] lg:h-[100vh]";
-    let arrowClasses = "rotate-90 lg:rotate-0";
+    const user = useAuth();
+    let widthClasses = "!w-[0%] h-0 overflow-hidden lg:h-[100vh]";
+    let arrowClasses = "";
     let arrowContainerClasses = "";
 
-    if (showNav) {
-        widthClasses = "w-[100%] lg:w-[250px] h-[100vh] lg:h-[100vh]";
-        arrowClasses = "-rotate-90 lg:rotate-180";
-        arrowContainerClasses = "lg:mr-auto";
+    if (user.email) {
+        widthClasses = "w-[100%] lg:px-5 lg:w-[calc(70px+1rem)] h-[70px] lg:h-[100vh]";
+        arrowClasses = "rotate-90 lg:rotate-0";
+        arrowContainerClasses = "";
+
+        if (showNav) {
+            widthClasses = "w-[100%] lg:w-[250px] h-[100vh] lg:h-[100vh]";
+            arrowClasses = "-rotate-90 lg:rotate-180";
+            arrowContainerClasses = "lg:mr-auto";
+        }
     }
 
     const navOptions = [
@@ -78,7 +87,7 @@ const SideNav = ({ showNav, toggleNav, collapseNav }) => {
         }
     ];
 
-    return <div className={`${widthClasses} flex flex-col py-2 lg:py-10 gap-1 lg:px-5 z-[50] fixed overflow-hidden bg-blue-700 dark:bg-blue-800 ${transitioner.simple} drop-shadow-lg`}>
+    return <div className={`${widthClasses} flex flex-col py-2 lg:py-10 gap-1 z-[50] fixed overflow-hidden bg-blue-700 dark:bg-blue-800 ${transitioner.simple} drop-shadow-lg`}>
         <div className={`flex flex-row justify-start ${transitioner.simple} ml-6 mt-2 lg:ml-1`}>
             <span className={`bg-white rounded-full cursor-pointer relative p-2 inline text-center material-icons-round font-bold transition-all duration-500 ease-linear ${arrowContainerClasses}`} onClick={toggleNav}>
                 <span className={`material-icons-round font-bold ${transitioner.simple} text-black ${arrowClasses}`} onClick={toggleNav}>arrow_forward_ios</span>
