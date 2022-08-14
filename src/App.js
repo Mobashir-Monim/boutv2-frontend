@@ -5,6 +5,8 @@ import SideNav from "./components/SideNav/SideNav";
 import UnderDevelopment from "./pages/UnderDevelopment/UnderDevelopment";
 import Evaluation from "./pages/Evaluation/Evaluation";
 import NotFound from "./pages/Utilities/NotFound";
+import EvaluationQuestions from "./pages/Evaluation/Admin/EvaluationQuestions";
+import { transitioner } from "./utils/styles/styles";
 
 const App = () => {
     const [sideNavStatus, setSideNavStatus] = useState({ currentRoute: "/", showNav: false });
@@ -22,18 +24,17 @@ const App = () => {
             showNav: false
         });
     }
-    // widthClasses = "w-[100%] lg:w-[20%] lg:max-w-[350px] h-[100vh] lg:h-[100vh]";
 
-
-    return <div className="min-h-[100vh] bg-[#FDFBF9] dark:bg-[#28282B] transition-all duration-300 ease-linear text-black dark:text-white">
+    return <div className={`min-h-[100vh] bg-[#FDFBF9] dark:bg-[#28282B] text-black dark:text-white ${transitioner.simple}`}>
         <Router>
             <SideNav showNav={sideNavStatus.showNav} toggleNav={toggleSideNav} collapseNav={collapseNav} />
-            <div className={`w-[100%] pt-[10vh] md:pt-[5vh] min-h-[100vh] ${sideNavStatus.showNav ? "lg:w-[calc(100vw-250px)]" : "lg:w-[calc(100vw-120px)]"} ml-auto text-black dark:text-white transition-all duration-200 ease-linear`}>
+            <div className={`w-[100%] pt-[10vh] md:pt-[7vh] min-h-[100vh] ${sideNavStatus.showNav ? "lg:w-[calc(100vw-250px)]" : "lg:w-[calc(100vw-120px)]"} ml-auto text-black dark:text-white ${transitioner.simple}`}>
                 <Routes>
                     <Route path="/" element={<UnderDevelopment />} />
                     <Route path="/dashboard" element={<UnderDevelopment />} />
                     <Route path="/profile" element={<UnderDevelopment />} />
                     <Route path="/evaluation" element={<Evaluation />} />
+                    <Route path="/evaluation/questions/:year/:semester" element={<EvaluationQuestions />} />
                     <Route path="/routine" element={<UnderDevelopment />} />
                     <Route path="/course-config" element={<UnderDevelopment />} />
                     <Route path="/obe" element={<UnderDevelopment />} />

@@ -10,8 +10,8 @@ export const bgColorStyles = {
 };
 
 export const buttonStyles = {
-    primary: "bg-blue-600 text-white hover:bg-rose-600 transition-all duration-300 ease-linear rounded-xl px-4 py-2 drop-shadow-md hover:drop-shadow-2xl",
-    secondary: "bg-indigo-600 text-white hover:bg-fuchsia-600 transition-all duration-300 ease-linear rounded-xl px-4 py-2 drop-shadow-md hover:drop-shadow-2xl"
+    primary: "bg-blue-600 text-white hover:bg-rose-600 transition-all duration-300 ease-linear rounded-xl px-4 py-2 drop-shadow-md hover:drop-shadow-2xl cursor-pointer",
+    secondary: "bg-indigo-600 text-white hover:bg-fuchsia-600 transition-all duration-300 ease-linear rounded-xl px-4 py-2 drop-shadow-md hover:drop-shadow-2xl cursor-pointer"
 }
 
 export const cardStyles = {
@@ -20,4 +20,8 @@ export const cardStyles = {
 
 export const modalBg = {
     simple: "w-[100%] lg:w-[calc(100vw-70px+1rem)] h-[calc(100vh-70px)] md:h-[95vh] lg:h-[100vh] top-[70px] left-0 lg:top-0 lg:left-[calc(70px+1rem)] bg-[#232323]/[0.8] z-40 fixed flex flex-col justify-center"
+}
+
+export const transitioner = {
+    simple: "transition-all duration-200 ease-liner"
 }

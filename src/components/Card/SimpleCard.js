@@ -1,5 +1,5 @@
 import CardHeader from "../Headers/CardHeader";
-import { cardStyles } from "../../utils/styles";
+import { cardStyles } from "../../utils/styles/styles";
 
 const SimpleCard = ({ title, children, width }) => {
     return <div className={`${width} ${cardStyles.simple}`}>

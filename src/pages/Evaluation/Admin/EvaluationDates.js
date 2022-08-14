@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import PrimaryButton from "../../../components/Buttons/PrimaryButton";
-import DateInput from "../../../components/FormInputs/DateInput";
+import DateInput from "../../../components/FormInputs/LabeledInputs/DateInput";
 import CardHeader from "../../../components/Headers/CardHeader";
-import { cardStyles, modalBg } from "../../../utils/styles";
+import { cardStyles, modalBg } from "../../../utils/styles/styles";
 
 const EvaluationDates = ({ show, toggleDateModal, setStartDate, setEndDate, startDate }) => {
     const escapeHandler = ({ keyCode }) => {

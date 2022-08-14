@@ -1,4 +1,4 @@
-import { buttonStyles } from "../../utils/styles";
+import { buttonStyles } from "../../utils/styles/styles";
 import BaseButton from "./BaseButton";
 
 const SecondaryButton = ({ text, type = "button", clickFunction, params, link }) => <>

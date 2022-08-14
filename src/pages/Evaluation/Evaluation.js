@@ -1,10 +1,10 @@
 import { useState } from "react";
 import PrimaryButton from "../../components/Buttons/PrimaryButton";
 import SecondaryButton from "../../components/Buttons/SecondaryButton";
-import SelectInput from "../../components/FormInputs/SelectInput";
+import SelectInput from "../../components/FormInputs/LabeledInputs/SelectInput";
 import CardHeader from "../../components/Headers/CardHeader";
 import SimpleCard from "../../components/Card/SimpleCard";
-import { cardStyles } from "../../utils/styles";
+import { cardStyles } from "../../utils/styles/styles";
 import EvaluationDates from "./Admin/EvaluationDates";
 
 const Evaluation = () => {
@@ -75,7 +75,7 @@ const Evaluation = () => {
             </form>
             <SimpleCard title="Evaluation Admin Checklist" width="w-[100%] lg:w-[35%]">
                 <div className="flex flex-row flex-wrap mt-5 justify-between gap-5 mx-auto">
-                    <SecondaryButton text={"Set Questions"} link={"/evaluation/questions"} />
+                    <SecondaryButton text={"Set Questions"} link={`/evaluation/questions/${pageState.evaluationViewForm.year}/${pageState.evaluationViewForm.semester}`} />
                     <SecondaryButton text={"Set Dates"} clickFunction={toggleEvaluationDatesModal} />
                     <SecondaryButton text={"Set Matrix"} link={"/evaluation/analysis"} />
                     <SecondaryButton text={"Initiate Collection"} link={"/evaluation/initiate"} />
