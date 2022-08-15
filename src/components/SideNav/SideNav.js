@@ -16,7 +16,7 @@ const SideNav = ({ showNav, toggleNav, collapseNav }) => {
         arrowContainerClasses = "";
 
         if (showNav) {
-            widthClasses = "w-[100%] lg:w-[250px] h-[100vh] lg:h-[100vh]";
+            widthClasses = "w-[100%] lg:w-[250px] lg:px-5 h-[100vh] lg:h-[100vh]";
             arrowClasses = "-rotate-90 lg:rotate-180";
             arrowContainerClasses = "lg:mr-auto";
         }
