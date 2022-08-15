@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { getUser } from "../../db/local/user";
 import { useAuth } from "../../utils/hooks/useAuth";
 import { transitioner } from "../../utils/styles/styles";
 
