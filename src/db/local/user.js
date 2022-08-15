@@ -1,12 +1,18 @@
-export const getUser = () => {
-    const user = localStorage.getItem("user");
+export const getStoredUser = () => {
+    let user = null;
 
-    if (user) return JSON.parse(user);
+    try {
+        user = JSON.parse(localStorage.getItem("user"));
+        if (user.stsTokenManager.expirationTime < (new Date()).getTime())
+            return null;
 
-    return null;
+        return user;
+    } catch (error) {
+        return null;
+    }
 }
 
-export const setUser = user => {
+export const setStoredUser = user => {
     user = typeof (user) === "string" ? user : JSON.stringify(user);
     localStorage.setItem("user", user);
 }

@@ -1,15 +1,22 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import { transitioner } from "./utils/styles/styles";
+import { app } from "./db/remote/firebase";
 
 import SideNav from "./components/SideNav/SideNav";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+
 import UnderDevelopment from "./pages/UnderDevelopment/UnderDevelopment";
 import Evaluation from "./pages/Evaluation/Evaluation";
 import NotFound from "./pages/Utilities/NotFound";
 import EvaluationQuestions from "./pages/Evaluation/Admin/EvaluationQuestions";
-import { transitioner } from "./utils/styles/styles";
+import Login from "./pages/Auth/Login";
+
+import { useAuth } from "./utils/contexts/AuthContext";
 
 const App = () => {
     const [sideNavStatus, setSideNavStatus] = useState({ currentRoute: "/", showNav: false });
+    const { user } = useAuth();
 
     const toggleSideNav = () => {
         setSideNavStatus({
@@ -26,10 +33,10 @@ const App = () => {
     }
 
     return <div className={`min-h-[100vh] bg-[#FDFBF9] dark:bg-[#28282B] text-black dark:text-white ${transitioner.simple}`}>
-        <Router>
-            <SideNav showNav={sideNavStatus.showNav} toggleNav={toggleSideNav} collapseNav={collapseNav} />
-            <div className={`w-[100%] pt-[10vh] md:pt-[7vh] min-h-[100vh] ${sideNavStatus.showNav ? "lg:w-[calc(100vw-250px)]" : "lg:w-[calc(100vw-120px)]"} ml-auto text-black dark:text-white ${transitioner.simple}`}>
-                <Routes>
+        <SideNav showNav={sideNavStatus.showNav} toggleNav={toggleSideNav} collapseNav={collapseNav} />
+        <div className={`w-[100%] min-h-[100vh] ${sideNavStatus.showNav ? "lg:w-[calc(100vw-250px)]" : "lg:w-[calc(100vw-120px)]"} ${user ? "ml-auto pt-[10vh] md:pt-[7vh]" : "mx-auto"} text-black dark:text-white ${transitioner.simple}`}>
+            <Routes>
+                <Route path="/" element={<ProtectedRoute />}>
                     <Route path="/" element={<UnderDevelopment />} />
                     <Route path="/dashboard" element={<UnderDevelopment />} />
                     <Route path="/profile" element={<UnderDevelopment />} />
@@ -38,10 +45,11 @@ const App = () => {
                     <Route path="/routine" element={<UnderDevelopment />} />
                     <Route path="/course-config" element={<UnderDevelopment />} />
                     <Route path="/obe" element={<UnderDevelopment />} />
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
-            </div>
-        </Router>
+                </Route>
+                <Route path="/login" element={<Login />} />
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+        </div>
     </div>
 }
 
