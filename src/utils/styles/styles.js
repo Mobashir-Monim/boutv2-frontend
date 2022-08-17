@@ -31,4 +31,7 @@ export const inputStyles = {
         input: `outline-none peer px-3 py-2 ${textColorStyles} ${bgColorStyles.contrast} border-b-2 ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`,
         label: `text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 peer-focus:text-orange-500 mt-1 text-right ${transitioner.simple}`
     },
+    minified: {
+        input: `outline-none peer px-3 py-2 ${textColorStyles} ${bgColorStyles.contrast} border-b-[1px] border-r-[0.5px] text-[0.9rem] ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`
+    }
 }
