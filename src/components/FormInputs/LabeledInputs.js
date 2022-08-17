@@ -1,17 +1,17 @@
-import { textColorStyles, bgColorStyles, borderColorStyles, transitioner } from "../../utils/styles/styles";
+import { inputStyles } from "../../utils/styles/styles";
 
 export const DateInput = ({ name, label, onChangeFn, minDate, maxDate, value }) => {
-    return <>
-        <input type="date" name={name} className={`outline-none peer px-3 py-2 ${textColorStyles} ${bgColorStyles.contrast} border-b-2 ${borderColorStyles.simple} hover:border-blue-500 focus:border-blue-500`} value={value} onChange={onChangeFn} min={minDate} max={maxDate} />
-        <p className="text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 mt-1 text-right">{label}</p>
-    </>
+    return <div className="flex flex-col">
+        <input type="date" name={name} className={`${inputStyles.labeled.input}`} value={value} onChange={onChangeFn} min={minDate} max={maxDate} />
+        <p className={`${inputStyles.labeled.label}`}>{label}</p>
+    </div>
 }
 
 export const LineInput = ({ name, label, onChangeFn, value }) => {
-    return <>
-        <input type="text" name={name} className={`outline-none peer px-3 py-2 ${textColorStyles} ${bgColorStyles.contrast} border-b-2 ${borderColorStyles.simple} hover:border-blue-500 focus:border-blue-500`} onChange={onChangeFn} value={value} />
-        <p className="text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 mt-1 text-right">{label}</p>
-    </>
+    return <div className="flex flex-col">
+        <input type="text" name={name} className={`${inputStyles.labeled.input}`} onChange={onChangeFn} value={value} />
+        <p className={`${inputStyles.labeled.label}`}>{label}</p>
+    </div>
 }
 
 export const SelectInput = ({ name, label, options, onChangeFn }) => {
@@ -24,10 +24,10 @@ export const SelectInput = ({ name, label, options, onChangeFn }) => {
     }
 
     return <div className="flex flex-col">
-        <select name={name} className={` peer px-3 py-2 outline-none ${textColorStyles} ${bgColorStyles.contrast} border-b-2 ${borderColorStyles.simple} hover:border-blue-500  focus:border-blue-500`} onChange={onChangeFn}>
+        <select name={name} className={`${inputStyles.labeled.input}`} onChange={onChangeFn}>
             {opts}
         </select>
-        <p className="text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 mt-1 text-right">{label}</p>
+        <p className={`${inputStyles.labeled.label}`}>{label}</p>
     </div>
 }
 
@@ -44,7 +44,7 @@ export const TextInput = ({ label, onChangeFn, value }) => {
     }
 
     return <div className="flex flex-col">
-        <textarea type="text" className={`resize-none outline-none peer px-3 py-2 ${textColorStyles} ${bgColorStyles.contrast} border-b-2 ${borderColorStyles.simple} hover:border-blue-500 focus:border-blue-500 ${transitioner.simple}`} onChange={onChangeFn} onKeyUp={resizeSelf} value={value} />
-        <p className="text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 mt-1 text-right">{label}</p>
+        <textarea type="text" className={`resize-none ${inputStyles.labeled.input}`} onChange={onChangeFn} onKeyUp={resizeSelf} value={value} />
+        <p className={`${inputStyles.labeled.label}`}>{label}</p>
     </div>
 }
