@@ -13,6 +13,7 @@ import EvaluationQuestions from "./pages/Evaluation/Admin/EvaluationQuestions";
 import Login from "./pages/Auth/Login";
 
 import { useAuth } from "./utils/contexts/AuthContext";
+import { EvaluationInstanceProvider } from "./utils/contexts/EvaluationContext";
 
 const App = () => {
     const [sideNavStatus, setSideNavStatus] = useState({ currentRoute: "/", showNav: false });
@@ -40,8 +41,10 @@ const App = () => {
                     <Route path="/" element={<UnderDevelopment />} />
                     <Route path="/dashboard" element={<UnderDevelopment />} />
                     <Route path="/profile" element={<UnderDevelopment />} />
-                    <Route path="/evaluation" element={<Evaluation />} />
-                    <Route path="/evaluation/questions/:year/:semester" element={<EvaluationQuestions />} />
+                    <Route path="/" element={<EvaluationInstanceProvider />}>
+                        <Route path="/evaluation" element={<Evaluation />} />
+                        <Route path="/evaluation/questions" element={<EvaluationQuestions />} />
+                    </Route>
                     <Route path="/routine" element={<UnderDevelopment />} />
                     <Route path="/course-config" element={<UnderDevelopment />} />
                     <Route path="/obe" element={<UnderDevelopment />} />

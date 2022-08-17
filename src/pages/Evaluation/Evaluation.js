@@ -1,65 +1,177 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../utils/contexts/AuthContext";
+import { getEvaluationInstance, setEvaluationInstance } from "../../db/remote/evaluation";
+import { cardStyles } from "../../utils/styles/styles";
+import { deepCopy } from "@firebase/util";
+import { useEvaluationInstance } from "../../utils/contexts/EvaluationContext";
+
 import PrimaryButton from "../../components/Buttons/PrimaryButton";
 import SecondaryButton from "../../components/Buttons/SecondaryButton";
 import SelectInput from "../../components/FormInputs/LabeledInputs/SelectInput";
 import CardHeader from "../../components/Headers/CardHeader";
 import SimpleCard from "../../components/Card/SimpleCard";
-import { cardStyles } from "../../utils/styles/styles";
 import EvaluationDates from "./Admin/EvaluationDates";
+import LineInput from "../../components/FormInputs/LabeledInputs/LineInput";
 
 const Evaluation = () => {
-    const years = Array((new Date()).getUTCFullYear() - 2022 + 1).fill().map((_, idx) => (new Date()).getUTCFullYear() + idx);
+    const { user } = useAuth();
+    const { evaluationInstance, storeEvaluationInstance } = useEvaluationInstance();
+    const years = Array((new Date()).getUTCFullYear() - 2022 + 1).fill().map((_, idx) => `${(new Date()).getUTCFullYear() + idx}`);
     const semesters = ["Spring", "Summer", "Fall"];
 
     const [pageState, setPageState] = useState({
-        evaluationViewForm: { year: years[0], semester: semesters[0] },
-        evaluationViewDates: { show: false, start: (new Date()).toISOString().split("T")[0], end: null }
+        year: years[0],
+        semester: semesters[0],
+        dates: { show: false, start: (new Date()).toISOString().split("T")[0], end: null },
+        entity: "CSE",
+        initiated: false,
+        published: false,
+        id: null,
     });
 
-    const toggleEvaluationDatesModal = (show) => {
-        show = typeof (show) === "boolean" ? show : !pageState.evaluationViewDates.show;
-        setPageState({
-            ...pageState,
-            evaluationViewDates: { ...pageState.evaluationViewDates, show: show }
-        })
+    const fetchEvaluationInstance = async () => {
+        if (semesters.includes(pageState.semester) && years.includes(pageState.year)) {
+            const pageStateClone = deepCopy(pageState);
+            let [evaluationInstance, id] = await getEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity });
+            if (!id) {
+                await setEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity, initiated: false, published: false, start: "", end: "" });
+                [evaluationInstance, id] = await getEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity });
+            }
+
+            pageStateClone.dates.start = evaluationInstance.start;
+            pageStateClone.dates.end = evaluationInstance.end;
+            pageStateClone.initiated = evaluationInstance.initiated;
+            pageStateClone.published = evaluationInstance.published;
+            pageStateClone.id = id;
+
+            storeEvaluationInstance(pageStateClone);
+            setPageState(pageStateClone);
+        } else {
+            alert("Please select a valid year and semester");
+        }
     }
 
-    const fetchEvaluationSemesterData = event => {
-        alert("Feature not complete yet")
+    const toggleEvaluationDatesModal = (show) => {
+        show = typeof (show) === "boolean" ? show : !pageState.dates.show;
+        const pageStateClone = deepCopy(pageState);
+        pageStateClone.dates.show = show;
+
+        setPageState(pageStateClone);
+    }
+
+    const fetchEvaluationSemesterData = async event => {
+        await fetchEvaluationInstance();
         event.preventDefault();
     }
 
     const selectEvaluationSemester = event => {
-        setPageState({
-            ...pageState,
-            evaluationViewForm: { ...pageState.evaluationViewForm, semester: event.target.value }
-        })
+        const pageStateClone = deepCopy(pageState);
+        pageStateClone.semester = event.target.value;
+
+        storeEvaluationInstance(pageStateClone);
+
+        setPageState(pageStateClone);
     }
 
     const selectEvaluationYear = event => {
-        setPageState({
-            ...pageState,
-            evaluationViewForm: { ...pageState.evaluationViewForm, year: event.target.value }
-        })
+        const pageStateClone = deepCopy(pageState);
+        pageStateClone.year = event.target.value;
+
+        storeEvaluationInstance(pageStateClone);
+
+        setPageState(pageStateClone);
     }
 
     const setStartDate = event => {
-        setPageState({
-            ...pageState,
-            evaluationViewDates: { ...pageState.evaluationViewDates, start: event.target.value }
-        })
+        const pageStateClone = deepCopy(pageState);
+        pageStateClone.dates.start = event.target.value;
+
+        setPageState(pageStateClone);
     }
 
     const setEndDate = event => {
-        setPageState({
-            ...pageState,
-            evaluationViewDates: { ...pageState.evaluationViewDates, end: event.target.value }
-        })
+        const pageStateClone = deepCopy(pageState);
+        pageStateClone.dates.end = event.target.value;
+
+        setPageState(pageStateClone);
     }
 
+    const setEntity = event => {
+        const pageStateClone = deepCopy(pageState);
+        pageStateClone.entity = event.target.value;
+
+        storeEvaluationInstance(pageStateClone);
+
+        setPageState(pageStateClone);
+    }
+
+    const toggleInitializedState = event => {
+        const pageStateClone = deepCopy(pageState);
+        pageStateClone.initiated = !pageStateClone.initiated;
+        pageStateClone.published = false;
+
+        setPageState(pageStateClone);
+    }
+
+    const togglePublishedState = event => {
+        if ((new Date()).getTime() > (new Date(`${pageState.dates.end} 11:59:59 PM`)).getTime() && pageState.initiated) {
+            const pageStateClone = deepCopy(pageState);
+            pageStateClone.published = !pageStateClone.published;
+
+            setPageState(pageStateClone);
+        } else {
+            alert(`Evaluation collection must be over before publishing results`);
+        }
+    }
+
+    const getFormattedEvaluationObject = () => {
+        return {
+            year: pageState.year,
+            semester: pageState.semester,
+            start: pageState.dates.start,
+            end: pageState.dates.end,
+            entity: pageState.entity,
+            initiated: pageState.initiated,
+            published: pageState.published,
+            id: pageState.id,
+        }
+    }
+
+    const saveEvaluationSettings = async () => {
+        await setEvaluationInstance(getFormattedEvaluationObject());
+    }
+
+    const entityControl = <LineInput label="Evaluation Entity" onChangeFn={setEntity} value={pageState.entity} />;
+
+    const evalAdminControls = <SimpleCard title="Evaluation Admin Checklist" width="w-[100%] lg:w-[35%]">
+        <div className="flex flex-col flex-wrap mt-5 justify-between gap-3 mx-auto">
+            <div className="flex flex-row w-[100%]">
+                <SecondaryButton text={"Set Questions"} customStyle="w-[50%] !rounded-r-none" link={`/evaluation/questions`} />
+                <SecondaryButton text={"Set Dates"} customStyle="w-[50%] !rounded-l-none" clickFunction={toggleEvaluationDatesModal} />
+            </div>
+            <div className="flex flex-row w-[100%]">
+                <SecondaryButton customStyle="w-[50%] !rounded-r-none" text={"Set Matrix"} link={"/evaluation/analysis"} />
+                <SecondaryButton customStyle="w-[50%] !rounded-l-none" text={`${pageState.published ? "Unpublish Form" : "Publish Form"}`} clickFunction={toggleInitializedState} />
+            </div>
+            <div className="flex flex-row w-[100%]">
+                <SecondaryButton customStyle="w-[50%] !rounded-r-none" text={`${pageState.published ? "Unpublish Results" : "Publish Results"}`} clickFunction={togglePublishedState} />
+                <SecondaryButton customStyle="w-[50%] !rounded-l-none" text={"Save Settings"} clickFunction={saveEvaluationSettings} />
+            </div>
+        </div>
+    </SimpleCard>;
+
+    const evaluationDatesModal = <EvaluationDates
+        show={pageState.dates.show}
+        toggleDateModal={toggleEvaluationDatesModal}
+        startDate={pageState.dates.start}
+        endDate={pageState.dates.end}
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
+    />;
+
     return <div className="w-[90%] mx-auto min-h-[95vh]">
-        <div className="flex flex-col md:flex-row gap-y-10 md:justify-between">
-            <form className={`w-[100%] lg:w-[60%] ${cardStyles.simple}`} onSubmit={fetchEvaluationSemesterData}>
+        <div className="flex flex-col lg:flex-row gap-y-10 md:justify-between">
+            <div className={`w-[100%] lg:w-[60%] ${cardStyles.simple}`}>
                 <CardHeader title="Select evaluation semester" />
                 <div className="flex flex-col mt-5 md:flex-row w-[100%] justify-between">
                     <div className="flex flex-col text-left md:w-[47%]">
@@ -69,27 +181,18 @@ const Evaluation = () => {
                         <SelectInput name={"semester"} label={"Evaluation Semester"} options={semesters} onChangeFn={selectEvaluationSemester} />
                     </div>
                 </div>
-                <div className="text-right mt-5">
-                    <PrimaryButton text="Confirm semester" type="submit" />
+                <div className="text-right flex flex-col md:flex-row mt-5 gap-5 justify-between">
+                    <div className="flex flex-col w-[100%] md:w-[50%]">
+                        {user.email === "mobashir.monim@bracu.ac.bd" ? entityControl : <></>}
+                    </div>
+                    <div className="flex flex-col w-[100%] md:w-[30%] my-auto">
+                        <PrimaryButton text="Confirm semester" type="button" clickFunction={fetchEvaluationSemesterData} />
+                    </div>
                 </div>
-            </form>
-            <SimpleCard title="Evaluation Admin Checklist" width="w-[100%] lg:w-[35%]">
-                <div className="flex flex-row flex-wrap mt-5 justify-between gap-5 mx-auto">
-                    <SecondaryButton text={"Set Questions"} link={`/evaluation/questions/${pageState.evaluationViewForm.year}/${pageState.evaluationViewForm.semester}`} />
-                    <SecondaryButton text={"Set Dates"} clickFunction={toggleEvaluationDatesModal} />
-                    <SecondaryButton text={"Set Matrix"} link={"/evaluation/analysis"} />
-                    <SecondaryButton text={"Initiate Collection"} link={"/evaluation/initiate"} />
-                    <SecondaryButton text={"Publish Results"} link={"/evaluation/publish"} />
-                </div>
-            </SimpleCard>
+            </div>
+            {user.email === "mobashir.monim@bracu.ac.bd" ? evalAdminControls : <></>}
         </div>
-        <EvaluationDates
-            show={pageState.evaluationViewDates.show}
-            toggleDateModal={toggleEvaluationDatesModal}
-            startDate={pageState.evaluationViewDates.start}
-            setStartDate={setStartDate}
-            setEndDate={setEndDate}
-        />
+        {user.email === "mobashir.monim@bracu.ac.bd" ? evaluationDatesModal : <></>}
     </div>
 }
 

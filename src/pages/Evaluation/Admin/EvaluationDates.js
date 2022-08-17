@@ -4,7 +4,7 @@ import DateInput from "../../../components/FormInputs/LabeledInputs/DateInput";
 import CardHeader from "../../../components/Headers/CardHeader";
 import { cardStyles, modalBg } from "../../../utils/styles/styles";
 
-const EvaluationDates = ({ show, toggleDateModal, setStartDate, setEndDate, startDate }) => {
+const EvaluationDates = ({ show, toggleDateModal, setStartDate, setEndDate, startDate, endDate }) => {
     const escapeHandler = ({ keyCode }) => {
         if (keyCode === 27) { toggleDateModal(false); }
     }
@@ -25,6 +25,7 @@ const EvaluationDates = ({ show, toggleDateModal, setStartDate, setEndDate, star
                         label={"Evaluation Start Date"}
                         onChangeFn={setStartDate}
                         minDate={(new Date()).toISOString().split("T")[0]}
+                        value={startDate}
                     />
                 </div>
                 <div className="flex flex-col text-left md:w-[47%]">
@@ -33,12 +34,13 @@ const EvaluationDates = ({ show, toggleDateModal, setStartDate, setEndDate, star
                         label={"Evaluation End Date"}
                         onChangeFn={setEndDate}
                         minDate={startDate}
+                        value={endDate ? endDate : startDate}
                     />
                 </div>
             </div>
-            <div className="text-right mt-5">
+            {/* <div className="text-right mt-5">
                 <PrimaryButton text={"Confirm Dates"} />
-            </div>
+            </div> */}
         </div>
     </div>
 }
