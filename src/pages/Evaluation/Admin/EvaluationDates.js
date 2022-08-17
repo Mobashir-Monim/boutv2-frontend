@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import PrimaryButton from "../../../components/Buttons/PrimaryButton";
-import DateInput from "../../../components/FormInputs/LabeledInputs/DateInput";
+import { DateInput } from "../../../components/FormInputs/LabeledInputs";
 import CardHeader from "../../../components/Headers/CardHeader";
 import { cardStyles, modalBg } from "../../../utils/styles/styles";
 

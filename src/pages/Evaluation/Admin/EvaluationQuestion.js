@@ -1,6 +1,6 @@
-import TextInput from "../../../components/FormInputs/LabeledInputs/TextInput";
-import LineInput from "../../../components/FormInputs/LabeledInputs/LineInput";
-import SelectInput from "../../../components/FormInputs/LabeledInputs/SelectInput";
+import { TextInput } from "../../../components/FormInputs/LabeledInputs";
+import { LineInput } from "../../../components/FormInputs/LabeledInputs";
+import { SelectInput } from "../../../components/FormInputs/LabeledInputs";
 
 import { cardStyles } from "../../../utils/styles/styles";
 import { transitioner } from "../../../utils/styles/styles";

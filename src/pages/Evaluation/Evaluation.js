@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "../../utils/contexts/AuthContext";
 import { getEvaluationInstance, setEvaluationInstance } from "../../db/remote/evaluation";
 import { cardStyles } from "../../utils/styles/styles";
@@ -7,15 +7,15 @@ import { useEvaluationInstance } from "../../utils/contexts/EvaluationContext";
 
 import PrimaryButton from "../../components/Buttons/PrimaryButton";
 import SecondaryButton from "../../components/Buttons/SecondaryButton";
-import SelectInput from "../../components/FormInputs/LabeledInputs/SelectInput";
+import { SelectInput } from "../../components/FormInputs/LabeledInputs";
 import CardHeader from "../../components/Headers/CardHeader";
 import SimpleCard from "../../components/Card/SimpleCard";
 import EvaluationDates from "./Admin/EvaluationDates";
-import LineInput from "../../components/FormInputs/LabeledInputs/LineInput";
+import { LineInput } from "../../components/FormInputs/LabeledInputs";
 
 const Evaluation = () => {
     const { user } = useAuth();
-    const { evaluationInstance, storeEvaluationInstance } = useEvaluationInstance();
+    const { storeEvaluationInstance } = useEvaluationInstance();
     const years = Array((new Date()).getUTCFullYear() - 2022 + 1).fill().map((_, idx) => `${(new Date()).getUTCFullYear() + idx}`);
     const semesters = ["Spring", "Summer", "Fall"];
 

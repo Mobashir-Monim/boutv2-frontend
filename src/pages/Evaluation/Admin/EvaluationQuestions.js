@@ -7,7 +7,7 @@ import { useAuth } from "../../../utils/contexts/AuthContext";
 import { getEvlauationQuestions, setEvaluationQuestions } from "../../../db/remote/evaluation";
 
 import SimpleCard from "../../../components/Card/SimpleCard";
-import SelectInput from "../../../components/FormInputs/LabeledInputs/SelectInput";
+import { SelectInput } from "../../../components/FormInputs/LabeledInputs";
 
 import EvaluationQuestion from "./EvaluationQuestion";
 
