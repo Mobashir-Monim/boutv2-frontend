@@ -35,3 +35,8 @@ export const inputStyles = {
         input: `outline-none peer px-3 py-2 ${textColorStyles} ${bgColorStyles.contrast} border-b-[1px] border-r-[0.5px] text-[0.9rem] ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`
     }
 }
+
+export const pageLayoutStyles = {
+    scrollable: "w-[90%] mx-auto min-h-[calc(100vh-70px-1rem)] lg:min-h-[calc(100vh-1.25rem)]",
+    fixed: "w-[100%] h-[calc(100vh-70px-1rem)] lg:h-[calc(100vh-1.25rem)]"
+}

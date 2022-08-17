@@ -14,6 +14,7 @@ import Login from "./pages/Auth/Login";
 
 import { useAuth } from "./utils/contexts/AuthContext";
 import { EvaluationInstanceProvider } from "./utils/contexts/EvaluationContext";
+import CourseConfig from "./pages/CourseConfig/CourseConfig";
 
 const App = () => {
     const [sideNavStatus, setSideNavStatus] = useState({ currentRoute: "/", showNav: false });
@@ -35,7 +36,7 @@ const App = () => {
 
     return <div className={`min-h-[100vh] bg-[#FDFBF9] dark:bg-[#28282B] text-black dark:text-white ${transitioner.simple}`}>
         <SideNav showNav={sideNavStatus.showNav} toggleNav={toggleSideNav} collapseNav={collapseNav} />
-        <div className={`w-[100%] min-h-[100vh] ${sideNavStatus.showNav ? "lg:w-[calc(100vw-250px)]" : "lg:w-[calc(100vw-120px)]"} ${user ? "ml-auto pt-[10vh] md:pt-[7vh]" : "mx-auto"} text-black dark:text-white ${transitioner.simple}`}>
+        <div className={`w-[100%] min-h-[100vh] ${sideNavStatus.showNav ? "lg:w-[calc(100vw-250px)]" : "lg:w-[calc(100vw-70px-1rem)]"} ${user ? "lg:ml-auto pt-[calc(70px+1rem)] lg:pt-5" : "lg:mx-auto"} text-black dark:text-white ${transitioner.simple}`}>
             <Routes>
                 <Route path="/" element={<ProtectedRoute />}>
                     <Route path="/" element={<UnderDevelopment />} />
@@ -46,7 +47,7 @@ const App = () => {
                         <Route path="/evaluation/questions" element={<EvaluationQuestions />} />
                     </Route>
                     <Route path="/routine" element={<UnderDevelopment />} />
-                    <Route path="/course-config" element={<UnderDevelopment />} />
+                    <Route path="/course-config" element={<CourseConfig />} />
                     <Route path="/obe" element={<UnderDevelopment />} />
                 </Route>
                 <Route path="/login" element={<Login />} />

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../../utils/contexts/AuthContext";
 import { getEvaluationInstance, setEvaluationInstance } from "../../db/remote/evaluation";
-import { cardStyles } from "../../utils/styles/styles";
+import { cardStyles, pageLayoutStyles } from "../../utils/styles/styles";
 import { deepCopy } from "@firebase/util";
 import { useEvaluationInstance } from "../../utils/contexts/EvaluationContext";
 
@@ -169,7 +169,7 @@ const Evaluation = () => {
         setEndDate={setEndDate}
     />;
 
-    return <div className="w-[90%] mx-auto min-h-[95vh]">
+    return <div className={`${pageLayoutStyles.scrollable}`}>
         <div className="flex flex-col lg:flex-row gap-y-10 md:justify-between">
             <div className={`w-[100%] lg:w-[60%] ${cardStyles.simple}`}>
                 <CardHeader title="Select evaluation semester" />
