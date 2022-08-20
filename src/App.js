@@ -15,6 +15,7 @@ import Login from "./pages/Auth/Login";
 import { useAuth } from "./utils/contexts/AuthContext";
 import { EvaluationInstanceProvider } from "./utils/contexts/EvaluationContext";
 import CourseConfig from "./pages/CourseConfig/CourseConfig";
+import EvaluationForm from "./pages/Evaluation/EvaluationForm";
 
 const App = () => {
     const [sideNavStatus, setSideNavStatus] = useState({ currentRoute: "/", showNav: false });
@@ -47,10 +48,11 @@ const App = () => {
                         <Route path="/evaluation/questions" element={<EvaluationQuestions />} />
                     </Route>
                     <Route path="/routine" element={<UnderDevelopment />} />
-                    <Route path="/course-config" element={<CourseConfig />} />
+                    <Route path="/course-config" element={<UnderDevelopment />} />
                     <Route path="/obe" element={<UnderDevelopment />} />
                 </Route>
                 <Route path="/login" element={<Login />} />
+                <Route path="/evaluation-form/:code" element={<EvaluationForm />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </div>

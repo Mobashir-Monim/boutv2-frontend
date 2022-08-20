@@ -1,7 +1,11 @@
 export const textColorStyles = "text-black dark:text-white";
 
 export const borderColorStyles = {
-    simple: "border-black dark:border-white"
+    simple: "border-black dark:border-white",
+}
+
+export const transitioner = {
+    simple: "transition-all duration-200 ease-liner"
 }
 
 export const bgColorStyles = {
@@ -15,15 +19,12 @@ export const buttonStyles = {
 }
 
 export const cardStyles = {
-    simple: `p-5 drop-shadow-lg ${textColorStyles} ${bgColorStyles.contrast}`
+    simple: `p-5 drop-shadow-lg ${textColorStyles} ${bgColorStyles.contrast}`,
+    question: `px-10 py-10 drop-shadow-lg ${textColorStyles} ${bgColorStyles.contrast} rounded-xl focus:drop-shadow-[0_0_5px_rgba(37,99,235,1)] hover:drop-shadow-[0_0_5px_rgba(37,99,235,1)] ${transitioner.simple}`,
 }
 
 export const modalBg = {
     simple: "w-[100%] lg:w-[calc(100vw-70px+1rem)] h-[calc(100vh-70px)] md:h-[95vh] lg:h-[100vh] top-[70px] left-0 lg:top-0 lg:left-[calc(70px+1rem)] bg-[#232323]/[0.8] z-40 fixed flex flex-col justify-center"
-}
-
-export const transitioner = {
-    simple: "transition-all duration-200 ease-liner"
 }
 
 export const inputStyles = {
@@ -33,6 +34,12 @@ export const inputStyles = {
     },
     minified: {
         input: `outline-none peer px-1 py-1 ${textColorStyles} ${bgColorStyles.contrast} border-y-[1px] focus:border-x-[0.5px] border-y-[1px] hover:border-x-[0.5px] text-[0.9rem] ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`
+    },
+    questioned: {
+        input: `outline-none peer px-3 py-2 ${textColorStyles} ${bgColorStyles.contrast} border-b-2 ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`,
+        label: `text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 peer-checked:text-orange-500 mt-1 text-center ${transitioner.simple}`,
+        question: `text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 peer-focus:text-orange-500 peer-focus:border-orange-500 mb-1 border-b-2 text-[1rem] md:text-[1.1rem] pb-3 leading-5 ${transitioner.simple}`,
+        markers: `text-[0.8rem] text-center md:text-left my-auto`,
     }
 }
 

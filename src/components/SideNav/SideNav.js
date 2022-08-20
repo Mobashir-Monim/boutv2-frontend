@@ -83,6 +83,16 @@ const SideNav = ({ showNav, toggleNav, collapseNav }) => {
                 icon: ""
             },
         },
+        // {
+        //     name: "Settings",
+        //     icon: "settings",
+        //     action: "/settings",
+        //     type: "link",
+        //     classses: {
+        //         name: "",
+        //         icon: ""
+        //     },
+        // },
         {
             name: "Logout",
             icon: "power_settings_new",
