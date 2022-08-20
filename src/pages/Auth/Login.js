@@ -24,7 +24,15 @@ const Login = () => {
                 // const credential = GoogleAuthProvider.credentialFromResult(result);
                 // const token = credential.accessToken;
                 // user.login(result.user);
-                login(result.user);
+                const user = {
+                    email: result.user.email,
+                    displayName: result.user.displayName,
+                    photoURL: result.user.photoURL,
+                    accessToken: result.user.stsTokenManager.accessToken,
+                    refreshToken: result.user.stsTokenManager.refreshToken,
+                    expirationTime: result.user.stsTokenManager.expirationTime,
+                }
+                login(user);
                 navigate("/");
             }).catch(error => {
                 alert("Whoops! Something went wrong. Please try again.");

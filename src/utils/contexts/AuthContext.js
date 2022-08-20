@@ -1,6 +1,9 @@
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setStoredUser, getStoredUser } from "../../db/local/user";
+import { getAuth, signOut } from "firebase/auth";
+
+const auth = getAuth();
 
 export const AuthContext = createContext(undefined);
 
@@ -19,7 +22,9 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         setStoredUser(null);
         setUser(null);
-        navigate("/login", { replace: true });
+        signOut(auth).then(() => {
+            navigate("/login", { replace: true });
+        })
     }
 
     const value = {
