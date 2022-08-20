@@ -32,7 +32,7 @@ export const inputStyles = {
         label: `text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 peer-focus:text-orange-500 mt-1 text-right ${transitioner.simple}`
     },
     minified: {
-        input: `outline-none peer px-3 py-2 ${textColorStyles} ${bgColorStyles.contrast} border-b-[1px] border-r-[0.5px] text-[0.9rem] ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`
+        input: `outline-none peer px-1 py-1 ${textColorStyles} ${bgColorStyles.contrast} border-y-[1px] focus:border-x-[0.5px] border-y-[1px] hover:border-x-[0.5px] text-[0.9rem] ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`
     }
 }
 
