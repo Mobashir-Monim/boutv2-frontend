@@ -1,18 +1,14 @@
 import { inputStyles } from "../../utils/styles/styles";
 
-export const DateInput = ({ name, onChangeFn, minDate, maxDate, value }) => {
-    return <div className="flex flex-col">
-        <input type="date" name={name} className={`${inputStyles.minified.input}`} value={value} onChange={onChangeFn} min={minDate} max={maxDate} />
-    </div>
+export const DateInput = ({ name, onChangeFn, minDate, maxDate, value, customStyle }) => {
+    return <input type="date" name={name} className={`${inputStyles.minified.input} ${customStyle}`} value={value} onChange={onChangeFn} min={minDate} max={maxDate} />
 }
 
-export const LineInput = ({ name, onChangeFn, value }) => {
-    return <div className="flex flex-col">
-        <input type="text" name={name} className={`${inputStyles.minified.input}`} onChange={onChangeFn} value={value} />
-    </div>
+export const LineInput = ({ name, onChangeFn, value, customStyle }) => {
+    return <input type="text" name={name} className={`${inputStyles.minified.input} ${customStyle}`} onChange={onChangeFn} value={value} />
 }
 
-export const SelectInput = ({ name, options, onChangeFn }) => {
+export const SelectInput = ({ name, options, onChangeFn, customStyle }) => {
     let opts = null;
 
     if (Array.isArray(options)) {
@@ -21,14 +17,12 @@ export const SelectInput = ({ name, options, onChangeFn }) => {
         opts = Object.keys(options).map((opt, optIndex) => <option value={opt} key={`es-${optIndex}`}>{options[opt]}</option>);
     }
 
-    return <div className="flex flex-col">
-        <select name={name} className={`${inputStyles.minified.input}`} onChange={onChangeFn}>
-            {opts}
-        </select>
-    </div>
+    return <select name={name} className={`${inputStyles.minified.input} ${customStyle}`} onChange={onChangeFn}>
+        {opts}
+    </select>
 }
 
-export const TextInput = ({ onChangeFn, value }) => {
+export const TextInput = ({ onChangeFn, value, customStyle }) => {
     const resizeSelf = event => {
         if (event.keyCode === 8) {
             event.target.style.height = `40px`;
@@ -40,7 +34,5 @@ export const TextInput = ({ onChangeFn, value }) => {
         }
     }
 
-    return <div className="flex flex-col">
-        <textarea type="text" className={`resize-none ${inputStyles.minified.input}`} onChange={onChangeFn} onKeyUp={resizeSelf} value={value} />
-    </div>
+    return <textarea type="text" className={`resize-none ${inputStyles.minified.input} ${customStyle}`} onChange={onChangeFn} onKeyUp={resizeSelf} value={value} />
 }
