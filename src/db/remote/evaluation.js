@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { collection, query, where, getDocs, addDoc, updateDoc, doc, getDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, updateDoc, doc } from "firebase/firestore";
 
 const evaluationInstancesCollection = "evaluation_instances";
 const evaluationQuestionsCollection = "evaluation_questions";
