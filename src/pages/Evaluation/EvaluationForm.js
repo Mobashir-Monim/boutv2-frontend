@@ -9,7 +9,6 @@ import { getEvaluationInstance, getEvlauationQuestions, addEvaluationSubmission 
 import { auth } from "../../db/remote/firebase"
 
 import { signInAnonymously } from "firebase/auth";
-import { allQuestions as baal } from "../../test";
 
 const EvaluationForm = () => {
     useEffect(() => {
@@ -22,7 +21,7 @@ const EvaluationForm = () => {
         }
     });
 
-    const buildQuestions = (questions = baal.lab, facultyMembers = [{ initials: "111", name: "Name 1" }, { initials: "222", name: "Name 2" }]) => {
+    const buildQuestions = (questions, facultyMembers) => {
         const printableQuestions = { course: {}, faculty: {} };
         const parts = ["course", "faculty"];
 
