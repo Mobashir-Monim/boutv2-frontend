@@ -110,6 +110,29 @@ export const addEvaluationSubmission = async ({ geo_tag, offered_section_id, par
     return docRef;
 }
 
+export const getEvaluationSubmissions = async ({ offered_section_id, offered_section_ids, part }) => {
+    let snapshots = null;
+    let results = [];
+
+    if (part) {
+        if (offered_section_id) {
+            snapshots = await getDocs(query(evalSubColRef, where("part", "==", part), where("offered_section_id", "==", offered_section_id)));
+        } else {
+            snapshots = await getDocs(query(evalSubColRef, where("part", "==", part), where("offered_section_id", "in", offered_section_ids)));
+        }
+    } else {
+        if (offered_section_id) {
+            snapshots = await getDocs(query(evalSubColRef, where("offered_section_id", "==", offered_section_id)));
+        } else {
+            snapshots = await getDocs(query(evalSubColRef, where("offered_section_id", "in", offered_section_ids)));
+        }
+    }
+
+    snapshots.forEach(s => { results.push([s.data(), s.id]) });
+
+    return results;
+}
+
 
 
 

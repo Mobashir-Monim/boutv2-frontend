@@ -89,10 +89,6 @@ const getOfferedSection = async (section, code, year, semester) => await getDocs
     where("section", "==", `${section}`),
 ))
 
-// getOfferedSectionByFaculty = async (email) => await getDocs(query(
-//     offeredSectionColRef
-// ))
-
 const getOfferedSectionByLinkCode = async link_code => {
     let snapshots = await getOfferedTheorySectionByLinkCode(link_code);
 
@@ -124,6 +120,18 @@ const getOfferedSectionsInSemester = async (year, semester) => await getDocs(que
     where("year", "==", `${year}`),
     where("semester", "==", semester),
 ));
+
+export const getOfferedSectionsByFaculty = async (email) => {
+    let snapshots = { theory: [], lab: [] };
+
+    const theory = await getDocs(query(offeredSectionColRef, where("theory_instructor_emails", "array-contains", email)));
+    const lab = await getDocs(query(offeredSectionColRef, where("lab_instructor_emails", "array-contains", email)));
+
+    theory.forEach(t => snapshots.theory.push([t.data(), t.id]));
+    lab.forEach(l => snapshots.lab.push([l.data(), l.id]));
+
+    return snapshots;
+}
 
 export const setOfferedSection = async section => {
     let docRef = null;

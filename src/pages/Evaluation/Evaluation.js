@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useAuth } from "../../utils/contexts/AuthContext";
-import { getEvaluationInstance, setEvaluationInstance } from "../../db/remote/evaluation";
-import { cardStyles, pageLayoutStyles } from "../../utils/styles/styles";
+import { getEvaluationInstance, getEvaluationSubmissions, setEvaluationInstance } from "../../db/remote/evaluation";
+import { getOfferedSectionsByFaculty } from "../../db/remote/course";
+import { cardStyles, pageLayoutStyles, transitioner } from "../../utils/styles/styles";
 import { deepCopy } from "@firebase/util";
 import { useEvaluationInstance } from "../../utils/contexts/EvaluationContext";
 
@@ -27,7 +28,22 @@ const Evaluation = () => {
         initiated: false,
         published: false,
         id: null,
+        offered_sections: { theory: [], lab: [] },
+        submissions: { theory: [], lab: [] },
     });
+
+    const fetchSubmissions = async (section_ids, part) => {
+        let submissions = [];
+
+        for (let i = 0; i < section_ids.length; i++) {
+            if (section_ids.slice(i * 10, i + 10).length > 0) {
+                const temp = await getEvaluationSubmissions({ offered_section_ids: section_ids.slice(i * 10, i + 10), part });
+                submissions = submissions.concat(temp);
+            }
+        }
+
+        return submissions;
+    }
 
     const fetchEvaluationInstance = async () => {
         if (semesters.includes(pageState.semester) && years.includes(pageState.year)) {
@@ -43,6 +59,9 @@ const Evaluation = () => {
             pageStateClone.initiated = evaluationInstance.initiated;
             pageStateClone.published = evaluationInstance.published;
             pageStateClone.id = id;
+            pageStateClone.offered_sections = await getOfferedSectionsByFaculty(user.email);
+            pageStateClone.submissions.theory = await fetchSubmissions(pageStateClone.offered_sections.theory.map(x => x[1]), "theory");
+            pageStateClone.submissions.lab = await fetchSubmissions(pageStateClone.offered_sections.lab.map(x => x[1]), "lab");
 
             storeEvaluationInstance(pageStateClone);
             setPageState(pageStateClone);
@@ -169,7 +188,7 @@ const Evaluation = () => {
         setEndDate={setEndDate}
     />;
 
-    return <div className={`${pageLayoutStyles.scrollable}`}>
+    return <div className={`${pageLayoutStyles.scrollable} flex flex-col gap-10 pb-20`}>
         <div className="flex flex-col lg:flex-row gap-y-10 md:justify-between">
             <div className={`w-[100%] lg:w-[60%] ${cardStyles.simple}`}>
                 <CardHeader title="Select evaluation semester" />
@@ -191,6 +210,30 @@ const Evaluation = () => {
                 </div>
             </div>
             {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" ? evalAdminControls : <></>}
+        </div>
+        <div className={`${pageState.id ? "" : "hidden"} ${transitioner.simple}`}>
+            <SimpleCard title={`Evaluation completion status of ${pageState.year} ${pageState.semester} course assignments`}>
+                <div className="flex flex-col mt-5 overflow-scroll pb-10">
+                    <div className="flex flex-row overflow-scroll min-w-[700px] border-b-[1px] mb-2">
+                        <span className="inline-block w-[150px]">Course Code</span>
+                        <span className="inline-block w-[150px]">Course Section</span>
+                        <span className="inline-block w-[200px]">Submissions</span>
+                        <span className="inline-block w-[200px]">Evaluation Code</span>
+                    </div>
+                    {pageState.offered_sections.theory.map((course, courseIndex) => <div className="flex flex-row overflow-scroll min-w-[700px]" key={`c-t-${courseIndex}`}>
+                        <span className="inline-block w-[150px] text-cent">{course[0].code}</span>
+                        <span className="inline-block w-[150px] text-cent">{course[0].section}</span>
+                        <span className="inline-block w-[200px] text-cent">{pageState.submissions.theory.filter(x => x[0].offered_section_id === course[1]).length}</span>
+                        <span className="inline-block w-[200px] text-cent">{course[0].theory_evaluation_link}</span>
+                    </div>)}
+                    {pageState.offered_sections.lab.map((course, courseIndex) => <div className="flex flex-row overflow-scroll min-w-[700px]" key={`c-l-${courseIndex}`}>
+                        <span className="inline-block w-[150px]">{course[0].code} Lab</span>
+                        <span className="inline-block w-[150px]">{course[0].section}</span>
+                        <span className="inline-block w-[200px]">{pageState.submissions.lab.filter(x => x[0].offered_section_id === course[1]).length}</span>
+                        <span className="inline-block w-[200px]">{course[0].theory_evaluation_link}</span>
+                    </div>)}
+                </div>
+            </SimpleCard>
         </div>
         {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" ? evaluationDatesModal : <></>}
     </div>
