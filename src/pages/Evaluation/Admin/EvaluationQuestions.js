@@ -48,7 +48,7 @@ const EvaluationQuestions = () => {
     });
 
     useEffect(() => {
-        if (!evalInstId || !year || !semester || !entity || user.email !== "mobashir.monim@bracu.ac.bd")
+        if (!evalInstId || !year || !semester || !entity || user.uid !== "36QlTRZox2Oc6QEqVFdSSK8eg4y1")
             navigate("/evaluation");
 
         (async () => {

@@ -26,6 +26,7 @@ const Login = () => {
                 // user.login(result.user);
                 const user = {
                     email: result.user.email,
+                    uid: result.user.uid,
                     displayName: result.user.displayName,
                     photoURL: result.user.photoURL,
                     accessToken: result.user.stsTokenManager.accessToken,

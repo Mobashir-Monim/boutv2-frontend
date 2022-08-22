@@ -183,16 +183,16 @@ const Evaluation = () => {
                 </div>
                 <div className="text-right flex flex-col md:flex-row mt-5 gap-5 justify-between">
                     <div className="flex flex-col w-[100%] md:w-[50%]">
-                        {user.email === "mobashir.monim@bracu.ac.bd" ? entityControl : <></>}
+                        {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" ? entityControl : <></>}
                     </div>
                     <div className="flex flex-col w-[100%] md:w-[30%] my-auto">
                         <PrimaryButton text="Confirm semester" type="button" clickFunction={fetchEvaluationSemesterData} />
                     </div>
                 </div>
             </div>
-            {user.email === "mobashir.monim@bracu.ac.bd" ? evalAdminControls : <></>}
+            {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" ? evalAdminControls : <></>}
         </div>
-        {user.email === "mobashir.monim@bracu.ac.bd" ? evaluationDatesModal : <></>}
+        {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" ? evaluationDatesModal : <></>}
     </div>
 }
 
