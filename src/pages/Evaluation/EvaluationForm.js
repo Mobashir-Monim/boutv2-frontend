@@ -93,6 +93,18 @@ const EvaluationForm = () => {
         submitted: false,
     });
 
+    const generateInstructorsObject = (offeredSection, part) => {
+        let instructors = [];
+
+        for (let i in offeredSection[`${part}_instructor_emails`]) {
+            instructors.push({
+                initials: offeredSection[`${part}_instructor_initials`][i],
+                email: offeredSection[`${part}_instructor_emails`][i],
+                name: offeredSection[`${part}_instructor_name`][i],
+            });
+        }
+    }
+
     const showForm = async (evalInstId, evaluationInstance, offeredSection, offeredSectionId) => {
         const formStateClone = deepClone(formState);
         formStateClone.part = formState.code === offeredSection.theory_evaluation_link ? "theory" : "lab";
@@ -100,7 +112,7 @@ const EvaluationForm = () => {
         formStateClone.semester = evaluationInstance.semester;
         formStateClone.offered_section = [offeredSection, offeredSectionId];
         let [questions] = await getEvlauationQuestions({ evalInstId: evalInstId });
-        formStateClone.questions = buildQuestions(JSON.parse(questions.questions)[formStateClone.part], offeredSection[`${formStateClone.part}_instructors`]);
+        formStateClone.questions = buildQuestions(JSON.parse(questions.questions)[formStateClone.part], generateInstructorsObject(offeredSection, formStateClone.part));
         formStateClone.responses = createResponseObject(formStateClone.questions);
 
         setFormState(formStateClone);
@@ -178,7 +190,12 @@ const EvaluationForm = () => {
                 if (evalInstId) {
                     const now = (new Date()).getTime();
 
-                    if (now > (new Date(`${evaluationInstance.start} 00:00:01 AM`)).getTime() && now < (new Date(`${evaluationInstance.end} 11:59:59 PM`).getTime())) {
+                    if (
+                        now > (new Date(`${evaluationInstance.start} 00:00:01 AM`)).getTime()
+                        && now < (new Date(`${evaluationInstance.end} 11:59:59 PM`).getTime())
+                        && evaluationInstance.initiated
+                        && !evaluationInstance.published
+                    ) {
                         flag = true;
                         showForm(evalInstId, evaluationInstance, section, section_id);
                     }

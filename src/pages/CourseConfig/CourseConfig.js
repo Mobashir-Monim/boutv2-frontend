@@ -51,16 +51,16 @@ const CourseConfig = () => {
             for (let x in parts) {
                 sections[l][`${parts[x]}_evaluation_link`] = parts[x] === "lab" ? lab_link : theory_link;
                 sections[l][`${parts[x]}_evaluation`] = "";
-                sections[l][`${parts[x]}_instructors`] = [];
+                sections[l][`${parts[x]}_instructor_names`] = [];
+                sections[l][`${parts[x]}_instructor_emails`] = [];
+                sections[l][`${parts[x]}_instructor_initials`] = [];
             }
 
             for (let z in markers) {
                 if (line[markers[z]] !== "") {
-                    sections[l][markers[z] === 2 ? "theory_instructors" : "lab_instructors"].push({
-                        initials: line[markers[z]],
-                        name: line[markers[z] + 1],
-                        email: line[markers[z] + 2]
-                    });
+                    sections[l][markers[z] === 2 ? "theory_instructor_names" : "lab_instructor_names"].push(line[markers[z] + 1]);
+                    sections[l][markers[z] === 2 ? "theory_instructor_emails" : "lab_instructor_emails"].push(line[markers[z] + 2]);
+                    sections[l][markers[z] === 2 ? "theory_instructor_initials" : "lab_instructor_initials"].push(line[markers[z]]);
                 }
             }
         }

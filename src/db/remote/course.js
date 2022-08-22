@@ -87,7 +87,11 @@ const getOfferedSection = async (section, code, year, semester) => await getDocs
     where("year", "==", `${year}`),
     where("semester", "==", semester),
     where("section", "==", `${section}`),
-));
+))
+
+// getOfferedSectionByFaculty = async (email) => await getDocs(query(
+//     offeredSectionColRef
+// ))
 
 const getOfferedSectionByLinkCode = async link_code => {
     let snapshots = await getOfferedTheorySectionByLinkCode(link_code);
@@ -133,7 +137,20 @@ export const setOfferedSection = async section => {
     return docRef;
 }
 
-const createOfferedSection = async ({ code, section, semester, year, lab_instructors, lab_evaluation_link, theory_instructors, theory_evaluation_link }) => {
+const createOfferedSection = async ({
+    code,
+    section,
+    semester,
+    year,
+    lab_instructor_names,
+    lab_instructor_emails,
+    lab_instructor_initials,
+    lab_evaluation_link,
+    theory_instructor_names,
+    theory_instructor_emails,
+    theory_instructor_initials,
+    theory_evaluation_link
+}) => {
     const docRef = await addDoc(offeredSectionColRef, {
         code,
         section,
@@ -141,8 +158,12 @@ const createOfferedSection = async ({ code, section, semester, year, lab_instruc
         year,
         lab_evaluation_link,
         theory_evaluation_link,
-        lab_instructors,
-        theory_instructors,
+        lab_instructor_names,
+        lab_instructor_emails,
+        lab_instructor_initials,
+        theory_instructor_names,
+        theory_instructor_emails,
+        theory_instructor_initials,
         lab_evaluation: "",
         theory_evaluation: "",
     });
@@ -150,17 +171,36 @@ const createOfferedSection = async ({ code, section, semester, year, lab_instruc
     return docRef;
 }
 
-const updateOfferedSection = async ({ code, section, semester, year, lab_instructors, lab_evaluation_link, theory_instructors, theory_evaluation_link, lab_evaluation = "", theory_evaluation = "", id }) => {
+const updateOfferedSection = async ({
+    code,
+    section,
+    semester,
+    year,
+    lab_evaluation_link,
+    theory_evaluation_link,
+    lab_instructor_names,
+    lab_instructor_emails,
+    lab_instructor_initials,
+    theory_instructor_names,
+    theory_instructor_emails,
+    theory_instructor_initials,
+    lab_evaluation = "",
+    theory_evaluation = "",
+    id }) => {
     const docRef = doc(db, offeredSectionsCollection, id);
     await updateDoc(docRef, {
         code,
         section,
         semester,
         year,
-        lab_instructors,
         lab_evaluation_link,
-        theory_instructors,
         theory_evaluation_link,
+        lab_instructor_names,
+        lab_instructor_emails,
+        lab_instructor_initials,
+        theory_instructor_names,
+        theory_instructor_emails,
+        theory_instructor_initials,
         lab_evaluation,
         theory_evaluation
     });
