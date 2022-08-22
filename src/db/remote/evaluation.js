@@ -3,8 +3,10 @@ import { collection, query, where, getDocs, addDoc, updateDoc, doc } from "fireb
 
 const evaluationInstancesCollection = "evaluation_instances";
 const evaluationQuestionsCollection = "evaluation_questions";
+const evaluationSubmissionsCollection = "evaluation_submissions";
 const evalInstColRef = collection(db, evaluationInstancesCollection);
 const evalQuesColRef = collection(db, evaluationQuestionsCollection);
+const evalSubColRef = collection(db, evaluationSubmissionsCollection);
 
 
 export const getEvaluationInstance = async ({ year, semester, entity = "CSE" }) => {
@@ -95,3 +97,20 @@ const updateEvaluationQuestions = async ({ id, questions }) => {
 
     return docRef;
 }
+
+export const addEvaluationSubmission = async ({ geo_tag, offered_section_id, part, response, user_uid }) => {
+    const docRef = await addDoc(evalSubColRef, {
+        geo_tag,
+        offered_section_id,
+        part,
+        response,
+        user_uid
+    });
+
+    return docRef;
+}
+
+
+
+
+

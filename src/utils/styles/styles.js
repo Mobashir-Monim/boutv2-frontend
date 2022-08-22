@@ -38,7 +38,7 @@ export const inputStyles = {
     questioned: {
         input: `outline-none peer px-3 py-2 ${textColorStyles} ${bgColorStyles.contrast} border-b-2 ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`,
         label: `text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 peer-checked:text-orange-500 mt-1 text-center ${transitioner.simple}`,
-        question: `text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 peer-focus:text-orange-500 peer-focus:border-orange-500 mb-1 border-b-2 text-[1rem] md:text-[1.1rem] pb-3 leading-5 ${transitioner.simple}`,
+        question: `peer-focus:text-blue-400 peer-hover:text-blue-400 peer-focus:text-orange-500 peer-focus:border-orange-500 mb-1 border-b-2 text-[1rem] md:text-[1.1rem] pb-3 leading-5 ${transitioner.simple}`,
         markers: `text-[0.8rem] text-center md:text-left my-auto`,
     }
 }

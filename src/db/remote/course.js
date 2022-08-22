@@ -57,19 +57,26 @@ const updateCourse = async ({ id, entity, code, name }) => {
     return docRef;
 }
 
-export const getOfferedSections = async ({ section, code, year, semester }) => {
+export const getOfferedSections = async ({ section, code, year, semester, link_code }) => {
     let snapshots = { size: 0 };
 
     if (section && year && semester && code) {
         snapshots = await getOfferedSection(section, code, year, semester);
     } else if (year && semester && code) {
         snapshots = await getOfferedSectionsByCode(code, year, semester);
+    } else if (link_code) {
+        snapshots = await getOfferedSectionByLinkCode(link_code);
     } else {
         snapshots = await getOfferedSectionsInSemester(year, semester);
     }
 
-    if (snapshots.size > 0)
-        return [snapshots.docs[0].data(), snapshots.docs[0].id];
+    if (snapshots.size > 0) {
+        if (snapshots.size > 1) {
+            return snapshots;
+        } else {
+            return [snapshots.docs[0].data(), snapshots.docs[0].id];
+        }
+    }
 
     return [null, null];
 }
@@ -80,6 +87,25 @@ const getOfferedSection = async (section, code, year, semester) => await getDocs
     where("year", "==", `${year}`),
     where("semester", "==", semester),
     where("section", "==", `${section}`),
+));
+
+const getOfferedSectionByLinkCode = async link_code => {
+    let snapshots = await getOfferedTheorySectionByLinkCode(link_code);
+
+    if (snapshots.size === 0)
+        snapshots = await getOfferedLabSectionByLinkCode(link_code);
+
+    return snapshots;
+}
+
+const getOfferedTheorySectionByLinkCode = async link_code => await getDocs(query(
+    offeredSectionColRef,
+    where("theory_evaluation_link", "==", link_code),
+));
+
+const getOfferedLabSectionByLinkCode = async link_code => await getDocs(query(
+    offeredSectionColRef,
+    where("lab_evaluation_link", "==", link_code),
 ));
 
 const getOfferedSectionsByCode = async (code, year, semester) => await getDocs(query(

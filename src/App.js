@@ -52,7 +52,7 @@ const App = () => {
                     <Route path="/obe" element={<UnderDevelopment />} />
                 </Route>
                 <Route path="/login" element={<Login />} />
-                <Route path="/evaluation-form/:code" element={<EvaluationForm />} />
+                <Route path="/evaluation-form" element={<EvaluationForm />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </div>
