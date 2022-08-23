@@ -98,9 +98,8 @@ const updateEvaluationQuestions = async ({ id, questions }) => {
     return docRef;
 }
 
-export const addEvaluationSubmission = async ({ geo_tag, offered_section_id, part, response, user_uid }) => {
+export const addEvaluationSubmission = async ({ offered_section_id, part, response, user_uid }) => {
     const docRef = await addDoc(evalSubColRef, {
-        geo_tag,
         offered_section_id,
         part,
         response,
