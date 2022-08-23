@@ -116,7 +116,7 @@ const EvaluationForm = () => {
         let [questions] = await getEvlauationQuestions({ evalInstId: evalInstId });
         formStateClone.questions = buildQuestions(JSON.parse(questions.questions)[formStateClone.part], generateInstructorsObject(offeredSection, formStateClone.part));
         formStateClone.responses = createResponseObject(formStateClone.questions);
-
+        console.log("here");
         setFormState(formStateClone);
     }
 
@@ -183,6 +183,7 @@ const EvaluationForm = () => {
     }
 
     const validateCode = async (flag = false) => {
+        console.log("validating");
         if (formState.code.length === 10) {
             const [section, section_id] = await getOfferedSections({ link_code: formState.code });
 
@@ -199,13 +200,17 @@ const EvaluationForm = () => {
                         && !evaluationInstance.published
                     ) {
                         flag = true;
+                        console.log("validated");
                         showForm(evalInstId, evaluationInstance, section, section_id);
                     }
                 }
             }
         }
 
-        if (!flag) setFormState({ ...formState, invalid_code: true });
+        if (!flag) {
+            console.log("flagged");
+            setFormState({ ...formState, invalid_code: true });
+        }
     }
 
     const setStringInput = (event, identifier, row = undefined) => {
