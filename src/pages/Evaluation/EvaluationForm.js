@@ -100,9 +100,11 @@ const EvaluationForm = () => {
             instructors.push({
                 initials: offeredSection[`${part}_instructor_initials`][i],
                 email: offeredSection[`${part}_instructor_emails`][i],
-                name: offeredSection[`${part}_instructor_name`][i],
+                name: offeredSection[`${part}_instructor_names`][i],
             });
         }
+
+        return instructors;
     }
 
     const showForm = async (evalInstId, evaluationInstance, offeredSection, offeredSectionId) => {
@@ -235,11 +237,11 @@ const EvaluationForm = () => {
     }
 
     const enterCode = event => setFormState({ ...formState, code: event.target.value, invalid_code: false });
-    const getLinearInput = (question, identifier) => <LinearInput required={question.required && !isFilled(identifier)} preventPaste={true} question={question.display} onChangeFn={event => setStringInput(event, identifier)} options={question.columns} labels={question.rows} identifier={identifier} />
+    const getLinearInput = (question, identifier) => <LinearInput required={question.required && !isFilled(identifier)} question={question.display} onChangeFn={event => setStringInput(event, identifier)} options={question.columns} labels={question.rows} identifier={identifier} />
     const getRadioInput = (question, identifier) => <RadioInput required={question.required && !isFilled(identifier)} question={question.display} onChangeFn={event => setStringInput(event, identifier)} options={question.rows} identifier={identifier} />
     const getCheckboxInput = (question, identifier) => <CheckboxInput required={question.required && !isFilled(identifier)} question={question.display} onChangeFn={event => setCheckboxInput(event, identifier)} options={question.rows} identifier={identifier} />
     const getTextInput = (question, identifier) => <TextInput required={question.required && !isFilled(identifier)} question={question.display} onChangeFn={event => setStringInput(event, identifier)} options={question.rows} identifier={identifier} />
-    const getLineInput = (question, identifier) => <LineInput required={question.required && !isFilled(identifier)} question={question.display} onChangeFn={event => setStringInput(event, identifier)} options={question.rows} identifier={identifier} />
+    const getLineInput = (question, identifier) => <LineInput required={question.required && !isFilled(identifier)} preventPaste={true} question={question.display} onChangeFn={event => setStringInput(event, identifier)} options={question.rows} identifier={identifier} />
     const getDateInput = (question, identifier) => <DateInput required={question.required && !isFilled(identifier)} question={question.display} onChangeFn={event => setStringInput(event, identifier)} options={question.rows} identifier={identifier} />
     const getSelectInput = (question, identifier) => <SelectInput required={question.required && !isFilled(identifier)} question={question.display} onChangeFn={event => setStringInput(event, identifier)} options={question.rows} identifier={identifier} />
     const getRadioGridInput = (question, identifier) => <RadioGridInput required={question.required && !isFilled(identifier)} question={question.display} onChangeFn={(event, row) => setStringInput(event, identifier, row)} labels={question.rows} options={question.columns} identifier={identifier} />
@@ -300,7 +302,7 @@ const EvaluationForm = () => {
     </div>
 
     const getCodeInput = () => <div className="w-[90%] lg:w-[60%] xl:w-[40%] flex flex-col gap-10 mx-auto">
-        <LineInput question={"Please enter evaluation code:"} max="10" min="10" placeholder="Evaluation Code" onChangeFn={enterCode} />
+        <LineInput question={"Please enter evaluation code:"} max="10" min="10" preventPaste={true} placeholder="Evaluation Code" onChangeFn={enterCode} />
 
         {<p className={`text-center ${bgColorStyles.contrast} rounded-full py-2 text-rose-500 ${formState.invalid_code ? "opacity-100" : "opacity-0"} ${transitioner.simple}`}>Invalid code entered</p>}
 

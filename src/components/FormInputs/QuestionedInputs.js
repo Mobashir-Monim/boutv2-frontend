@@ -11,9 +11,9 @@ export const DateInput = ({ name, question, onChangeFn, minDate, maxDate, value,
 
 export const LineInput = ({ name, question, onChangeFn, value, placeholder = "Your Response", max, min, required, preventPaste }) => {
     if (preventPaste) {
-        preventPaste = event => {event.preventDefault(); return false;}
+        preventPaste = event => { event.preventDefault(); return false; }
     } else {
-        preventPaste = () => {}
+        preventPaste = () => { }
     }
 
 
