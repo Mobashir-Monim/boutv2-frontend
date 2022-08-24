@@ -230,7 +230,7 @@ const Evaluation = () => {
                         <span className="inline-block w-[150px]">{course[0].code} Lab</span>
                         <span className="inline-block w-[150px]">{course[0].section}</span>
                         <span className="inline-block w-[200px]">{pageState.submissions.lab.filter(x => x[0].offered_section_id === course[1]).length}</span>
-                        <span className="inline-block w-[200px]">{course[0].theory_evaluation_link}</span>
+                        <span className="inline-block w-[200px]">{course[0].lab_evaluation_link}</span>
                     </div>)}
                 </div>
             </SimpleCard>

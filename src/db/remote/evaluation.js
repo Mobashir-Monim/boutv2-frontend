@@ -68,8 +68,6 @@ export const getEvlauationQuestions = async ({ evalInstId }) => {
 export const setEvaluationQuestions = async evalQuesObj => {
     let docRef = null;
 
-    console.log(evalQuesObj.id);
-
     if (!evalQuesObj.id) {
         docRef = await createEvaluationQuestions(evalQuesObj);
     } else {
