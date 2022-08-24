@@ -301,7 +301,7 @@ const EvaluationForm = () => {
     </div>
 
     const getCodeInput = () => <div className="w-[90%] lg:w-[60%] xl:w-[40%] flex flex-col gap-10 mx-auto">
-        <LineInput question={"Please enter evaluation code:"} max="10" min="10" preventPaste={true} placeholder="Evaluation Code" onChangeFn={enterCode} />
+        <LineInput question={"Please enter evaluation code:"} customStyle={{ input: "font-['Source_Code_Pro']" }} max="10" min="10" preventPaste={true} placeholder="Evaluation Code" onChangeFn={enterCode} />
 
         {<p className={`text-center ${bgColorStyles.contrast} rounded-full py-2 text-rose-500 ${formState.invalid_code ? "opacity-100" : "opacity-0"} ${transitioner.simple}`}>Invalid code entered</p>}
 

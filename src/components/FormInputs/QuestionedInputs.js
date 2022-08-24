@@ -9,7 +9,7 @@ export const DateInput = ({ name, question, onChangeFn, minDate, maxDate, value,
     </QuestionCard>
 }
 
-export const LineInput = ({ name, question, onChangeFn, value, placeholder = "Your Response", max, min, required, preventPaste }) => {
+export const LineInput = ({ name, question, onChangeFn, value, placeholder = "Your Response", max, min, required, preventPaste, customStyle = {} }) => {
     if (preventPaste) {
         preventPaste = event => { event.preventDefault(); return false; }
     } else {
@@ -19,7 +19,7 @@ export const LineInput = ({ name, question, onChangeFn, value, placeholder = "Yo
 
     return <QuestionCard title={required ? <>{question}<div className="italic text-right text-red-400 font-bold text-[0.8rem]">[ Response Required ]</div></> : question}>
         <div className="flex flex-col max-w-[700px]">
-            <input type="text" name={name} onPaste={preventPaste} className={`${inputStyles.questioned.input} text-[0.9rem]`} onChange={onChangeFn} value={value} placeholder={placeholder} maxLength={max} minLength={min} />
+            <input type="text" name={name} onPaste={preventPaste} className={`${inputStyles.questioned.input} text-[0.9rem] ${customStyle.input}`} onChange={onChangeFn} value={value} placeholder={placeholder} maxLength={max} minLength={min} />
         </div>
     </QuestionCard>
 }
