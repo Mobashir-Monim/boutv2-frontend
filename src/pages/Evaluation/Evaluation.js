@@ -8,11 +8,10 @@ import { useEvaluationInstance } from "../../utils/contexts/EvaluationContext";
 
 import PrimaryButton from "../../components/Buttons/PrimaryButton";
 import SecondaryButton from "../../components/Buttons/SecondaryButton";
-import { SelectInput } from "../../components/FormInputs/LabeledInputs";
+import { SelectInput, LineInput } from "../../components/FormInputs/LabeledInputs";
 import CardHeader from "../../components/Headers/CardHeader";
 import SimpleCard from "../../components/Card/SimpleCard";
 import EvaluationDates from "./Admin/EvaluationDates";
-import { LineInput } from "../../components/FormInputs/LabeledInputs";
 
 const Evaluation = () => {
     const { user } = useAuth();
@@ -48,23 +47,39 @@ const Evaluation = () => {
     const fetchEvaluationInstance = async () => {
         if (semesters.includes(pageState.semester) && years.includes(pageState.year)) {
             const pageStateClone = deepCopy(pageState);
+            let flag = false;
             let [evaluationInstance, id] = await getEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity });
-            if (!id) {
+
+            if (!id && user.uid != "36QlTRZox2Oc6QEqVFdSSK8eg4y1") {
                 await setEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity, initiated: false, published: false, start: "", end: "" });
                 [evaluationInstance, id] = await getEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity });
             }
 
-            pageStateClone.dates.start = evaluationInstance.start;
-            pageStateClone.dates.end = evaluationInstance.end;
-            pageStateClone.initiated = evaluationInstance.initiated;
-            pageStateClone.published = evaluationInstance.published;
-            pageStateClone.id = id;
-            pageStateClone.offered_sections = await getOfferedSectionsByFaculty(user.email);
-            pageStateClone.submissions.theory = await fetchSubmissions(pageStateClone.offered_sections.theory.map(x => x[1]), "theory");
-            pageStateClone.submissions.lab = await fetchSubmissions(pageStateClone.offered_sections.lab.map(x => x[1]), "lab");
+            if (id) {
+                pageStateClone.dates.start = evaluationInstance.start;
+                pageStateClone.dates.end = evaluationInstance.end;
+                pageStateClone.initiated = evaluationInstance.initiated;
+                pageStateClone.published = evaluationInstance.published;
+                pageStateClone.id = id;
+                pageStateClone.offered_sections = await getOfferedSectionsByFaculty(user.email);
+                pageStateClone.submissions.theory = await fetchSubmissions(pageStateClone.offered_sections.theory.map(x => x[1]), "theory");
+                pageStateClone.submissions.lab = await fetchSubmissions(pageStateClone.offered_sections.lab.map(x => x[1]), "lab");
 
-            storeEvaluationInstance(pageStateClone);
-            setPageState(pageStateClone);
+                storeEvaluationInstance(pageStateClone);
+                setPageState(pageStateClone);
+            } else {
+                setPageState({
+                    ...pageState,
+                    dates: { show: false, start: (new Date()).toISOString().split("T")[0], end: null },
+                    entity: "CSE",
+                    initiated: false,
+                    published: false,
+                    id: null,
+                    offered_sections: { theory: [], lab: [] },
+                    submissions: { theory: [], lab: [] },
+                });
+                alert("Evaluation not set.")
+            }
         } else {
             alert("Please select a valid year and semester");
         }
@@ -235,6 +250,13 @@ const Evaluation = () => {
                 </div>
             </SimpleCard>
         </div>
+        {/* <div className={`${!pageState.id ? "" : "hidden"} ${transitioner.simple}`}>
+            <SimpleCard title={`Evaluation admin panel`}>
+                <div className="flex flex-col md:flex-row gap-5 mt-5">
+                    <LineInput label="" onChangeFn={setEntity} value={pageState.entity} />;
+                </div>
+            </SimpleCard>
+        </div> */}
         {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" ? evaluationDatesModal : <></>}
     </div>
 }
