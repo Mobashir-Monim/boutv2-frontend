@@ -46,6 +46,7 @@ const Evaluation = () => {
             if (section_ids.slice(i * 10, i + 10).length > 0) {
                 const temp = await getEvaluationSubmissions({ offered_section_ids: section_ids.slice(i * 10, i + 10), part });
 
+                console.log(temp);
                 if (temp[0][1])
                     submissions = submissions.concat(temp);
             }
@@ -329,17 +330,17 @@ const Evaluation = () => {
                         <span className="inline-block w-[200px] text-center">Evaluation Code</span>
                     </div>
 
-                    {[pageState.offered_sections.theory, pageState.offered_sections.lab].map(courses => {
-                        return courses.map((course, courseIndex) => <div className={`flex flex-row min-w-[700px] px-3 py-2.5 border-b-[1px] ${borderColorStyles.simple} ${courseIndex % 2 ? "bg-[#eee] dark:bg-[#333]" : ""}`} key={`c-t-${courseIndex}`}>
+                    {[pageState.offered_sections.theory, pageState.offered_sections.lab].map((courses, cIndex) =>
+                        courses.map((course, courseIndex) => <div className={`flex flex-row min-w-[700px] px-3 py-2.5 border-b-[1px] ${borderColorStyles.simple} ${courseIndex % 2 ? "bg-[#eee] dark:bg-[#333]" : ""}`} key={`c-t-${courseIndex}`}>
                             <span className="inline-block w-[150px]">{course[0].code}</span>
                             <span className="inline-block w-[150px] text-center">{course[0].section}</span>
-                            <span className="inline-block w-[200px] text-center">{pageState.submissions.theory.filter(x => x[0].offered_section_id === course[1]).length}</span>
-                            <span className={`flex w-[200px] justify-center hover:text-orange-500 text-blue-500 dark:text-blue-400 cursor-copy ${transitioner.simple} font-['Source_Code_Pro']`} onClick={() => navigator.clipboard.writeText(course[0].theory_evaluation_link)}>
+                            <span className="inline-block w-[200px] text-center">{cIndex === 1 ? pageState.submissions.lab.filter(x => x[0].offered_section_id === course[1]).length : pageState.submissions.theory.filter(x => x[0].offered_section_id === course[1]).length}</span>
+                            <span className={`flex w-[200px] justify-center hover:text-orange-500 text-blue-500 dark:text-blue-400 cursor-copy ${transitioner.simple} font-['Source_Code_Pro']`} onClick={() => navigator.clipboard.writeText(cIndex === 1 ? course[0].lab_evaluation_link : course[0].theory_evaluation_link)}>
                                 <span className="material-icons-round mr-3">content_copy</span>
-                                {course[0].theory_evaluation_link}
+                                {cIndex === 1 ? course[0].lab_evaluation_link : course[0].theory_evaluation_link}
                             </span>
                         </div>)
-                    })}
+                    )}
                 </div>
             </SimpleCard>
         </div>
