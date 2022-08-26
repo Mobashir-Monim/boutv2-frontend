@@ -344,7 +344,7 @@ const Evaluation = () => {
                 </div>
             </SimpleCard>
         </div>
-        <div className={`${pageState.id ? "" : "hidden"} w-[100%] lg:w-[80%] ${transitioner.simple}`}>
+        <div className={`${user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" && pageState.id ? "" : "hidden"} w-[100%] lg:w-[80%] ${transitioner.simple}`}>
             <SimpleCard title={`Evaluation Admin`}>
                 <div className="flex flex-col mt-5">
                     <div className="flex flex-col gap-5 mb-10">
