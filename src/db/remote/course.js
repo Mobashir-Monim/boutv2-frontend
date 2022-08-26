@@ -1,35 +1,31 @@
 import { db } from "./firebase";
 import { collection, query, where, getDocs, addDoc, updateDoc, doc } from "firebase/firestore";
 
+import { firestoreSnapshotFormatter } from "../../utils/functions/firestoreSnapshotFormatter";
+
 const coursesCollection = "courses";
 const offeredSectionsCollection = "offered_sections";
 const courseColRef = collection(db, coursesCollection);
 const offeredSectionColRef = collection(db, offeredSectionsCollection);
 
 export const getCourse = async ({ entity, code }) => {
+    let results = [];
     const snapshots = await getDocs(query(
         courseColRef,
         where("entity", "==", entity),
         where("code", "==", code),
     ))
 
-    if (snapshots.size > 0)
-        return [snapshots.docs[0].data(), snapshots.docs[0].id];
-
-    return [null, null];
+    return firestoreSnapshotFormatter(snapshots, results);
 }
 
 export const getCourses = async ({ entity, code }) => {
-    let results = {};
-    let query = null;
-    if (entity) { query = where("entity", "==", entity) }
-    else { query = where("code", "==", code) }
+    let results = [], queryVar = null;
+    if (entity) { queryVar = where("entity", "==", entity) }
+    else { queryVar = where("code", "==", code) }
 
-    const snapshots = await getDocs(courseColRef, query);
-
-    snapshots.forEach(snapshot => { results[snapshot.id] = snapshot.data() });
-
-    return results;
+    const snapshots = await getDocs(courseColRef, queryVar);
+    return firestoreSnapshotFormatter(snapshots, results);
 }
 
 export const setCourse = async course => {
@@ -58,7 +54,7 @@ const updateCourse = async ({ id, entity, code, name }) => {
 }
 
 export const getOfferedSections = async ({ section, code, year, semester, link_code }) => {
-    let snapshots = { size: 0 };
+    let snapshots = { size: 0 }, results = [];
 
     if (section && year && semester && code) {
         snapshots = await getOfferedSection(section, code, year, semester);
@@ -70,15 +66,7 @@ export const getOfferedSections = async ({ section, code, year, semester, link_c
         snapshots = await getOfferedSectionsInSemester(year, semester);
     }
 
-    if (snapshots.size > 0) {
-        if (snapshots.size > 1) {
-            return snapshots;
-        } else {
-            return [snapshots.docs[0].data(), snapshots.docs[0].id];
-        }
-    }
-
-    return [null, null];
+    return firestoreSnapshotFormatter(snapshots, results);
 }
 
 const getOfferedSection = async (section, code, year, semester) => await getDocs(query(

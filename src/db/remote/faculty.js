@@ -1,37 +1,23 @@
 import { db } from "./firebase";
 import { collection, query, where, getDocs, addDoc, updateDoc, doc } from "firebase/firestore";
 
+import { firestoreSnapshotFormatter } from "../../utils/functions/firestoreSnapshotFormatter";
+
 const facultyCollection = "faculty_members";
 const facultyColRef = collection(db, facultyCollection);
 
 export const getFacultyMember = async ({ email }) => {
-    const snapshots = await getDocs(query(
-        facultyColRef,
-        where("email", "==", email),
-    ))
+    let results = []
+    const snapshots = await getDocs(query(facultyColRef, where("email", "==", email)));
 
-    if (snapshots.size > 0)
-        return [snapshots.docs[0].data(), snapshots.docs[0].id];
-
-    return [null, null];
+    return firestoreSnapshotFormatter(snapshots, results);
 }
 
-export const getFacultyMembers = async ({ entity, email }) => {
-    let results = {};
+export const getFacultyMembers = async ({ entity }) => {
+    let results = [];
+    const snapshots = await getDocs(facultyColRef, where("entity", "==", entity));
 
-    if (entity) {
-        const snapshots = await getDocs(facultyColRef, where("entity", "==", entity));
-        snapshots.forEach(snapshot => { results[snapshot.id] = snapshot.data() });
-    }
-
-    if (email) {
-        const snapshots = await getDocs(facultyColRef, where("email", "==", email));
-        snapshots.forEach(snapshot => {
-            if (!(snapshot.id in results)) results[snapshot.id] = snapshot.data();
-        });
-    }
-
-    return results;
+    return firestoreSnapshotFormatter(snapshots, results);
 }
 
 export const setFaculty = async faculty => {

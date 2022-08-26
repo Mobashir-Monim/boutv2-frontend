@@ -7,10 +7,10 @@ export const DateInput = ({ name, label, onChangeFn, minDate, maxDate, value }) 
     </div>
 }
 
-export const LineInput = ({ name, label, onChangeFn, value }) => {
-    return <div className="flex flex-col">
-        <input type="text" name={name} className={`${inputStyles.labeled.input}`} onChange={onChangeFn} value={value} />
-        <p className={`${inputStyles.labeled.label}`}>{label}</p>
+export const LineInput = ({ name, label, onChangeFn, value, customStyle = {} }) => {
+    return <div className={`flex flex-col ${customStyle.container}`}>
+        <input type="text" name={name} className={`${inputStyles.labeled.input} ${customStyle.input}`} onChange={onChangeFn} value={value} />
+        <p className={`${inputStyles.labeled.label} ${customStyle.label}`}>{label}</p>
     </div>
 }
 

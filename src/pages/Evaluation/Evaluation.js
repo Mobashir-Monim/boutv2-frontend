@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useAuth } from "../../utils/contexts/AuthContext";
 import { getEvaluationInstance, getEvaluationSubmissions, setEvaluationInstance } from "../../db/remote/evaluation";
-import { getOfferedSectionsByFaculty } from "../../db/remote/course";
-import { cardStyles, pageLayoutStyles, transitioner } from "../../utils/styles/styles";
+import { getOfferedSections, getOfferedSectionsByFaculty, setOfferedSection } from "../../db/remote/course";
+import { borderColorStyles, cardStyles, pageLayoutStyles, transitioner } from "../../utils/styles/styles";
 import { deepCopy } from "@firebase/util";
 import { useEvaluationInstance } from "../../utils/contexts/EvaluationContext";
 
@@ -29,6 +29,14 @@ const Evaluation = () => {
         id: null,
         offered_sections: { theory: [], lab: [] },
         submissions: { theory: [], lab: [] },
+        search: {
+            phrase: {
+                code: "",
+                section: "",
+                link: ""
+            },
+            results: { theory: {}, lab: {} }
+        },
     });
 
     const fetchSubmissions = async (section_ids, part) => {
@@ -37,7 +45,9 @@ const Evaluation = () => {
         for (let i = 0; i < section_ids.length; i++) {
             if (section_ids.slice(i * 10, i + 10).length > 0) {
                 const temp = await getEvaluationSubmissions({ offered_section_ids: section_ids.slice(i * 10, i + 10), part });
-                submissions = submissions.concat(temp);
+
+                if (temp[0][1])
+                    submissions = submissions.concat(temp);
             }
         }
 
@@ -48,11 +58,11 @@ const Evaluation = () => {
         if (semesters.includes(pageState.semester) && years.includes(pageState.year)) {
             const pageStateClone = deepCopy(pageState);
             let flag = false;
-            let [evaluationInstance, id] = await getEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity });
+            let [evaluationInstance, id] = (await getEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity }))[0];
 
             if (!id && user.uid != "36QlTRZox2Oc6QEqVFdSSK8eg4y1") {
                 await setEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity, initiated: false, published: false, start: "", end: "" });
-                [evaluationInstance, id] = await getEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity });
+                [evaluationInstance, id] = (await getEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity }))[0];
             }
 
             if (id) {
@@ -139,6 +149,89 @@ const Evaluation = () => {
         setPageState(pageStateClone);
     }
 
+    const setSearchPhraseCode = event => {
+        const pageStateClone = deepCopy(pageState);
+        pageStateClone.search.phrase.code = event.target.value;
+
+        setPageState(pageStateClone);
+    }
+
+    const setSearchPhraseSection = event => {
+        const pageStateClone = deepCopy(pageState);
+        pageStateClone.search.phrase.section = event.target.value;
+
+        setPageState(pageStateClone);
+    }
+
+    const setSearchPhraseLink = event => {
+        const pageStateClone = deepCopy(pageState);
+        pageStateClone.search.phrase.link = event.target.value;
+
+        setPageState(pageStateClone);
+    }
+
+    const constructSearchResultObject = (results) => {
+        const resultObject = { theory: {}, lab: {} };
+
+        if (results[0][1]) {
+            for (let p in resultObject) {
+                results.forEach(row => {
+                    resultObject[p][row[1]] = {
+                        code: row[0].code,
+                        section: row[0].section,
+                        [`${p}_instructor_names`]: row[0][`${p}_instructor_names`],
+                        [`${p}_instructor_emails`]: row[0][`${p}_instructor_emails`],
+                        [`${p}_instructor_initials`]: row[0][`${p}_instructor_initials`],
+                        [`${p}_evaluation_link`]: row[0][`${p}_evaluation_link`],
+                    }
+                })
+            }
+        }
+
+        return resultObject;
+    }
+
+    const searchOfferedSection = async () => {
+        const offered_sections = await getOfferedSections({
+            year: pageState.year,
+            semester: pageState.semester,
+            code: pageState.search.phrase.code,
+            section: pageState.search.phrase.section,
+            link_code: pageState.search.phrase.link
+        });
+        const pageStateClone = deepCopy(pageState);
+        pageStateClone.search.results = constructSearchResultObject(offered_sections);
+
+        setPageState(pageStateClone);
+    }
+
+    const setOfferedSectionInstructorState = (part, identifier, target, index, event) => {
+        const pageStateClone = deepCopy(pageState);
+        pageStateClone.search.results[part][identifier][`${part}_instructor_${target}`][index] = event.target.value;
+
+        setPageState(pageStateClone);
+    }
+
+    const setOfferedSectionInstructor = async identifier => {
+        const docRef = await setOfferedSection({
+            id: identifier,
+            code: pageState.search.results.theory[identifier].code,
+            section: pageState.search.results.theory[identifier].section,
+            semester: pageState.semester,
+            year: `${pageState.year}`,
+            lab_evaluation_link: pageState.search.results.lab[identifier].lab_evaluation_link,
+            theory_evaluation_link: pageState.search.results.theory[identifier].theory_evaluation_link,
+            lab_instructor_names: pageState.search.results.lab[identifier].lab_instructor_names,
+            lab_instructor_emails: pageState.search.results.lab[identifier].lab_instructor_emails,
+            lab_instructor_initials: pageState.search.results.lab[identifier].lab_instructor_initials,
+            theory_instructor_names: pageState.search.results.theory[identifier].theory_instructor_names,
+            theory_instructor_emails: pageState.search.results.theory[identifier].theory_instructor_emails,
+            theory_instructor_initials: pageState.search.results.theory[identifier].theory_instructor_initials,
+        })
+
+        console.log("updated");
+    }
+
     const toggleInitializedState = event => {
         const pageStateClone = deepCopy(pageState);
         pageStateClone.initiated = !pageStateClone.initiated;
@@ -178,14 +271,14 @@ const Evaluation = () => {
     const entityControl = <LineInput label="Evaluation Entity" onChangeFn={setEntity} value={pageState.entity} />;
 
     const evalAdminControls = <SimpleCard title="Evaluation Admin Checklist" width="w-[100%] lg:w-[35%]">
-        <div className="flex flex-col flex-wrap mt-5 justify-between gap-3 mx-auto">
+        <div className="flex flex-col flex-wrap mt-2 justify-between gap-3 mx-auto">
             <div className="flex flex-row w-[100%]">
                 <SecondaryButton text={"Set Questions"} customStyle="w-[50%] !rounded-r-none" link={`/evaluation/questions`} />
                 <SecondaryButton text={"Set Dates"} customStyle="w-[50%] !rounded-l-none" clickFunction={toggleEvaluationDatesModal} />
             </div>
             <div className="flex flex-row w-[100%]">
                 <SecondaryButton customStyle="w-[50%] !rounded-r-none" text={"Set Matrix"} link={"/evaluation/analysis"} />
-                <SecondaryButton customStyle="w-[50%] !rounded-l-none" text={`${pageState.published ? "Unpublish Form" : "Publish Form"}`} clickFunction={toggleInitializedState} />
+                <SecondaryButton customStyle="w-[50%] !rounded-l-none" text={`${pageState.initiated ? "Unpublish Form" : "Publish Form"}`} clickFunction={toggleInitializedState} />
             </div>
             <div className="flex flex-row w-[100%]">
                 <SecondaryButton customStyle="w-[50%] !rounded-r-none" text={`${pageState.published ? "Unpublish Results" : "Publish Results"}`} clickFunction={togglePublishedState} />
@@ -203,11 +296,11 @@ const Evaluation = () => {
         setEndDate={setEndDate}
     />;
 
-    return <div className={`${pageLayoutStyles.scrollable} flex flex-col gap-10 pb-20`}>
+    return <div className={`${pageLayoutStyles.scrollable} flex flex-col gap-10`}>
         <div className="flex flex-col lg:flex-row gap-y-10 md:justify-between">
             <div className={`w-[100%] lg:w-[60%] ${cardStyles.simple}`}>
                 <CardHeader title="Select evaluation semester" />
-                <div className="flex flex-col mt-5 md:flex-row w-[100%] justify-between">
+                <div className="flex flex-col mt-2 md:flex-row w-[100%] justify-between">
                     <div className="flex flex-col text-left md:w-[47%]">
                         <SelectInput name={"year"} label={"Evaluation Year"} options={years} onChangeFn={selectEvaluationYear} />
                     </div>
@@ -215,8 +308,8 @@ const Evaluation = () => {
                         <SelectInput name={"semester"} label={"Evaluation Semester"} options={semesters} onChangeFn={selectEvaluationSemester} />
                     </div>
                 </div>
-                <div className="text-right flex flex-col md:flex-row mt-5 gap-5 justify-between">
-                    <div className="flex flex-col w-[100%] md:w-[50%]">
+                <div className="text-right flex flex-col md:flex-row mt-2 gap-5 justify-between">
+                    <div className="flex flex-col w-[100%] md:w-[47%]">
                         {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" ? entityControl : <></>}
                     </div>
                     <div className="flex flex-col w-[100%] md:w-[30%] my-auto">
@@ -224,39 +317,90 @@ const Evaluation = () => {
                     </div>
                 </div>
             </div>
-            {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" ? evalAdminControls : <></>}
+            {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" && pageState.id ? evalAdminControls : <></>}
         </div>
         <div className={`${pageState.id ? "" : "hidden"} ${transitioner.simple}`}>
             <SimpleCard title={`Evaluation completion status of ${pageState.year} ${pageState.semester} course assignments`}>
-                <div className="flex flex-col mt-5 overflow-scroll pb-10">
-                    <div className="flex flex-row overflow-scroll min-w-[700px] border-b-[1px] mb-2">
+                <div className="flex flex-col mt-5 overflow-scroll no-scroll-bar pb-5">
+                    <div className={`flex flex-row min-w-[700px] border-y-2 px-3 py-2.5 ${borderColorStyles.simple} bg-[#eee] ${borderColorStyles.simple} dark:bg-[#333]`}>
                         <span className="inline-block w-[150px]">Course Code</span>
-                        <span className="inline-block w-[150px]">Course Section</span>
-                        <span className="inline-block w-[200px]">Submissions</span>
-                        <span className="inline-block w-[200px]">Evaluation Code</span>
+                        <span className="inline-block w-[150px] text-center">Course Section</span>
+                        <span className="inline-block w-[200px] text-center">Submissions</span>
+                        <span className="inline-block w-[200px] text-center">Evaluation Code</span>
                     </div>
-                    {pageState.offered_sections.theory.map((course, courseIndex) => <div className="flex flex-row overflow-scroll min-w-[700px]" key={`c-t-${courseIndex}`}>
-                        <span className="inline-block w-[150px] text-cent">{course[0].code}</span>
-                        <span className="inline-block w-[150px] text-cent">{course[0].section}</span>
-                        <span className="inline-block w-[200px] text-cent">{pageState.submissions.theory.filter(x => x[0].offered_section_id === course[1]).length}</span>
-                        <span className="inline-block w-[200px] text-cent">{course[0].theory_evaluation_link}</span>
-                    </div>)}
-                    {pageState.offered_sections.lab.map((course, courseIndex) => <div className="flex flex-row overflow-scroll min-w-[700px]" key={`c-l-${courseIndex}`}>
-                        <span className="inline-block w-[150px]">{course[0].code} Lab</span>
-                        <span className="inline-block w-[150px]">{course[0].section}</span>
-                        <span className="inline-block w-[200px]">{pageState.submissions.lab.filter(x => x[0].offered_section_id === course[1]).length}</span>
-                        <span className="inline-block w-[200px]">{course[0].lab_evaluation_link}</span>
-                    </div>)}
+
+                    {[pageState.offered_sections.theory, pageState.offered_sections.lab].map(courses => {
+                        return courses.map((course, courseIndex) => <div className={`flex flex-row min-w-[700px] px-3 py-2.5 border-b-[1px] ${borderColorStyles.simple} ${courseIndex % 2 ? "bg-[#eee] dark:bg-[#333]" : ""}`} key={`c-t-${courseIndex}`}>
+                            <span className="inline-block w-[150px]">{course[0].code}</span>
+                            <span className="inline-block w-[150px] text-center">{course[0].section}</span>
+                            <span className="inline-block w-[200px] text-center">{pageState.submissions.theory.filter(x => x[0].offered_section_id === course[1]).length}</span>
+                            <span className={`flex w-[200px] justify-center hover:text-orange-500 text-blue-500 dark:text-blue-400 cursor-copy ${transitioner.simple} font-['Source_Code_Pro']`} onClick={() => navigator.clipboard.writeText(course[0].theory_evaluation_link)}>
+                                <span className="material-icons-round mr-3">content_copy</span>
+                                {course[0].theory_evaluation_link}
+                            </span>
+                        </div>)
+                    })}
                 </div>
             </SimpleCard>
         </div>
-        {/* <div className={`${!pageState.id ? "" : "hidden"} ${transitioner.simple}`}>
-            <SimpleCard title={`Evaluation admin panel`}>
-                <div className="flex flex-col md:flex-row gap-5 mt-5">
-                    <LineInput label="" onChangeFn={setEntity} value={pageState.entity} />;
+        <div className={`${pageState.id ? "" : "hidden"} w-[100%] lg:w-[80%] ${transitioner.simple}`}>
+            <SimpleCard title={`Evaluation Admin`}>
+                <div className="flex flex-col mt-5">
+                    <div className="flex flex-col gap-5 mb-10">
+                        <div className="flex flex-col md:flex-row justify-between md:w-[100%] gap-5">
+                            <div className="md:w-[47%]">
+                                <LineInput label="Course Code" onChangeFn={setSearchPhraseCode} />
+                            </div>
+                            <div className="md:w-[47%]">
+                                <LineInput label="Course Section" onChangeFn={setSearchPhraseSection} />
+                            </div>
+                        </div>
+                        <div className="flex flex-col md:flex-row justify-between md:w-[100%] gap-5">
+                            <div className="md:w-[47%]">
+                                <LineInput label="Evaluation Code" onChangeFn={setSearchPhraseLink} />
+                            </div>
+                            <div className="md:w-[47%] justify-center flex my-auto">
+                                <PrimaryButton text="Fetch Data" customStyle={"w-[100%]"} type="button" clickFunction={searchOfferedSection} />
+                            </div>
+                        </div>
+                    </div>
+                    {Object.keys(pageState.search.results).map(part =>
+                        Object.keys(pageState.search.results[part]).map(identifier => {
+                            if (pageState.search.results[part][identifier][`${part}_instructor_names`].length === 0)
+                                return <span className="hidden" key={identifier}></span>;
+
+                            return <div className={`border-b-2 pb-10 ${borderColorStyles.simple} flex flex-col gap-10`} key={`${identifier}`}>
+                                <div className={`flex flex-col md:flex-row mt-5 gap-7 md:gap-32`}>
+                                    <div className="md:w-[20%] my-auto h-10 flex flex-col">
+                                        <div>
+                                            <p className={`border-b-2 ${borderColorStyles.simple} text-center`}>
+                                                {pageState.search.results[part][identifier].code} - {pageState.search.results[part][identifier].section}
+                                                <span className="text-blue-500 dark:text-blue-400 ml-2">{part[0].toUpperCase()}</span>
+                                            </p>
+                                            <p className="font-['Source_Code_Pro'] text-center text-blue-500 dark:text-blue-400">
+                                                {pageState.search.results[part][identifier][`${part}_evaluation_link`]}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col w-[100%] md:w-[70%] gap-3 md:max-w-[400px]">
+                                        {pageState.search.results[part][identifier][`${part}_instructor_emails`].map((_, iIndex) => <div key={`${identifier}-${iIndex}`}>
+                                            <div className="flex flex-row">
+                                                <div className="w-[65px]"><LineInput customStyle={{ input: "text-[0.9rem] border-2 border-b-[1px] border-r-[1px] rounded-tl-[10px]", label: "hidden" }} label="Initials" value={pageState.search.results[part][identifier][`${part}_instructor_initials`][iIndex]} onChangeFn={event => setOfferedSectionInstructorState(part, identifier, "initials", iIndex, event)} /></div>
+                                                <div className="min-w-[200px] w-[100%]"><LineInput customStyle={{ input: "text-[0.9rem] border-2 border-b-[1px] border-l-[1px] rounded-tr-[10px]", label: "hidden" }} label="Name" value={pageState.search.results[part][identifier][`${part}_instructor_names`][iIndex]} onChangeFn={event => setOfferedSectionInstructorState(part, identifier, "names", iIndex, event)} /></div>
+                                            </div>
+                                            <div className="w-[100%]"><LineInput customStyle={{ input: "text-[0.9rem] border-2 border-2 border-t-[1px] rounded-b-[10px]", label: "hidden" }} label="Email" value={pageState.search.results[part][identifier][`${part}_instructor_emails`][iIndex]} onChangeFn={event => setOfferedSectionInstructorState(part, identifier, "emails", iIndex, event)} /></div>
+                                        </div>)}
+                                    </div>
+                                </div>
+                                <div className="my-auto">
+                                    <PrimaryButton text="Save Changes" customStyle={"w-[100%]"} type="button" clickFunction={() => setOfferedSectionInstructor(identifier)} />
+                                </div>
+                            </div>
+                        })
+                    )}
                 </div>
             </SimpleCard>
-        </div> */}
+        </div>
         {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" ? evaluationDatesModal : <></>}
     </div>
 }

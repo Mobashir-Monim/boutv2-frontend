@@ -1,5 +1,7 @@
+import { pageLayoutStyles } from "../../utils/styles/styles";
+
 const NotFound = () => {
-    return <div className="w-[90%] h-[90vh] md:h-[95vh] mx-auto flex flex-col justify-center">
+    return <div className={`${pageLayoutStyles.fixed} flex flex-col justify-center`}>
         <div className="flex flex-col">
             <div className="flex flex-row mx-auto">
                 <span className={`material-icons-round text-white text-[5rem] md:text-[7rem] lg:text-[10rem]`}>sentiment_very_dissatisfied</span>

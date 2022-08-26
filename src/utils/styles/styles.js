@@ -5,7 +5,7 @@ export const borderColorStyles = {
 }
 
 export const transitioner = {
-    simple: "transition-all duration-200 ease-liner"
+    simple: "transition-all duration-500 ease-liner transform-gpu"
 }
 
 export const bgColorStyles = {
@@ -44,6 +44,6 @@ export const inputStyles = {
 }
 
 export const pageLayoutStyles = {
-    scrollable: "w-[90%] mx-auto min-h-[calc(100vh-70px-1rem)] lg:min-h-[calc(100vh-1.25rem)]",
-    fixed: "w-[100%] h-[calc(100vh-70px-1rem)] lg:h-[calc(100vh-1.25rem)]"
+    scrollable: "w-[90%] mx-auto min-h-[calc(100vh-70px-1rem)] lg:min-h-[calc(100vh-5rem)]",
+    fixed: "w-[100%] h-[calc(100vh-70px-1rem)] lg:h-[calc(100vh-5rem)]"
 }

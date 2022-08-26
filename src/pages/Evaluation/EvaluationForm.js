@@ -113,7 +113,7 @@ const EvaluationForm = () => {
         formStateClone.year = evaluationInstance.year;
         formStateClone.semester = evaluationInstance.semester;
         formStateClone.offered_section = [offeredSection, offeredSectionId];
-        let [questions] = await getEvlauationQuestions({ evalInstId: evalInstId });
+        let [questions] = (await getEvlauationQuestions({ evalInstId: evalInstId }))[0];
         formStateClone.questions = buildQuestions(JSON.parse(questions.questions)[formStateClone.part], generateInstructorsObject(offeredSection, formStateClone.part));
         formStateClone.responses = createResponseObject(formStateClone.questions);
         setFormState(formStateClone);
@@ -183,10 +183,10 @@ const EvaluationForm = () => {
 
     const validateCode = async (flag = false) => {
         if (formState.code.length === 10) {
-            const [section, section_id] = await getOfferedSections({ link_code: formState.code });
+            const [section, section_id] = (await getOfferedSections({ link_code: formState.code }))[0];
 
             if (section_id) {
-                const [evaluationInstance, evalInstId] = await getEvaluationInstance({ year: section.year, semester: section.semester });
+                const [evaluationInstance, evalInstId] = (await getEvaluationInstance({ year: section.year, semester: section.semester }))[0];
 
                 if (evalInstId) {
                     const now = (new Date()).getTime();

@@ -1,6 +1,8 @@
 import { db } from "./firebase";
 import { collection, query, where, getDocs, addDoc, updateDoc, doc } from "firebase/firestore";
 
+import { firestoreSnapshotFormatter } from "../../utils/functions/firestoreSnapshotFormatter";
+
 const evaluationInstancesCollection = "evaluation_instances";
 const evaluationQuestionsCollection = "evaluation_questions";
 const evaluationSubmissionsCollection = "evaluation_submissions";
@@ -10,6 +12,7 @@ const evalSubColRef = collection(db, evaluationSubmissionsCollection);
 
 
 export const getEvaluationInstance = async ({ year, semester, entity = "CSE" }) => {
+    let results = [];
     const snapshots = await getDocs(query(
         evalInstColRef,
         where("year", "==", `${year}`),
@@ -17,10 +20,7 @@ export const getEvaluationInstance = async ({ year, semester, entity = "CSE" }) 
         where("entity", "==", entity)
     ));
 
-    if (snapshots.size > 0)
-        return [snapshots.docs[0].data(), snapshots.docs[0].id];
-
-    return [null, null];
+    return firestoreSnapshotFormatter(snapshots, results);
 }
 
 export const setEvaluationInstance = async evalObj => {
@@ -54,15 +54,13 @@ const updateEvaluationInstance = async ({ id, start, end, initiated, published }
 }
 
 export const getEvlauationQuestions = async ({ evalInstId }) => {
+    let results = [];
     const snapshots = await getDocs(query(
         evalQuesColRef,
         where("instance_id", "==", evalInstId)
     ));
 
-    if (snapshots.size > 0)
-        return [snapshots.docs[0].data(), snapshots.docs[0].id];
-
-    return [null, null];
+    return firestoreSnapshotFormatter(snapshots, results);
 }
 
 export const setEvaluationQuestions = async evalQuesObj => {
@@ -125,9 +123,7 @@ export const getEvaluationSubmissions = async ({ offered_section_id, offered_sec
         }
     }
 
-    snapshots.forEach(s => { results.push([s.data(), s.id]) });
-
-    return results;
+    return firestoreSnapshotFormatter(snapshots, results);
 }
 
 

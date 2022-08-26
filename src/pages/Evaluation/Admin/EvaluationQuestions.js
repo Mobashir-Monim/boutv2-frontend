@@ -52,7 +52,7 @@ const EvaluationQuestions = () => {
             navigate("/evaluation");
 
         (async () => {
-            let [evalQuestions, id] = await getEvlauationQuestions({ evalInstId });
+            let [evalQuestions, id] = (await getEvlauationQuestions({ evalInstId }))[0];
 
             if (id) {
                 evalQuestions = JSON.parse(evalQuestions.questions);
