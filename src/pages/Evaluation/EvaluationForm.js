@@ -181,7 +181,9 @@ const EvaluationForm = () => {
         }
     }
 
-    const validateCode = async (flag = false) => {
+    const validateCode = async () => {
+        let flag = false;
+
         if (formState.code.length === 10) {
             const [section, section_id] = (await getOfferedSections({ link_code: formState.code }))[0];
 
@@ -190,7 +192,6 @@ const EvaluationForm = () => {
 
                 if (evalInstId) {
                     const now = (new Date()).getTime();
-
                     if (
                         now > (new Date(`${evaluationInstance.start} 00:00:01 AM`)).getTime()
                         && now < (new Date(`${evaluationInstance.end} 11:59:59 PM`).getTime())
@@ -204,7 +205,8 @@ const EvaluationForm = () => {
             }
         }
 
-        if (!flag) setFormState({ ...formState, invalid_code: true });
+        if (!flag)
+            setFormState({ ...formState, invalid_code: true });
     }
 
     const setStringInput = (event, identifier, row = undefined) => {
