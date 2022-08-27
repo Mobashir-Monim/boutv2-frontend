@@ -15,7 +15,7 @@ export const EvaluationInstanceProvider = () => {
 
     const storeEvaluationInstance = ({ id, year, semester, entity }) => {
         setEvaluationInstance({
-            id: id ? id : evaluationInstance.id,
+            id: id,
             year: year,
             semester: semester,
             entity: entity
