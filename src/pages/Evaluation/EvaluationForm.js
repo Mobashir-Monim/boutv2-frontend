@@ -186,15 +186,15 @@ const EvaluationForm = () => {
 
         if (formState.code.length === 10) {
             const [section, section_id] = (await getOfferedSections({ link_code: formState.code }))[0];
-
             if (section_id) {
                 const [evaluationInstance, evalInstId] = (await getEvaluationInstance({ year: section.year, semester: section.semester }))[0];
 
                 if (evalInstId) {
                     const now = (new Date()).getTime();
+
                     if (
-                        now > (new Date(`${evaluationInstance.start} 00:00:01 AM`)).getTime()
-                        && now < (new Date(`${evaluationInstance.end} 11:59:59 PM`).getTime())
+                        now > (new Date(`${evaluationInstance.start}T00:00:01.000+06:00`)).getTime()
+                        && now < (new Date(`${evaluationInstance.end}T23:59:59.000+06:00`).getTime())
                         && evaluationInstance.initiated
                         && !evaluationInstance.published
                     ) {
@@ -303,7 +303,7 @@ const EvaluationForm = () => {
     </div>
 
     const getCodeInput = () => <div className="w-[90%] lg:w-[60%] xl:w-[40%] flex flex-col gap-10 mx-auto">
-        <LineInput question={"Please enter evaluation code:"} customStyle={{ input: "font-['Source_Code_Pro']" }} max="10" min="10" preventPaste={true} placeholder="Evaluation Code" onChangeFn={enterCode} />
+        <LineInput question={"Please enter evaluation code:"} customStyle={{ input: "font-['Source_Code_Pro']" }} max="10" min="10" preventPaste={window.location.hostname !== "localhost"} placeholder="Evaluation Code" onChangeFn={enterCode} />
 
         {<p className={`text-center ${bgColorStyles.contrast} rounded-full py-2 text-rose-500 ${formState.invalid_code ? "opacity-100" : "opacity-0"} ${transitioner.simple}`}>Invalid code entered</p>}
 
