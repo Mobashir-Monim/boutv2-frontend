@@ -61,7 +61,7 @@ const Evaluation = () => {
             let flag = false;
             let [evaluationInstance, id] = (await getEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity }))[0];
 
-            if (!id && user.uid != "36QlTRZox2Oc6QEqVFdSSK8eg4y1") {
+            if (!id && user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1") {
                 await setEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity, initiated: false, published: false, start: "", end: "" });
                 [evaluationInstance, id] = (await getEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity }))[0];
             }
