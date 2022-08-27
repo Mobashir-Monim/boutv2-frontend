@@ -46,7 +46,6 @@ const Evaluation = () => {
             if (section_ids.slice(i * 10, i + 10).length > 0) {
                 const temp = await getEvaluationSubmissions({ offered_section_ids: section_ids.slice(i * 10, i + 10), part });
 
-                console.log(temp);
                 if (temp[0][1])
                     submissions = submissions.concat(temp);
             }
@@ -58,12 +57,13 @@ const Evaluation = () => {
     const fetchEvaluationInstance = async () => {
         if (semesters.includes(pageState.semester) && years.includes(pageState.year)) {
             const pageStateClone = deepCopy(pageState);
-            let flag = false;
             let [evaluationInstance, id] = (await getEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity }))[0];
 
             if (!id && user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1") {
-                await setEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity, initiated: false, published: false, start: "", end: "" });
-                [evaluationInstance, id] = (await getEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity }))[0];
+                if (window.confirm(`Are you sure that you want to create a new evaluation instance for ${pageState.year} ${pageState.semester}`)) {
+                    await setEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity, initiated: false, published: false, start: "", end: "" });
+                    [evaluationInstance, id] = (await getEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity }))[0];
+                }
             }
 
             if (id) {
@@ -214,7 +214,7 @@ const Evaluation = () => {
     }
 
     const setOfferedSectionInstructor = async identifier => {
-        const docRef = await setOfferedSection({
+        await setOfferedSection({
             id: identifier,
             code: pageState.search.results.theory[identifier].code,
             section: pageState.search.results.theory[identifier].section,
@@ -230,7 +230,7 @@ const Evaluation = () => {
             theory_instructor_initials: pageState.search.results.theory[identifier].theory_instructor_initials,
         })
 
-        console.log("updated");
+        alert("updated");
     }
 
     const toggleInitializedState = event => {
@@ -266,7 +266,8 @@ const Evaluation = () => {
     }
 
     const saveEvaluationSettings = async () => {
-        await setEvaluationInstance(getFormattedEvaluationObject());
+        if (user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1")
+            await setEvaluationInstance(getFormattedEvaluationObject());
     }
 
     const entityControl = <LineInput label="Evaluation Entity" onChangeFn={setEntity} value={pageState.entity} />;
