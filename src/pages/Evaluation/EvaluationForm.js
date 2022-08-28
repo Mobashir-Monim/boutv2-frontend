@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { LinearInput, RadioInput, CheckboxInput, TextInput, LineInput, DateInput, SelectInput, RadioGridInput } from "../../components/FormInputs/QuestionedInputs";
 import { bgColorStyles, buttonStyles, pageLayoutStyles, transitioner } from "../../utils/styles/styles";
 import { deepClone } from "../../utils/functions/deepClone";
+import { useLoadingScreen } from "../../utils/contexts/LoadingScreenContext";
 
 import { getOfferedSections } from "../../db/remote/course";
 import { getEvaluationInstance, getEvlauationQuestions, addEvaluationSubmission } from "../../db/remote/evaluation";
@@ -11,6 +12,7 @@ import { auth } from "../../db/remote/firebase"
 import { signInAnonymously } from "firebase/auth";
 
 const EvaluationForm = () => {
+    const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
     useEffect(() => {
         if (!auth.currentUser) {
             signInAnonymously(auth)
@@ -164,6 +166,7 @@ const EvaluationForm = () => {
 
     const submitEvaluation = async () => {
         if (isSubmittable()) {
+            showLoadingScreen("Submitting evaluation, please wait");
 
             await addEvaluationSubmission({
                 offered_section_id: formState.offered_section[1],
@@ -176,12 +179,15 @@ const EvaluationForm = () => {
             formStateClone.submitted = true;
 
             setFormState(formStateClone);
+            hideLoadingScreen();
         } else {
             alert("Please fill up all the required questions");
         }
+
     }
 
     const validateCode = async () => {
+        showLoadingScreen("Validating code, please wait");
         let flag = false;
 
         if (formState.code.length === 10) {
@@ -207,6 +213,8 @@ const EvaluationForm = () => {
 
         if (!flag)
             setFormState({ ...formState, invalid_code: true });
+
+        hideLoadingScreen();
     }
 
     const setStringInput = (event, identifier, row = undefined) => {

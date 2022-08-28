@@ -5,10 +5,12 @@ import { useNavigate } from "react-router-dom";
 import BracuLogo from "../../assets/bracu-logo.svg";
 import { useAuth } from "../../utils/contexts/AuthContext";
 import { useEffect } from "react";
+import { useLoadingScreen } from "../../utils/contexts/LoadingScreenContext";
 
 const auth = getAuth();
 
 const Login = () => {
+    const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
     const { user, login } = useAuth();
     const navigate = useNavigate();
 
@@ -18,12 +20,10 @@ const Login = () => {
     }, [navigate, user]);
 
     const authenticate = () => {
+        showLoadingScreen("Authenticating, please wait");
         const provider = new GoogleAuthProvider();
         signInWithPopup(auth, provider)
             .then(result => {
-                // const credential = GoogleAuthProvider.credentialFromResult(result);
-                // const token = credential.accessToken;
-                // user.login(result.user);
                 const user = {
                     email: result.user.email,
                     uid: result.user.uid,
@@ -35,7 +35,9 @@ const Login = () => {
                 }
                 login(user);
                 navigate("/");
+                hideLoadingScreen();
             }).catch(error => {
+                hideLoadingScreen();
                 alert("Whoops! Something went wrong. Please try again.");
             })
     }

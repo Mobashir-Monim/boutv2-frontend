@@ -1,9 +1,12 @@
 import { AuthProvider } from "./AuthContext"
+import { LoadingScreenProvider } from "./LoadingScreenContext"
 
 export const ContextApplier = ({ children }) => {
     return <>
-        <AuthProvider>
-            {children}
-        </AuthProvider>
+        <LoadingScreenProvider>
+            <AuthProvider>
+                {children}
+            </AuthProvider>
+        </LoadingScreenProvider>
     </>
 }

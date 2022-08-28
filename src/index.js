@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { ContextApplier } from './utils/contexts/ContextApplier';
+import LoadingScreen from './components/LoadingScreen/LoadingScreen';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -12,6 +13,7 @@ root.render(
         <BrowserRouter>
             <ContextApplier>
                 <App />
+                <LoadingScreen />
             </ContextApplier>
         </BrowserRouter>
     </React.StrictMode>

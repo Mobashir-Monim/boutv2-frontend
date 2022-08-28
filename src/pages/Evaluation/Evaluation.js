@@ -5,6 +5,7 @@ import { getOfferedSections, getOfferedSectionsByFaculty, setOfferedSection } fr
 import { borderColorStyles, cardStyles, pageLayoutStyles, transitioner } from "../../utils/styles/styles";
 import { deepCopy } from "@firebase/util";
 import { useEvaluationInstance } from "../../utils/contexts/EvaluationContext";
+import { useLoadingScreen } from "../../utils/contexts/LoadingScreenContext";
 
 import PrimaryButton from "../../components/Buttons/PrimaryButton";
 import SecondaryButton from "../../components/Buttons/SecondaryButton";
@@ -14,6 +15,7 @@ import SimpleCard from "../../components/Card/SimpleCard";
 import EvaluationDates from "./Admin/EvaluationDates";
 
 const Evaluation = () => {
+    const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
     const { user } = useAuth();
     const { storeEvaluationInstance } = useEvaluationInstance();
     const years = Array((new Date()).getUTCFullYear() - 2022 + 1).fill().map((_, idx) => `${(new Date()).getUTCFullYear() + idx}`);
@@ -105,8 +107,11 @@ const Evaluation = () => {
     }
 
     const fetchEvaluationSemesterData = async event => {
+        showLoadingScreen("Fetching data, please wait");
         await fetchEvaluationInstance();
         event.preventDefault();
+
+        hideLoadingScreen();
     }
 
     const selectEvaluationSemester = event => {
@@ -193,6 +198,7 @@ const Evaluation = () => {
     }
 
     const searchOfferedSection = async () => {
+        showLoadingScreen("Fetching data, please wait");
         const offered_sections = await getOfferedSections({
             year: pageState.year,
             semester: pageState.semester,
@@ -204,6 +210,7 @@ const Evaluation = () => {
         pageStateClone.search.results = constructSearchResultObject(offered_sections);
 
         setPageState(pageStateClone);
+        hideLoadingScreen();
     }
 
     const setOfferedSectionInstructorState = (part, identifier, target, index, event) => {
@@ -214,6 +221,7 @@ const Evaluation = () => {
     }
 
     const setOfferedSectionInstructor = async identifier => {
+        showLoadingScreen("Updating data, please wait");
         await setOfferedSection({
             id: identifier,
             code: pageState.search.results.theory[identifier].code,
@@ -230,7 +238,7 @@ const Evaluation = () => {
             theory_instructor_initials: pageState.search.results.theory[identifier].theory_instructor_initials,
         })
 
-        alert("updated");
+        hideLoadingScreen();
     }
 
     const toggleInitializedState = event => {
@@ -266,8 +274,11 @@ const Evaluation = () => {
     }
 
     const saveEvaluationSettings = async () => {
-        if (user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1")
+        if (user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1") {
+            showLoadingScreen("Updating data, please wait");
             await setEvaluationInstance(getFormattedEvaluationObject());
+            hideLoadingScreen();
+        }
     }
 
     const entityControl = <LineInput label="Evaluation Entity" onChangeFn={setEntity} value={pageState.entity} />;
