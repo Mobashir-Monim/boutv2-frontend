@@ -5,8 +5,6 @@ import { bgColorStyles, pageLayoutStyles } from "../../utils/styles/styles";
 const LoadingScreen = () => {
     const { loadingScreenState } = useLoadingScreen();
 
-    useEffect(() => { console.log(loadingScreenState.isLoading); });
-
     return <div className={`${pageLayoutStyles.fixed} !h-[100vh] fixed top-0 left-0 ${loadingScreenState.isLoading ? "z-50" : "-z-50 hidden"} text-black dark:text-white flex flex-col justify-center bg-[#171717]/[0.7]`}>
         <div className={`${bgColorStyles.contrast} p-10 rounded-xl w-[90%] md:w-[55%] lg:w-[45%] xl:w-[35%] min-h-[20vh] lg:min-h-[30vh] flex flex-col justify-center mx-auto`}>
             <div className="flex flex-row gap-5">
