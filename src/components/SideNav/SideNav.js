@@ -44,6 +44,16 @@ const SideNav = ({ showNav, toggleNav, collapseNav }) => {
             },
         },
         {
+            name: "Student Mapper",
+            icon: "share",
+            action: "/student-mapper",
+            type: "link",
+            classses: {
+                name: "",
+                icon: ""
+            },
+        },
+        {
             name: "Evaluation",
             icon: "analytics",
             action: "/evaluation",

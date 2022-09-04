@@ -16,6 +16,7 @@ import { useAuth } from "./utils/contexts/AuthContext";
 import { EvaluationInstanceProvider } from "./utils/contexts/EvaluationContext";
 import CourseConfig from "./pages/CourseConfig/CourseConfig";
 import EvaluationForm from "./pages/Evaluation/EvaluationForm";
+import Dashboard from "./pages/Dashboard/Dashboard";
 
 const App = () => {
     const [sideNavStatus, setSideNavStatus] = useState({ currentRoute: "/", showNav: false });
@@ -40,9 +41,10 @@ const App = () => {
         <div className={`w-[100%] min-h-[100vh] ${sideNavStatus.showNav ? "lg:w-[calc(100vw-250px)]" : "lg:w-[calc(100vw-70px-1rem)]"} ${user ? "lg:ml-auto pt-[calc(70px+1rem)] pb-5 lg:py-10" : "lg:mx-auto"} text-black dark:text-white ${transitioner.simple}`}>
             <Routes>
                 <Route path="/" element={<ProtectedRoute />}>
-                    <Route path="/" element={<UnderDevelopment />} />
-                    <Route path="/dashboard" element={<UnderDevelopment />} />
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/profile" element={<UnderDevelopment />} />
+                    <Route path="/student-mapper" element={<UnderDevelopment />} />
                     <Route path="/" element={<EvaluationInstanceProvider />}>
                         <Route path="/evaluation" element={<Evaluation />} />
                         <Route path="/evaluation/questions" element={<EvaluationQuestions />} />
