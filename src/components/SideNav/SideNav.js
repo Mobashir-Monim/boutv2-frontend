@@ -46,7 +46,7 @@ const SideNav = ({ showNav, toggleNav, collapseNav }) => {
         {
             name: "Student Mapper",
             icon: "share",
-            action: "/student-mapper",
+            action: "/students/mapper",
             type: "link",
             classses: {
                 name: "",

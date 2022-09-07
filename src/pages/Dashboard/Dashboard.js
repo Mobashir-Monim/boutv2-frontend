@@ -13,7 +13,7 @@ const Dashboard = () => {
                     <p className="text-center mb-5">What would you like to do today?</p>
                     <div className="flex flex-row flex-wrap justify-center gap-5">
                         <PrimaryButton text={"Evaluation Panel"} link="/evaluation" />
-                        <PrimaryButton text={"Student Mapper"} link="/student-mapper" />
+                        <PrimaryButton text={"Student Mapper"} link="/students/mapper" />
                     </div>
                 </div>
             </SimpleCard>
