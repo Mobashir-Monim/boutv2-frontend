@@ -14,7 +14,7 @@ export const LineInput = ({ name, label, onChangeFn, value, customStyle = {} }) 
     </div>
 }
 
-export const SelectInput = ({ name, label, options, onChangeFn }) => {
+export const SelectInput = ({ name, label, options, onChangeFn, value }) => {
     let opts = null;
 
     if (Array.isArray(options)) {
@@ -24,14 +24,14 @@ export const SelectInput = ({ name, label, options, onChangeFn }) => {
     }
 
     return <div className="flex flex-col">
-        <select name={name} className={`${inputStyles.labeled.input}`} onChange={onChangeFn}>
+        <select name={name} className={`${inputStyles.labeled.input}`} onChange={onChangeFn} value={value}>
             {opts}
         </select>
         <p className={`${inputStyles.labeled.label}`}>{label}</p>
     </div>
 }
 
-export const TextInput = ({ label, onChangeFn, value }) => {
+export const TextInput = ({ label, onChangeFn, value, customStyle = {}, placeholder, disabled = false }) => {
     const resizeSelf = event => {
         if (event.keyCode === 8) {
             event.target.style.height = `40px`;
@@ -44,7 +44,7 @@ export const TextInput = ({ label, onChangeFn, value }) => {
     }
 
     return <div className="flex flex-col">
-        <textarea type="text" className={`resize-none ${inputStyles.labeled.input}`} onChange={onChangeFn} onKeyUp={resizeSelf} value={value} />
+        <textarea type="text" className={`resize-none ${inputStyles.labeled.input} ${customStyle.input} !rounded-xl`} onChange={onChangeFn} onKeyUp={resizeSelf} value={value} placeholder={placeholder} disabled={disabled ? "disabled" : ""} />
         <p className={`${inputStyles.labeled.label}`}>{label}</p>
     </div>
 }

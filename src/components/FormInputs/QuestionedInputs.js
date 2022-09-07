@@ -24,7 +24,7 @@ export const LineInput = ({ name, question, onChangeFn, value, placeholder = "Yo
     </QuestionCard>
 }
 
-export const SelectInput = ({ name, question, options, onChangeFn, required }) => {
+export const SelectInput = ({ name, question, options, onChangeFn, required, customStyle = {} }) => {
     let opts = null;
 
     if (Array.isArray(options)) {
@@ -33,9 +33,9 @@ export const SelectInput = ({ name, question, options, onChangeFn, required }) =
         opts = Object.keys(options).map((opt, optIndex) => <option value={opt} key={`es-${optIndex}`}>{options[opt]}</option>);
     }
 
-    return <QuestionCard title={required ? <>{question}<div className="italic text-right text-red-400 font-bold text-[0.8rem]">[ Response Required ]</div></> : question}>
+    return <QuestionCard title={required ? <>{question}<div className={`italic text-right text-red-400 font-bold text-[0.8rem]`} customStyle={customStyle.card}>[ Response Required ]</div></> : question}>
         <div className="flex flex-col max-w-[350px]">
-            <select name={name} className={`${inputStyles.questioned.input}`} onChange={onChangeFn}>
+            <select name={name} className={`${inputStyles.questioned.input} ${customStyle.input}`} onChange={onChangeFn}>
                 {opts}
             </select>
         </div>
