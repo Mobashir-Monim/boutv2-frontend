@@ -22,8 +22,8 @@ const Evaluation = () => {
     const semesters = ["Spring", "Summer", "Fall"];
 
     const [pageState, setPageState] = useState({
-        year: years[0],
-        semester: semesters[0],
+        year: null,
+        semester: null,
         dates: { show: false, start: (new Date()).toISOString().split("T")[0], end: null },
         entity: "CSE",
         initiated: false,
@@ -44,9 +44,9 @@ const Evaluation = () => {
     const fetchSubmissions = async (section_ids, part) => {
         let submissions = [];
 
-        for (let i = 0; i < section_ids.length; i++) {
-            if (section_ids.slice(i * 10, i + 10).length > 0) {
-                const temp = await getEvaluationSubmissions({ offered_section_ids: section_ids.slice(i * 10, i + 10), part });
+        for (let i = 0; i < section_ids.length; i += 10) {
+            if (section_ids.slice(i, i + 10).length > 0) {
+                const temp = await getEvaluationSubmissions({ offered_section_ids: section_ids.slice(i, i + 10), part });
 
                 if (temp[0][1])
                     submissions = submissions.concat(temp);
@@ -58,6 +58,7 @@ const Evaluation = () => {
 
     const fetchEvaluationInstance = async () => {
         if (semesters.includes(pageState.semester) && years.includes(pageState.year)) {
+            showLoadingScreen("Fetching data, please wait");
             const pageStateClone = deepCopy(pageState);
             let [evaluationInstance, id] = (await getEvaluationInstance({ year: pageState.year, semester: pageState.semester, entity: pageState.entity }))[0];
 
@@ -93,6 +94,8 @@ const Evaluation = () => {
                 });
                 alert("Evaluation not set.")
             }
+
+            hideLoadingScreen();
         } else {
             alert("Please select a valid year and semester");
         }
@@ -107,11 +110,8 @@ const Evaluation = () => {
     }
 
     const fetchEvaluationSemesterData = async event => {
-        showLoadingScreen("Fetching data, please wait");
         await fetchEvaluationInstance();
         event.preventDefault();
-
-        hideLoadingScreen();
     }
 
     const selectEvaluationSemester = event => {
@@ -315,10 +315,10 @@ const Evaluation = () => {
                 <CardHeader title="Select evaluation semester" />
                 <div className="flex flex-col mt-2 md:flex-row w-[100%] justify-between">
                     <div className="flex flex-col text-left md:w-[47%]">
-                        <SelectInput name={"year"} label={"Evaluation Year"} options={years} onChangeFn={selectEvaluationYear} />
+                        <SelectInput name={"year"} label={"Evaluation Year"} options={pageState.year === null ? ["Select year", ...years] : years} value={pageState.year} onChangeFn={selectEvaluationYear} />
                     </div>
                     <div className="flex flex-col text-left md:w-[47%]">
-                        <SelectInput name={"semester"} label={"Evaluation Semester"} options={semesters} onChangeFn={selectEvaluationSemester} />
+                        <SelectInput name={"semester"} label={"Evaluation Semester"} options={pageState.semester === null ? ["Select semester", ...semesters] : semesters} value={pageState.semester} onChangeFn={selectEvaluationSemester} />
                     </div>
                 </div>
                 <div className="text-right flex flex-col md:flex-row mt-2 gap-5 justify-between">
@@ -398,10 +398,10 @@ const Evaluation = () => {
                                     <div className="flex flex-col w-[100%] md:w-[70%] gap-3 md:max-w-[400px]">
                                         {pageState.search.results[part][identifier][`${part}_instructor_emails`].map((_, iIndex) => <div key={`${identifier}-${iIndex}`}>
                                             <div className="flex flex-row">
-                                                <div className="w-[65px]"><LineInput customStyle={{ input: "text-[0.9rem] border-2 border-b-[1px] border-r-[1px] rounded-tl-[10px]", label: "hidden" }} label="Initials" value={pageState.search.results[part][identifier][`${part}_instructor_initials`][iIndex]} onChangeFn={event => setOfferedSectionInstructorState(part, identifier, "initials", iIndex, event)} /></div>
-                                                <div className="min-w-[200px] w-[100%]"><LineInput customStyle={{ input: "text-[0.9rem] border-2 border-b-[1px] border-l-[1px] rounded-tr-[10px]", label: "hidden" }} label="Name" value={pageState.search.results[part][identifier][`${part}_instructor_names`][iIndex]} onChangeFn={event => setOfferedSectionInstructorState(part, identifier, "names", iIndex, event)} /></div>
+                                                <div className="w-[65px]"><LineInput customStyle={{ input: "text-[0.9rem] border-2 border-b-[1px] border-r-[1px] rounded-none rounded-tl-xl", label: "hidden" }} label="Initials" value={pageState.search.results[part][identifier][`${part}_instructor_initials`][iIndex]} onChangeFn={event => setOfferedSectionInstructorState(part, identifier, "initials", iIndex, event)} /></div>
+                                                <div className="min-w-[200px] w-[100%]"><LineInput customStyle={{ input: "text-[0.9rem] border-2 border-b-[1px] border-l-[1px] rounded-none rounded-tr-xl", label: "hidden" }} label="Name" value={pageState.search.results[part][identifier][`${part}_instructor_names`][iIndex]} onChangeFn={event => setOfferedSectionInstructorState(part, identifier, "names", iIndex, event)} /></div>
                                             </div>
-                                            <div className="w-[100%]"><LineInput customStyle={{ input: "text-[0.9rem] border-2 border-2 border-t-[1px] rounded-b-[10px]", label: "hidden" }} label="Email" value={pageState.search.results[part][identifier][`${part}_instructor_emails`][iIndex]} onChangeFn={event => setOfferedSectionInstructorState(part, identifier, "emails", iIndex, event)} /></div>
+                                            <div className="w-[100%]"><LineInput customStyle={{ input: "text-[0.9rem] border-2 border-2 border-t-[1px] rounded-none rounded-b-xl", label: "hidden" }} label="Email" value={pageState.search.results[part][identifier][`${part}_instructor_emails`][iIndex]} onChangeFn={event => setOfferedSectionInstructorState(part, identifier, "emails", iIndex, event)} /></div>
                                         </div>)}
                                     </div>
                                 </div>
