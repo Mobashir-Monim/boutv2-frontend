@@ -17,6 +17,7 @@ import { EvaluationInstanceProvider } from "./utils/contexts/EvaluationContext";
 import CourseConfig from "./pages/CourseConfig/CourseConfig";
 import EvaluationForm from "./pages/Evaluation/EvaluationForm";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import StudentMapper from "./pages/StudentMapper/StudentMapper";
 
 const App = () => {
     const [sideNavStatus, setSideNavStatus] = useState({ currentRoute: "/", showNav: false });
@@ -38,13 +39,13 @@ const App = () => {
 
     return <div className={`min-h-[100vh] bg-[#FDFBF9] dark:bg-[#28282B] flex flex-col lg:flex-row text-black dark:text-white ${transitioner.simple}`}>
         <SideNav showNav={sideNavStatus.showNav} toggleNav={toggleSideNav} collapseNav={collapseNav} />
-        <div className={`w-[100%] min-h-[100vh] ${sideNavStatus.showNav ? "lg:w-[calc(100vw-250px)]" : "lg:w-[calc(100vw-70px-1rem)]"} ${user ? "lg:ml-auto pt-[calc(70px+1rem)] pb-5 lg:py-10" : "lg:mx-auto"} text-black dark:text-white ${transitioner.simple}`}>
+        <div className={`w-[100%] min-h-[100vh] ${sideNavStatus.showNav ? "lg:w-[calc(100vw-250px)]" : "lg:w-[calc(100vw-70px-1rem)]"} ${user ? "lg:ml-auto pt-[1rem] pb-5 lg:py-10" : "lg:mx-auto"} text-black dark:text-white ${transitioner.simple}`}>
             <Routes>
                 <Route path="/" element={<ProtectedRoute />}>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/profile" element={<UnderDevelopment />} />
-                    <Route path="/student-mapper" element={<UnderDevelopment />} />
+                    <Route path="/student-mapper" element={<StudentMapper />} />
                     <Route path="/" element={<EvaluationInstanceProvider />}>
                         <Route path="/evaluation" element={<Evaluation />} />
                         <Route path="/evaluation/questions" element={<EvaluationQuestions />} />
