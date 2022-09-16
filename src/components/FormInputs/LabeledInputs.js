@@ -24,7 +24,7 @@ export const SelectInput = ({ name, label, options, onChangeFn, value }) => {
     }
 
     return <div className="flex flex-col">
-        <select name={name} className={`${inputStyles.labeled.input}`} onChange={onChangeFn} value={value}>
+        <select name={name} className={`${inputStyles.labeled.input}`} onChange={onChangeFn} value={value ? value : ""}>
             {opts}
         </select>
         <p className={`${inputStyles.labeled.label}`}>{label}</p>
@@ -33,7 +33,7 @@ export const SelectInput = ({ name, label, options, onChangeFn, value }) => {
 
 export const TextInput = ({ label, onChangeFn, value, customStyle = {}, placeholder, disabled = false }) => {
     const resizeSelf = event => {
-        if (event.keyCode === 8) {
+        if (event.key === "Backspace") {
             event.target.style.height = `40px`;
             setTimeout(() => {
                 event.target.style.height = `${event.target.scrollHeight}px`;

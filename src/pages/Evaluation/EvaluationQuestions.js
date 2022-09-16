@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { useEvaluationInstance } from "../../../utils/contexts/EvaluationContext";
-import { deepClone } from "../../../utils/functions/deepClone"
+import { useEvaluationInstance } from "../../utils/contexts/EvaluationContext";
+import { deepClone } from "../../utils/functions/deepClone"
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../utils/contexts/AuthContext";
-import { getEvlauationQuestions, setEvaluationQuestions } from "../../../db/remote/evaluation";
+import { useAuth } from "../../utils/contexts/AuthContext";
+import { getEvaluationQuestions, setEvaluationQuestions } from "../../db/remote/evaluation";
 
-import SimpleCard from "../../../components/Card/SimpleCard";
-import { SelectInput } from "../../../components/FormInputs/LabeledInputs";
+import SimpleCard from "../../components/Card/SimpleCard";
+import { SelectInput } from "../../components/FormInputs/LabeledInputs";
 
-import EvaluationQuestion from "./EvaluationQuestion";
+import EvaluationQuestion from "./components/EvaluationQuestion";
 
-import { buttonStyles } from "../../../utils/styles/styles";
-import { pageLayoutStyles } from "../../../utils/styles/styles";
+import { buttonStyles } from "../../utils/styles/styles";
+import { pageLayoutStyles } from "../../utils/styles/styles";
 
 const questionTypes = {
     short: "Short",
@@ -52,7 +52,7 @@ const EvaluationQuestions = () => {
             navigate("/evaluation");
 
         (async () => {
-            let [evalQuestions, id] = (await getEvlauationQuestions({ evalInstId }))[0];
+            let [evalQuestions, id] = (await getEvaluationQuestions({ evalInstId }))[0];
 
             if (id) {
                 evalQuestions = JSON.parse(evalQuestions.questions);

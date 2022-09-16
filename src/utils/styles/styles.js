@@ -1,7 +1,10 @@
-export const textColorStyles = "text-black dark:text-white";
+export const textColorStyles = {
+    simple: "text-black dark:text-white",
+    clickable: "hover:text-orange-500 text-blue-500 dark:text-blue-400",
+};
 
 export const borderColorStyles = {
-    simple: "border-[#aaa] dark:border-white",
+    simple: "border-[#999] dark:border-[#aaa]",
 }
 
 export const transitioner = {
@@ -19,8 +22,8 @@ export const buttonStyles = {
 }
 
 export const cardStyles = {
-    simple: `p-5 drop-shadow-lg rounded-xl border-[1px] ${borderColorStyles.simple} ${textColorStyles} ${bgColorStyles.contrast}`,
-    question: `px-10 py-10 drop-shadow-lg ${textColorStyles} ${bgColorStyles.contrast} rounded-xl focus:drop-shadow-[0_0_5px_rgba(37,99,235,1)] hover:drop-shadow-[0_0_5px_rgba(37,99,235,1)] ${transitioner.simple}`,
+    simple: `p-5 drop-shadow-lg rounded-xl border-[1px] ${borderColorStyles.simple} ${textColorStyles.simple} ${bgColorStyles.contrast}`,
+    question: `px-10 py-10 drop-shadow-lg ${textColorStyles.simple} ${bgColorStyles.contrast} rounded-xl focus:drop-shadow-[0_0_5px_rgba(37,99,235,1)] hover:drop-shadow-[0_0_5px_rgba(37,99,235,1)] ${transitioner.simple}`,
 }
 
 export const modalBg = {
@@ -29,14 +32,14 @@ export const modalBg = {
 
 export const inputStyles = {
     labeled: {
-        input: `outline-none peer p-2 rounded-3xl !bg-[#fff]/[0.7] dark:!bg-[#171717]/[0.3] ${textColorStyles} border-[1px] ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`,
+        input: `outline-none peer p-2 rounded-3xl !bg-[#fff]/[0.7] dark:!bg-[#171717]/[0.3] ${textColorStyles.simple} border-[1px] ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`,
         label: `text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 peer-focus:text-orange-500 mt-1 text-right ${transitioner.simple}`
     },
     minified: {
-        input: `outline-none peer px-1 py-1 ${textColorStyles} ${bgColorStyles.contrast} border-y-[1.5px] focus:border-x-[0.5px] border-y-[1px] hover:border-x-[0.5px] text-[0.9rem] ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`
+        input: `outline-none peer px-1 py-1 ${textColorStyles.simple} ${bgColorStyles.contrast} border-y-[1.5px] focus:border-x-[0.5px] border-y-[1px] hover:border-x-[0.5px] text-[0.9rem] ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`
     },
     questioned: {
-        input: `outline-none peer px-3 py-2 ${textColorStyles} ${bgColorStyles.contrast} border-b-2 ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`,
+        input: `outline-none peer px-3 py-2 ${textColorStyles.simple} ${bgColorStyles.contrast} border-b-2 ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`,
         label: `text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 peer-checked:text-orange-500 mt-1 text-center ${transitioner.simple}`,
         question: `peer-focus:text-blue-400 peer-hover:text-blue-400 peer-focus:text-orange-500 peer-focus:border-orange-500 mb-1 border-b-2 text-[1rem] md:text-[1.1rem] pb-3 leading-5 ${transitioner.simple}`,
         markers: `text-[0.8rem] text-center md:text-left my-auto`,

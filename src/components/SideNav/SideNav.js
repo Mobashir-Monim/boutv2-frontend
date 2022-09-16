@@ -115,7 +115,7 @@ const SideNav = ({ showNav, toggleNav, collapseNav }) => {
         }
     ];
 
-    return <nav className={`${widthClasses} flex flex-col py-2 lg:py-10 gap-1 z-[50] sticky top-0 overflow-hidden bg-blue-700 dark:bg-blue-800 ${transitioner.simple} drop-shadow-lg`}>
+    return <nav className={`${widthClasses} flex flex-col py-2 lg:py-10 gap-1 z-[50] fixed top-0 overflow-hidden bg-blue-700 dark:bg-blue-800 ${transitioner.simple} drop-shadow-lg`}>
         <div className={`flex flex-row justify-start ${transitioner.simple} ml-6 mt-2 lg:ml-1`}>
             <span className={`bg-white rounded-full cursor-pointer relative p-2 inline text-center material-icons-round font-bold transition-all duration-500 ease-linear ${arrowContainerClasses}`} onClick={toggleNav}>
                 <span className={`material-icons-round font-bold ${transitioner.simple} text-black ${arrowClasses}`} onClick={toggleNav}>arrow_forward_ios</span>

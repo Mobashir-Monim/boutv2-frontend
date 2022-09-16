@@ -53,7 +53,7 @@ const updateCourse = async ({ id, entity, code, name }) => {
     return docRef;
 }
 
-export const getOfferedSections = async ({ section, code, year, semester, link_code }) => {
+export const getOfferedSections = async ({ section, code, year, semester, link_code, faculty }) => {
     let snapshots = { size: 0 }, results = [];
 
     if (section && year && semester && code) {
@@ -62,6 +62,10 @@ export const getOfferedSections = async ({ section, code, year, semester, link_c
         snapshots = await getOfferedSectionsByCode(code, year, semester);
     } else if (link_code) {
         snapshots = await getOfferedSectionByLinkCode(link_code);
+    } else if (faculty) {
+        snapshots = await getDocs(query(offeredSectionColRef, where("theory_instructor_emails", "array-contains", faculty)));
+        firestoreSnapshotFormatter(snapshots, results);
+        snapshots = await getDocs(query(offeredSectionColRef, where("lab_instructor_emails", "array-contains", faculty)));
     } else {
         snapshots = await getOfferedSectionsInSemester(year, semester);
     }

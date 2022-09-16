@@ -44,7 +44,7 @@ export const SelectInput = ({ name, question, options, onChangeFn, required, cus
 
 export const TextInput = ({ question, onChangeFn, value, placeholder = "Your Response", required }) => {
     const resizeSelf = event => {
-        if (event.keyCode === 8) {
+        if (event.key === "Backspace") {
             event.target.style.height = `40px`;
             setTimeout(() => {
                 event.target.style.height = `${event.target.scrollHeight}px`;
