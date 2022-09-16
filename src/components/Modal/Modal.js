@@ -14,9 +14,9 @@ const Modal = ({ navShown }) => {
     }
 
     return <div className={`${modalClasses} ${transitioner.simple} block fixed ${show ? "z-20" : "-z-50 hidden"} flex flex-col justify-center bg-[#171717]/[0.7]`} onClick={hideModal} onKeyDown={event => { if (event.key === "Escape") hideModal() }}>
-        <div className="w-[95%] md:w-[80%] mx-auto" onClick={event => event.stopPropagation()}>
+        <div className="w-[90%] md:w-[80%] mx-auto" onClick={event => event.stopPropagation()}>
             <SimpleCard title={title}>
-                <div className="mt-5 overflow-scroll p-5 no-scroll-bar min-h-[50vh] max-h-[80vh]">
+                <div className="mt-5 overflow-scroll p-5 no-scroll-bar min-h-[50vh] max-h-[60vh] md:max-h-[80vh]">
                     {content}
                 </div>
             </SimpleCard>
