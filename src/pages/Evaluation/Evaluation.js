@@ -253,7 +253,6 @@ const Evaluation = () => {
         if ((new Date()).getTime() > (new Date(`${pageState.dates.end} 11:59:59 PM`)).getTime() && pageState.initiated) {
             const pageStateClone = deepCopy(pageState);
             pageStateClone.published = !pageStateClone.published;
-
             setPageState(pageStateClone);
         } else {
             alert(`Evaluation collection must be over before publishing results`);
