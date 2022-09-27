@@ -105,7 +105,7 @@ const StudentMapper = () => {
         <div className="w-[100%] lg:w-[70%] mx-auto flex flex-col md:flex-row drop-shadow-lg">
             <SimpleCard title="Student Mapper">
                 <div className="mt-5 flex flex-col">
-                    <div className={`w-[100%] lg:w-[70%] mx-auto flex flex-col gap-6 pb-5 ${borderColorStyles.simple}`}>
+                    <div className={`w-[100%] mx-auto flex flex-col gap-6 pb-5 ${borderColorStyles.simple}`}>
                         <div className="flex flex-col md:flex-row gap-6">
                             <div className="w-[100%]">
                                 <SelectInput name="convert_from" label="Convert From" options={mapper.from ? convertionOption : { null: "Convert From", ...convertionOption }} customStyle={{ card: "!drop-shadow-none" }} onChangeFn={updateConvertFrom} value={mapper.from} />

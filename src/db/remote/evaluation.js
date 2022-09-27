@@ -53,7 +53,7 @@ const updateEvaluationInstance = async ({ id, start, end, initiated, published }
     return docRef;
 }
 
-export const getEvlauationQuestions = async ({ evalInstId }) => {
+export const getEvaluationQuestions = async ({ evalInstId }) => {
     let results = [];
     const snapshots = await getDocs(query(
         evalQuesColRef,

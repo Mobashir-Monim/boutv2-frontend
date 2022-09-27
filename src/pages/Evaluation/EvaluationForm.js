@@ -6,7 +6,7 @@ import { deepClone } from "../../utils/functions/deepClone";
 import { useLoadingScreen } from "../../utils/contexts/LoadingScreenContext";
 
 import { getOfferedSections } from "../../db/remote/course";
-import { getEvaluationInstance, getEvlauationQuestions, addEvaluationSubmission } from "../../db/remote/evaluation";
+import { getEvaluationInstance, getEvaluationQuestions, addEvaluationSubmission } from "../../db/remote/evaluation";
 import { auth } from "../../db/remote/firebase"
 
 import { signInAnonymously } from "firebase/auth";
@@ -115,7 +115,7 @@ const EvaluationForm = () => {
         formStateClone.year = evaluationInstance.year;
         formStateClone.semester = evaluationInstance.semester;
         formStateClone.offered_section = [offeredSection, offeredSectionId];
-        let [questions] = (await getEvlauationQuestions({ evalInstId: evalInstId }))[0];
+        let [questions] = (await getEvaluationQuestions({ evalInstId: evalInstId }))[0];
         formStateClone.questions = buildQuestions(JSON.parse(questions.questions)[formStateClone.part], generateInstructorsObject(offeredSection, formStateClone.part));
         formStateClone.responses = createResponseObject(formStateClone.questions);
         setFormState(formStateClone);
