@@ -19,6 +19,7 @@ import EvaluationForm from "./pages/Evaluation/EvaluationForm";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import StudentMapper from "./pages/StudentMapper/StudentMapper";
 import { EvaluationInstanceProvider, EvaluationQuestionsProvider } from "./utils/contexts/EvaluationContext";
+import Thesis from "./pages/Thesis/Thesis";
 
 const App = () => {
     const [sideNavStatus, setSideNavStatus] = useState({ currentRoute: "/", showNav: false });
@@ -48,6 +49,7 @@ const App = () => {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/profile" element={<UnderDevelopment />} />
                     <Route path="/students/mapper" element={<StudentMapper />} />
+                    <Route path="/thesis" element={<Thesis />} />
                     <Route path="/" element={<EvaluationInstanceProvider />}>
                         <Route path="/" element={<EvaluationQuestionsProvider />}>
                             <Route path="/evaluation" element={<Evaluation />} />
