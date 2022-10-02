@@ -23,6 +23,7 @@ import Thesis from "./pages/Thesis/Thesis";
 import ThesisRegistration from "./pages/Thesis/ThesisRegistration";
 import PrivacyPolicy from "./pages/StaticPage/PrivacyPolicy";
 import Profile from "./pages/Profile/Profile";
+import TermsOfService from "./pages/StaticPage/TermsOfService";
 
 const App = () => {
     const [sideNavStatus, setSideNavStatus] = useState({ currentRoute: "/", showNav: false });
@@ -71,6 +72,7 @@ const App = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/evaluation/form" element={<EvaluationForm />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </div>

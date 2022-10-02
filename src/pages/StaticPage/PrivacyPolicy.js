@@ -25,12 +25,12 @@ const PrivacyPolicy = () => {
             <h2 className={`text-[1.5rem] mt-10 mb-3 border-b-2 ${borderColorStyles.simple}`}>How we use your information</h2>
             <p className={`text-justify my-2`}>We use the information we collect in various ways, including to:</p>
             <ul className="ml-5 flex flex-col gap-2">
-                <li className="text-justify">Provide, operate, and maintain our website</li>
-                <li className="text-justify">Improve, personalize, and expand our website</li>
-                <li className="text-justify">Understand and analyze how you use our website</li>
-                <li className="text-justify">Develop new products, services, features, and functionality</li>
-                <li className="text-justify">Communicate with you, either directly or through one of our partners, including for customer service, to provide you with updates and other information relating to the website, and for marketing and promotional purposes</li>
-                <li className="text-justify">Send you emails</li>
+                <li className="text-justify border-b-[1px]">Provide, operate, and maintain our website</li>
+                <li className="text-justify border-b-[1px]">Improve, personalize, and expand our website</li>
+                <li className="text-justify border-b-[1px]">Understand and analyze how you use our website</li>
+                <li className="text-justify border-b-[1px]">Develop new products, services, features, and functionality</li>
+                <li className="text-justify border-b-[1px]">Communicate with you, either directly or through one of our partners, including for customer service, to provide you with updates and other information relating to the website, and for marketing and promotional purposes</li>
+                <li className="text-justify border-b-[1px]">Send you emails</li>
                 <li className="text-justify">Find and prevent fraud</li>
             </ul>
 
