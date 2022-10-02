@@ -6,7 +6,6 @@ import BracuLogo from "../../assets/bracu-logo.svg";
 import { useAuth } from "../../utils/contexts/AuthContext";
 import { useEffect } from "react";
 import { useLoadingScreen } from "../../utils/contexts/LoadingScreenContext";
-import { domainKey, studentDomainValue, staffDomainValue } from "../../utils/contants";
 
 const auth = getAuth();
 
@@ -25,8 +24,6 @@ const Login = () => {
         const provider = new GoogleAuthProvider();
         signInWithPopup(auth, provider)
             .then(result => {
-                const domainNamespace = result.user.email.endsWith("@g.brac.ac.bd") ? studentDomainValue : staffDomainValue;
-
                 const user = {
                     email: result.user.email,
                     uid: result.user.uid,
@@ -35,7 +32,6 @@ const Login = () => {
                     accessToken: result.user.stsTokenManager.accessToken,
                     refreshToken: result.user.stsTokenManager.refreshToken,
                     expirationTime: result.user.stsTokenManager.expirationTime,
-                    [domainKey]: domainNamespace
                 }
                 login(user);
                 navigate("/");
