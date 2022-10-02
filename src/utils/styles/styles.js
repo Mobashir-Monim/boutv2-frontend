@@ -18,6 +18,16 @@ export const bgColorStyles = {
     contrast: "bg-[#fff] dark:bg-[#444]"
 };
 
+export const navStyles = {
+    optionContainer: `rounded-full flex cursor-pointer relative p-3 text-center transition-all duration-500 ease-linear`,
+    optionIcon: `material-icons-round my-auto font-bold ${transitioner.simple} text-white`,
+    optionText: {
+        base: `text-white my-auto`,
+        hidden: `opacity-0 ml-0 text-[0rem]`,
+        shown: `text-[0.8rem] opacity-100 ml-4`
+    },
+}
+
 export const buttonStyles = {
     primary: "bg-blue-600 text-white hover:bg-rose-600 transition-all duration-300 ease-linear rounded-3xl px-4 py-2 drop-shadow-md hover:drop-shadow-2xl cursor-pointer text-center",
     secondary: "bg-indigo-600 text-white hover:bg-fuchsia-600 transition-all duration-300 ease-linear rounded-3xl px-4 py-2 drop-shadow-md hover:drop-shadow-2xl cursor-pointer text-center"

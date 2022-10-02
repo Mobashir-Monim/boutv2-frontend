@@ -1,10 +1,14 @@
+import { getAuth } from "firebase/auth";
+
+const auth = getAuth();
+
 export const getStoredUser = () => {
     let user = null;
 
     try {
         user = JSON.parse(localStorage.getItem("user"));
-        // if (user.expirationTime < (new Date()).getTime())
-        //     return null;
+        if (!auth.currentUser)
+            return null;
 
         return user;
     } catch (error) {
