@@ -7,14 +7,14 @@ export const DateInput = ({ name, label, onChangeFn, minDate, maxDate, value }) 
     </div>
 }
 
-export const LineInput = ({ name, label, onChangeFn, value, customStyle = {} }) => {
+export const LineInput = ({ name, label, onChangeFn, value, customStyle = {}, placeholder }) => {
     return <div className={`flex flex-col ${customStyle.container}`}>
-        <input type="text" name={name} className={`${inputStyles.labeled.input} ${customStyle.input}`} onChange={onChangeFn} value={value} />
+        <input type="text" name={name} className={`${inputStyles.labeled.input} ${customStyle.input}`} onChange={onChangeFn} value={value} placeholder={placeholder} />
         <p className={`${inputStyles.labeled.label} ${customStyle.label}`}>{label}</p>
     </div>
 }
 
-export const SelectInput = ({ name, label, options, onChangeFn, value }) => {
+export const SelectInput = ({ name, label, options, onChangeFn, value, customStyle = {} }) => {
     let opts = null;
 
     if (Array.isArray(options)) {
@@ -23,11 +23,11 @@ export const SelectInput = ({ name, label, options, onChangeFn, value }) => {
         opts = Object.keys(options).map((opt, optIndex) => <option value={opt} key={`es-${optIndex}`}>{options[opt]}</option>);
     }
 
-    return <div className="flex flex-col">
-        <select name={name} className={`${inputStyles.labeled.input}`} onChange={onChangeFn} value={value ? value : ""}>
+    return <div className={`flex flex-col ${customStyle.container}`}>
+        <select name={name} className={`${inputStyles.labeled.input} ${customStyle.input}`} onChange={onChangeFn} value={value ? value : ""}>
             {opts}
         </select>
-        <p className={`${inputStyles.labeled.label}`}>{label}</p>
+        <p className={`${inputStyles.labeled.label} ${customStyle.label}`}>{label}</p>
     </div>
 }
 
@@ -43,7 +43,7 @@ export const TextInput = ({ label, onChangeFn, value, customStyle = {}, placehol
         }
     }
 
-    return <div className="flex flex-col">
+    return <div className={`flex flex-col ${customStyle.container}`}>
         <textarea type="text" className={`resize-none ${inputStyles.labeled.input} ${customStyle.input} !rounded-xl`} onChange={onChangeFn} onKeyUp={resizeSelf} value={value} placeholder={placeholder} disabled={disabled ? "disabled" : ""} />
         <p className={`${inputStyles.labeled.label}`}>{label}</p>
     </div>

@@ -3,8 +3,8 @@ export const getStoredUser = () => {
 
     try {
         user = JSON.parse(localStorage.getItem("user"));
-        if (user.expirationTime < (new Date()).getTime())
-            return null;
+        // if (user.expirationTime < (new Date()).getTime())
+        //     return null;
 
         return user;
     } catch (error) {

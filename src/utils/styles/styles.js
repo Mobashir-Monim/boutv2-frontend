@@ -5,6 +5,8 @@ export const textColorStyles = {
 
 export const borderColorStyles = {
     simple: "border-[#999] dark:border-[#aaa]",
+    primary: "border-blue-600",
+    secondary: "border-indigo-600"
 }
 
 export const transitioner = {
@@ -13,7 +15,7 @@ export const transitioner = {
 
 export const bgColorStyles = {
     body: "bg-white dark:bg-[#232323]",
-    contrast: "bg-[#ddd] dark:bg-[#444]"
+    contrast: "bg-[#fff] dark:bg-[#444]"
 };
 
 export const buttonStyles = {
@@ -37,7 +39,7 @@ export const inputStyles = {
         label: `text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 peer-focus:text-orange-500 mt-1 text-right ${transitioner.simple}`
     },
     minified: {
-        input: `outline-none peer px-1 py-1 ${textColorStyles.simple} ${bgColorStyles.contrast} border-y-[1.5px] focus:border-x-[0.5px] border-y-[1px] hover:border-x-[0.5px] text-[0.9rem] ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`
+        input: `outline-none peer px-1 py-1 ${textColorStyles.simple} ${bgColorStyles.contrast} border-b-[1.5px] text-[0.9rem] ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`
     },
     questioned: {
         input: `outline-none peer px-3 py-2 ${textColorStyles.simple} ${bgColorStyles.contrast} border-b-2 ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`,
@@ -48,6 +50,10 @@ export const inputStyles = {
 }
 
 export const pageLayoutStyles = {
-    scrollable: "w-[90%] mx-auto min-h-[calc(100vh-70px-1rem)] lg:min-h-[calc(100vh-5rem)]",
-    fixed: "w-[100%] h-[calc(100vh-70px-1rem)] lg:h-[calc(100vh-5rem)]"
+    scrollable: "w-[90%] mx-auto min-h-[calc(100vh-70px-2.5rem)] lg:min-h-[calc(100vh-5rem)]",
+    fixed: "w-[100%] h-[calc(100vh-70px-2.5rem)] lg:h-[calc(100vh-5rem)]"
+}
+
+export const linkStyles = {
+    primary: `text-blue-400 hover:text-rose-400 ${transitioner.simple}`
 }
