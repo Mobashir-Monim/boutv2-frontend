@@ -1,6 +1,6 @@
-import { buttonStyles } from "../../utils/styles/styles";
+import { buttonStyles, textColorStyles, transitioner } from "../../utils/styles/styles";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import BracuLogo from "../../assets/bracu-logo.svg";
 import { useAuth } from "../../utils/contexts/AuthContext";
@@ -46,12 +46,16 @@ const Login = () => {
             })
     }
 
-    return <div className="w-[100%] min-h-[100vh] flex flex-col justify-center">
-        <div className={`mx-auto ${buttonStyles.primary} flex flex-row w-[70%] rounded-3xl md:w-[40%] lg:w-[25%] gap-10`} onClick={authenticate}>
+    return <div className="w-[100%] min-h-[100vh] flex flex-col justify-center gap-5">
+        <div className={`mx-auto ${buttonStyles.primary} flex flex-row w-[90%] rounded-3xl md:w-[40%] lg:w-[25%] gap-10`} onClick={authenticate}>
             <img src={BracuLogo} alt="Brac University" className="w-[40%]" />
             <span className={`text-[1.8rem] inline-block my-auto`}>
                 Login
             </span>
+        </div>
+        <div className="flex md:flex-row w-[90%] rounded-3xl md:w-[40%] lg:w-[25%] mx-auto justify-between px-5">
+            <Link className={`${textColorStyles.clickable} ${transitioner.simple}`} target="_blank" to="/privacy-policy">Privacy Policy</Link>
+            <Link className={`${textColorStyles.clickable} ${transitioner.simple}`} target="_blank" to="/terms-of-service">Terms of Service</Link>
         </div>
     </div>
 }

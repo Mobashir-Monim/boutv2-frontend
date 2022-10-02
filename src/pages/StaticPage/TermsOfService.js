@@ -48,7 +48,7 @@ const TermsOfService = () => {
             <hr />
 
             <h2 className={`text-[1.5rem] mt-10 mb-3 border-b-2 ${borderColorStyles.simple}`}>8. Your Privacy</h2>
-            <p className={`text-justify my-2`}>Please read our <Link to="/privacy-policy" className={`${textColorStyles.clickable} ${transitioner.simple}`}>Privacy Policy</Link>.</p>
+            <p className={`text-justify my-2`}>Please read our <Link to="/privacy-policy" className={`${textColorStyles.clickable} ${transitioner.simple}`} target="_blank">Privacy Policy</Link>.</p>
 
             <hr />
 

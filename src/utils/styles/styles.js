@@ -14,7 +14,7 @@ export const transitioner = {
 }
 
 export const bgColorStyles = {
-    body: "bg-white dark:bg-[#232323]",
+    body: "bg-[#FDFBF9] dark:bg-[#232323]",
     contrast: "bg-[#fff] dark:bg-[#444]"
 };
 
