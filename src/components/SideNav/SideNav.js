@@ -19,10 +19,6 @@ const SideNav = ({ showNav, toggleNav, collapseNav }) => {
             icon: "dashboard",
             action: "/dashboard",
             type: "link",
-            classses: {
-                name: "",
-                icon: ""
-            },
         },
     ];
 
@@ -48,10 +44,6 @@ const SideNav = ({ showNav, toggleNav, collapseNav }) => {
             icon: "power_settings_new",
             action: logout,
             type: "function",
-            classses: {
-                name: "",
-                icon: ""
-            },
         });
     }
 

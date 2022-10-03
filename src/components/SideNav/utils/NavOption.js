@@ -6,10 +6,7 @@ const profile = {
     icon: "person",
     action: "/profile",
     type: "link",
-    classses: {
-        name: "",
-        icon: ""
-    },
+
 };
 
 const thesis = {
@@ -17,10 +14,7 @@ const thesis = {
     icon: "biotech",
     action: "/thesis",
     type: "link",
-    classses: {
-        name: "",
-        icon: ""
-    },
+
 };
 
 const studentMapper = {
@@ -28,10 +22,7 @@ const studentMapper = {
     icon: "share",
     action: "/students/mapper",
     type: "link",
-    classses: {
-        name: "",
-        icon: ""
-    },
+
 };
 
 const evaluation = {
@@ -39,10 +30,7 @@ const evaluation = {
     icon: "analytics",
     action: "/evaluation",
     type: "link",
-    classses: {
-        name: "",
-        icon: ""
-    },
+
 };
 
 const routine = {
@@ -50,10 +38,7 @@ const routine = {
     icon: "calendar_month",
     action: "/routine",
     type: "link",
-    classses: {
-        name: "",
-        icon: ""
-    },
+
 };
 
 const courseConfig = {
@@ -61,10 +46,7 @@ const courseConfig = {
     icon: "auto_stories",
     action: "/course-config",
     type: "link",
-    classses: {
-        name: "",
-        icon: ""
-    },
+
 };
 
 const obe = {
@@ -72,10 +54,7 @@ const obe = {
     icon: "bubble_chart",
     action: "/obe",
     type: "link",
-    classses: {
-        name: "",
-        icon: ""
-    },
+
 };
 
 const settings = {
@@ -83,10 +62,6 @@ const settings = {
     icon: "settings",
     action: "/settings",
     type: "link",
-    classses: {
-        name: "",
-        icon: ""
-    },
 };
 
 export const appendStaffNavOptions = navOptions => {
