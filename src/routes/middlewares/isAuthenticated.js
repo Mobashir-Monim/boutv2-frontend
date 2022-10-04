@@ -4,5 +4,5 @@ import { auth } from "../../db/remote/firebase";
 
 export const isAuthenticated = () => ({
     evaluation: Boolean(getStoredUser()),
-    onFail: <Navigate to="/login" />
+    onFail: <Navigate to="/logout" />
 });

@@ -75,8 +75,8 @@ const App = () => {
 
                     {/* <Route path="/thesis" element={<Thesis />} /> */}
                     {/* <Route path="/thesis/registration" element={<ThesisRegistration />} /> */}
-                    <Route path="/logout" element={<Logout />} />
                 </Route>
+                <Route path="/logout" element={<Logout />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/evaluation/form" element={<EvaluationForm />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
