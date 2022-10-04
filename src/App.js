@@ -24,6 +24,7 @@ import PrivacyPolicy from "./pages/StaticPage/PrivacyPolicy";
 import Profile from "./pages/Profile/Profile";
 import TermsOfService from "./pages/StaticPage/TermsOfService";
 import Middleware from "./routes/Middleware";
+import Logout from "./pages/Auth/Logout";
 
 const App = () => {
     const [sideNavStatus, setSideNavStatus] = useState({ currentRoute: "/", showNav: false });
@@ -74,6 +75,7 @@ const App = () => {
 
                     {/* <Route path="/thesis" element={<Thesis />} /> */}
                     {/* <Route path="/thesis/registration" element={<ThesisRegistration />} /> */}
+                    <Route path="/logout" element={<Logout />} />
                 </Route>
                 <Route path="/login" element={<Login />} />
                 <Route path="/evaluation/form" element={<EvaluationForm />} />
