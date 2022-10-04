@@ -1,11 +1,7 @@
-import { Link } from "react-router-dom";
 import { transitioner } from "../../utils/styles/styles";
-
 import { useAuth } from "../../utils/contexts/AuthContext";
-import { getAuth } from "firebase/auth";
 import { appendStaffNavOptions, appendStudentNavOptions, generateFunctionNavOption, generateLinkNavOption } from "./utils/NavOption";
-
-const auth = getAuth();
+import { domainKey, studentDomainValue, staffDomainValue } from "../../utils/contants";
 
 const SideNav = ({ showNav, toggleNav, collapseNav }) => {
     const { user, logout } = useAuth();
@@ -33,9 +29,9 @@ const SideNav = ({ showNav, toggleNav, collapseNav }) => {
             arrowContainerClasses = "lg:mr-auto";
         }
 
-        if (auth.currentUser.email.endsWith("@bracu.ac.bd")) {
+        if (user[domainKey] == staffDomainValue) {
             appendStaffNavOptions(navOptions);
-        } else if (auth.currentUser.email.endsWith("@g.bracu.ac.bd")) {
+        } else if (user[domainKey] == studentDomainValue) {
             appendStudentNavOptions(navOptions);
         }
 

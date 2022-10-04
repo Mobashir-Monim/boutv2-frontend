@@ -1,13 +1,12 @@
-import { getAuth } from "firebase/auth";
+import { auth } from "../remote/firebase";
 
-const auth = getAuth();
 
 export const getStoredUser = () => {
     let user = null;
 
     try {
         user = JSON.parse(localStorage.getItem("user"));
-        if (!auth.currentUser)
+        if (user.expirationTime < (new Date()).getTime())
             return null;
 
         return user;

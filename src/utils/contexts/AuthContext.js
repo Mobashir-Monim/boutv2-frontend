@@ -1,9 +1,8 @@
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setStoredUser, getStoredUser } from "../../db/local/user";
-import { getAuth, signOut } from "firebase/auth";
-
-const auth = getAuth();
+import { signOut } from "firebase/auth";
+import { auth } from "../../db/remote/firebase";
 
 export const AuthContext = createContext(undefined);
 

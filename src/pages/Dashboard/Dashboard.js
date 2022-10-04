@@ -1,19 +1,18 @@
-import { getAuth } from "firebase/auth";
+import { auth } from "../../db/remote/firebase";
 import { useAuth } from "../../utils/contexts/AuthContext";
 import { pageLayoutStyles } from "../../utils/styles/styles";
 import FacultyDashboard from "./components/FacultyDashboard";
 import NonMemberDashboard from "./components/NonMemberDashboard";
 import StudentDashboard from "./components/StudentDashboard";
-
-const auth = getAuth();
+import { domainKey, studentDomainValue, staffDomainValue } from "../../utils/contants";
 
 const Dashboard = () => {
     const { user } = useAuth();
     let content = null;
 
-    if (auth.currentUser.email.endsWith("@bracu.ac.bd")) {
+    if (user[domainKey] === staffDomainValue) {
         content = <FacultyDashboard user={user} />
-    } else if (auth.currentUser.email.endsWith("@g.bracu.ac.bd")) {
+    } else if (user[domainKey] === studentDomainValue) {
         content = <StudentDashboard user={user} />
     } else {
         content = <NonMemberDashboard user={user} />

@@ -1,13 +1,13 @@
 import { buttonStyles, textColorStyles, transitioner } from "../../utils/styles/styles";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 
 import BracuLogo from "../../assets/bracu-logo.svg";
 import { useAuth } from "../../utils/contexts/AuthContext";
 import { useEffect } from "react";
 import { useLoadingScreen } from "../../utils/contexts/LoadingScreenContext";
-
-const auth = getAuth();
+import { auth } from "../../db/remote/firebase";
+import { domainKey, studentDomainValue, staffDomainValue } from "../../utils/contants";
 
 const Login = () => {
     const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
@@ -32,6 +32,7 @@ const Login = () => {
                     accessToken: result.user.stsTokenManager.accessToken,
                     refreshToken: result.user.stsTokenManager.refreshToken,
                     expirationTime: result.user.stsTokenManager.expirationTime,
+                    [domainKey]: result.user.email.endsWith("@bracu.ac.bd") ? staffDomainValue : (result.user.email.endsWith("@g.bracu.ac.bd") ? studentDomainValue : null)
                 }
                 login(user);
                 navigate("/");
