@@ -45,36 +45,43 @@ const StudentProfile = ({ user }) => {
 
     return <div className={`${pageLayoutStyles.scrollable}`}>
         <div className="flex flex-col md:flex-row gap-10">
-            <SimpleCard title="Student Profile" customStyle="w-[100%] h-auto lg:w-[70%] mx-auto">
+            <SimpleCard title="Student Profile" customStyle="w-[100%] h-auto mx-auto">
                 <div className="mt-5 flex flex-col gap-5">
-                    <div className="flex flex-col md:flex-row gap-5 md:gap-10 md:bg-[#171717]/[0.1] md:dark:bg-[#fff]/[0.3] md:p-2 rounded-3xl">
-                        <div className={`flex flex-row  md:w-[35%] justify-start bg-[#171717]/[0.1] dark:bg-[#fff]/[0.3] p-2 rounded-3xl md:bg-[#fff]/[0] md:p-0`}>
-                            <span className={`material-icons-round border-r-[1px] ${borderColorStyles.secondary} px-3`}>badge</span>
-                            <span className={`px-3 border-l-[1px] ${borderColorStyles.secondary} my-auto`}>{student.student_id}</span>
+                    <div className="flex flex-col md:flex-row md:justify-between gap-5">
+                        <div className="flex flex-col justify-center w-[50%] mx-auto md:w-[15%]">
+                            <img src={user.photoURL} className="rounded-full" alt="Student Image" referrerPolicy="no-referrer" />
                         </div>
-                        <div className={`flex flex-row  md:w-[50%] justify-start bg-[#171717]/[0.1] dark:bg-[#fff]/[0.3] p-2 rounded-3xl md:bg-[#fff]/[0] md:p-0`}>
-                            <span className={`material-icons-round border-r-[1px] ${borderColorStyles.secondary} px-3`}>person</span>
-                            <span className={`px-3 border-l-[1px] ${borderColorStyles.secondary} my-auto`}>{user.displayName}</span>
-                        </div>
-                    </div>
-                    <div className="flex flex-col md:flex-row gap-5 md:gap-10 md:bg-[#171717]/[0.1] md:dark:bg-[#fff]/[0.3] md:p-2 rounded-3xl">
-                        <div className={`flex flex-row  md:w-[35%] justify-start bg-[#171717]/[0.1] dark:bg-[#fff]/[0.3] p-2 rounded-3xl md:bg-[#fff]/[0] md:p-0`}>
-                            <span className={`material-icons-round border-r-[1px] ${borderColorStyles.secondary} px-3`}>school</span>
-                            <span className={`px-3 border-l-[1px] ${borderColorStyles.secondary} my-auto`}>{student.program}</span>
-                        </div>
-                        <div className={`flex flex-row  md:w-[50%] justify-start bg-[#171717]/[0.1] dark:bg-[#fff]/[0.3] p-2 rounded-3xl md:bg-[#fff]/[0] md:p-0`}>
-                            <span className={`material-icons-round border-r-[1px] ${borderColorStyles.secondary} px-3`}>email</span>
-                            <span className={`px-3 border-l-[1px] ${borderColorStyles.secondary} my-auto`}>{user.email}</span>
-                        </div>
-                    </div>
-                    <div className="flex flex-col md:flex-row gap-5 md:gap-10 md:bg-[#171717]/[0.1] md:dark:bg-[#fff]/[0.3] md:p-2 rounded-3xl">
-                        <div className={`flex flex-row  md:w-[35%] justify-start bg-[#171717]/[0.1] dark:bg-[#fff]/[0.3] p-2 rounded-3xl md:bg-[#fff]/[0] md:p-0`}>
-                            <span className={`material-icons-round border-r-[1px] ${borderColorStyles.secondary} px-3`}>phone</span>
-                            <span className={`px-3 border-l-[1px] ${borderColorStyles.secondary} my-auto`}>{student.phone}</span>
-                        </div>
-                        <div className={`flex flex-row  md:w-[50%] justify-start bg-[#171717]/[0.1] dark:bg-[#fff]/[0.3] p-2 rounded-3xl md:bg-[#fff]/[0] md:p-0`}>
-                            <span className={`material-icons-round border-r-[2px] ${borderColorStyles.secondary} px-3`}>discord</span>
-                            <span className={`px-3 border-l-[1px] ${borderColorStyles.secondary} my-auto`}>{student.discord_id}</span>
+                        <div className="flex flex-col w-[100%] lg:w-[70%] gap-5">
+                            <div className="flex flex-col md:flex-row gap-5 md:gap-10 md:bg-[#171717]/[0.1] md:dark:bg-[#fff]/[0.3] md:p-2 rounded-3xl">
+                                <div className={`flex flex-row  md:w-[35%] justify-start bg-[#171717]/[0.1] dark:bg-[#fff]/[0.3] p-2 rounded-3xl md:bg-[#fff]/[0] md:p-0`}>
+                                    <span className={`material-icons-round border-r-[1px] ${borderColorStyles.secondary} px-3`}>badge</span>
+                                    <span className={`px-3 border-l-[1px] ${borderColorStyles.secondary} my-auto text-[0.9rem]`}>{student.student_id}</span>
+                                </div>
+                                <div className={`flex flex-row  md:w-[50%] justify-start bg-[#171717]/[0.1] dark:bg-[#fff]/[0.3] p-2 rounded-3xl md:bg-[#fff]/[0] md:p-0`}>
+                                    <span className={`material-icons-round border-r-[1px] ${borderColorStyles.secondary} px-3`}>person</span>
+                                    <span className={`px-3 border-l-[1px] ${borderColorStyles.secondary} my-auto text-[0.9rem]`}>{user.displayName}</span>
+                                </div>
+                            </div>
+                            <div className="flex flex-col md:flex-row gap-5 md:gap-10 md:bg-[#171717]/[0.1] md:dark:bg-[#fff]/[0.3] md:p-2 rounded-3xl">
+                                <div className={`flex flex-row  md:w-[35%] justify-start bg-[#171717]/[0.1] dark:bg-[#fff]/[0.3] p-2 rounded-3xl md:bg-[#fff]/[0] md:p-0`}>
+                                    <span className={`material-icons-round border-r-[1px] ${borderColorStyles.secondary} px-3`}>school</span>
+                                    <span className={`px-3 border-l-[1px] ${borderColorStyles.secondary} my-auto text-[0.9rem]`}>{student.program}</span>
+                                </div>
+                                <div className={`flex flex-row  md:w-[50%] justify-start bg-[#171717]/[0.1] dark:bg-[#fff]/[0.3] p-2 rounded-3xl md:bg-[#fff]/[0] md:p-0`}>
+                                    <span className={`material-icons-round border-r-[1px] ${borderColorStyles.secondary} px-3`}>email</span>
+                                    <span className={`px-3 border-l-[1px] ${borderColorStyles.secondary} my-auto text-[0.9rem]`}>{user.email}</span>
+                                </div>
+                            </div>
+                            <div className="flex flex-col md:flex-row gap-5 md:gap-10 md:bg-[#171717]/[0.1] md:dark:bg-[#fff]/[0.3] md:p-2 rounded-3xl">
+                                <div className={`flex flex-row  md:w-[35%] justify-start bg-[#171717]/[0.1] dark:bg-[#fff]/[0.3] p-2 rounded-3xl md:bg-[#fff]/[0] md:p-0`}>
+                                    <span className={`material-icons-round border-r-[1px] ${borderColorStyles.secondary} px-3`}>phone</span>
+                                    <span className={`px-3 border-l-[1px] ${borderColorStyles.secondary} my-auto text-[0.9rem]`}>{student.phone}</span>
+                                </div>
+                                <div className={`flex flex-row  md:w-[50%] justify-start bg-[#171717]/[0.1] dark:bg-[#fff]/[0.3] p-2 rounded-3xl md:bg-[#fff]/[0] md:p-0`}>
+                                    <span className={`material-icons-round border-r-[2px] ${borderColorStyles.secondary} px-3`}>discord</span>
+                                    <span className={`px-3 border-l-[1px] ${borderColorStyles.secondary} my-auto text-[0.9rem]`}>{student.discord_id}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className={`flex justify-center ${updateRequest ? "h-[0px]" : "h-[40px]"} ${transitioner.simple} overflow-hidden`}>
