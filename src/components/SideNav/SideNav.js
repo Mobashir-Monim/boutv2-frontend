@@ -38,8 +38,8 @@ const SideNav = ({ showNav, toggleNav, collapseNav }) => {
         navOptions.push({
             name: "Logout",
             icon: "power_settings_new",
-            action: logout,
-            type: "function",
+            action: "/logout",
+            type: "link",
         });
     }
 
