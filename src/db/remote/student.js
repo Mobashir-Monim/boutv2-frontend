@@ -2,9 +2,12 @@ import { db } from "./firebase";
 import { collection, query, where, getDocs, addDoc, updateDoc, doc } from "firebase/firestore";
 
 import { firestoreSnapshotFormatter } from "../../utils/functions/firestoreSnapshotFormatter";
+import { FirebaseError } from "firebase/app";
 
 const studentsCollection = "students";
+const studentInfoUpdateRequestCollection = "student_info_update_requests";
 const studentsColRef = collection(db, studentsCollection);
+const studentInfoUpdateRequestColRef = collection(db, studentInfoUpdateRequestCollection);
 
 export const getStudents = async ({ official_emails = [], personal_emails = [], student_ids = [], usernames = [] }) => {
     let snapshots = { size: 0 }, results = [];
@@ -113,4 +116,22 @@ const updateStudent = async ({
     });
 
     return docRef;
+}
+
+export const getStudentsInfoUpdateRequest = async email => {
+    let results = [];
+    const snapshots = await getDocs(query(studentInfoUpdateRequestColRef, where("email", "==", email)));
+
+    return firestoreSnapshotFormatter(snapshots, results);
+}
+
+export const setStudentInfoUpdateRequest = async updateRequest => {
+    const existingReq = await getStudentsInfoUpdateRequest(updateRequest.email);
+
+    if (!existingReq[0][1]) {
+        await addDoc(studentInfoUpdateRequestColRef, { ...updateRequest });
+        return "Successfully placed update request.";
+    } else {
+        return "You already have an existing request, please wait for it to be processed."
+    }
 }

@@ -5,8 +5,8 @@ export const textColorStyles = {
 
 export const borderColorStyles = {
     simple: "border-[#999] dark:border-[#aaa]",
-    primary: "border-blue-600",
-    secondary: "border-indigo-600"
+    primary: "border-blue-600 dark:border-indigo-600",
+    secondary: "border-indigo-600 dark:border-blue-600"
 }
 
 export const transitioner = {
@@ -15,7 +15,10 @@ export const transitioner = {
 
 export const bgColorStyles = {
     body: "bg-[#FDFBF9] dark:bg-[#232323]",
-    contrast: "bg-[#fff] dark:bg-[#444]"
+    contrast: "bg-[#fff] dark:bg-[#444]",
+    patternA: "bg-[#fcf3fd] dark:bg-[#9AB086]",
+    patternB: "bg-[#ffefe2] dark:bg-[#7BAAB3]",
+    patternC: "bg-[#F7FAE9] dark:bg-[#9C7FAD]",
 };
 
 export const navStyles = {

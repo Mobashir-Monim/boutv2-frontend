@@ -7,9 +7,10 @@ const Profile = () => {
     const { user } = useAuth();
 
     if (user[domainKey] === studentDomainValue) {
-        return <StudentProfile user={user} />
+        return <StudentProfile user={user} />;
+        return <UnderDevelopment />;
     } else if (user[domainKey] === staffDomainValue) {
-        return <UnderDevelopment />
+        return <UnderDevelopment />;
     }
 }
 
