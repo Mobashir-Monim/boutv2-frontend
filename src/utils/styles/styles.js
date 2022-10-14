@@ -1,10 +1,10 @@
 export const textColorStyles = {
-    simple: "text-black dark:text-white",
+    simple: "text-black/[0.5] dark:text-white",
     clickable: "hover:text-orange-500 text-blue-500 dark:text-blue-400",
 };
 
 export const borderColorStyles = {
-    simple: "border-[#999] dark:border-[#aaa]",
+    simple: "border-[#ddd] dark:border-[#171717]/[0.3]",
     primary: "border-blue-600 dark:border-indigo-600",
     secondary: "border-indigo-600 dark:border-blue-600"
 }
@@ -37,7 +37,7 @@ export const buttonStyles = {
 }
 
 export const cardStyles = {
-    simple: `p-5 drop-shadow-lg rounded-xl border-[1px] ${borderColorStyles.simple} ${bgColorStyles.contrast}`,
+    simple: `p-5 drop-shadow-lg rounded-xl ${bgColorStyles.contrast}`,
     simpleCustomBg: `p-5 drop-shadow-lg rounded-xl border-[1px] ${borderColorStyles.simple} `,
     question: `px-10 py-10 drop-shadow-lg ${textColorStyles.simple} ${bgColorStyles.contrast} rounded-xl focus:drop-shadow-[0_0_5px_rgba(37,99,235,1)] hover:drop-shadow-[0_0_5px_rgba(37,99,235,1)] ${transitioner.simple}`,
 }
@@ -48,8 +48,8 @@ export const modalBg = {
 
 export const inputStyles = {
     labeled: {
-        input: `outline-none peer p-2 rounded-3xl !bg-[#fff]/[0.7] dark:!bg-[#171717]/[0.3] ${textColorStyles.simple} border-[1px] ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`,
-        label: `text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 peer-focus:text-orange-500 mt-1 text-right ${transitioner.simple}`
+        input: `outline-none peer p-2 rounded-3xl !bg-[#232323]/[0.2] dark:!bg-[#171717]/[0.3] ${textColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`,
+        label: `text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 peer-focus:text-orange-500 mt-1 mr-3 text-right ${transitioner.simple}`
     },
     minified: {
         input: `outline-none peer px-1 py-1 ${textColorStyles.simple} ${bgColorStyles.contrast} border-b-[1.5px] text-[0.9rem] ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`

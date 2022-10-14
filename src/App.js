@@ -25,6 +25,7 @@ import Profile from "./pages/Profile/Profile";
 import TermsOfService from "./pages/StaticPage/TermsOfService";
 import Middleware from "./routes/Middleware";
 import Logout from "./pages/Auth/Logout";
+import StudentProfileManager from "./pages/Profile/StudentProfileManager";
 
 const App = () => {
     const [sideNavStatus, setSideNavStatus] = useState({ currentRoute: "/", showNav: false });
@@ -50,7 +51,7 @@ const App = () => {
         <div className={textColorStyles.simple}>
             <Modal navShown={sideNavStatus.showNav} />
         </div>
-        <div className={`w-[100%] min-h-[100vh] bg-[#FDFBF9] dark:bg-[#28282B] ${user ? `lg:ml-auto pt-[calc(70px+1rem)] pb-5 lg:py-5 ${sideNavStatus.showNav ? "lg:w-[calc(100vw-250px)]" : "lg:w-[calc(100vw-70px-1rem)]"}` : "lg:mx-auto"} text-black dark:text-white ${transitioner.simple}`}>
+        <div className={`w-[100%] min-h-[100vh] bg-[#FDFBF9] dark:bg-[#28282B] ${user ? `lg:ml-auto pt-[calc(70px+1rem)] pb-5 lg:py-5 ${sideNavStatus.showNav ? "lg:w-[calc(100vw-250px)]" : "lg:w-[calc(100vw-70px-1rem)]"}` : "lg:mx-auto"} text-[#171717]/[0.7] font-bold dark:text-white ${transitioner.simple}`}>
             <Routes>
                 <Route path="/" element={<Middleware checks={["auth"]} />}>
                     <Route path="/" element={<Dashboard />} />
@@ -59,6 +60,10 @@ const App = () => {
                         <Route path="/profile" element={<Profile />} />
                         <Route path="/thesis" element={<UnderDevelopment />} />
                     </Route>
+
+                    {/* <Route path="/" element={<Middleware checks={["hasRole:student-profile-manager"]} />}> */}
+                    <Route path="/profile/manage/students" element={<StudentProfileManager />} />
+                    {/* </Route> */}
 
                     <Route path="/" element={<Middleware checks={["faculty"]} />}>
                         <Route path="/students/mapper" element={<StudentMapper />} />

@@ -12,7 +12,7 @@ const AssignedCourses = ({ evaluationState, showReport }) => {
     const getCourseSection = course => course[0].section;
     const getEvaluationCode = (course, part) => course[0][`${part === 1 ? "lab" : "theory"}_evaluation_link`];
     const copyEvaluationCode = (course, part) => navigator.clipboard.writeText(getEvaluationCode(course, part));
-    const getRowBgColor = (rowIndex) => rowIndex % 2 ? "bg-[#eee] dark:bg-[#333]" : "";
+    const getRowBgColor = (rowIndex) => rowIndex % 2 ? "bg-[#ddd] dark:bg-[#333]" : "";
     const countSubmissions = (part, courseID) =>
         evaluationState.submissions[part === 1 ? "lab" : "theory"].filter(x => x[0].offered_section_id === courseID).length;
 
@@ -23,7 +23,7 @@ const AssignedCourses = ({ evaluationState, showReport }) => {
         part === 1 ? "lab" : "theory");
 
     const getRow = (course, courseIndex, cIndex) => <div
-        className={`flex flex-row min-w-[700px] px-3 py-2.5 border-b-[1px] ${borderColorStyles.simple} ${getRowBgColor(courseIndex)}`}
+        className={`flex flex-row min-w-[700px] px-3 py-2.5 ${borderColorStyles.simple} ${getRowBgColor(courseIndex)}`}
         key={`c-t-${courseIndex}`}
     >
         <span className={`${colSm} !text-left`}>{getCourseCode(course)} {cIndex === 1 ? "Lab" : ""}</span>
@@ -46,7 +46,7 @@ const AssignedCourses = ({ evaluationState, showReport }) => {
     return <div className={`${evaluationState.id ? "" : "hidden"} ${transitioner.simple}`}>
         <SimpleCard title={`Evaluation completion status of ${evaluationState.year} ${evaluationState.semester} course assignments`}>
             <div className="flex flex-col mt-5 overflow-scroll no-scroll-bar pb-5">
-                <div className={`flex flex-row min-w-[700px] border-y-2 px-3 py-2.5 ${borderColorStyles.simple} bg-[#eee] dark:bg-[#333]`}>
+                <div className={`flex flex-row min-w-[700px] px-3 py-2.5 ${borderColorStyles.simple} bg-[#ccc] dark:bg-[#333]`}>
                     <span className={`${colSm} !text-left`}>Course Code</span>
                     <span className={`${colSm}`}>Course Section</span>
                     <span className={`${colMd}`}>Submissions</span>

@@ -51,8 +51,8 @@ const Login = () => {
             </span>
         </div>
         <div className="flex md:flex-row w-[90%] rounded-3xl md:w-[40%] lg:w-[25%] mx-auto justify-between px-5">
-            <Link className={`${textColorStyles.clickable} ${transitioner.simple}`} target="_blank" to="/privacy-policy">Privacy Policy</Link>
-            <Link className={`${textColorStyles.clickable} ${transitioner.simple}`} target="_blank" to="/terms-of-service">Terms of Service</Link>
+            <Link className={`${textColorStyles.clickable} ${transitioner.simple}`} target="_blank" rel="noreferrer" to="/privacy-policy">Privacy Policy</Link>
+            <Link className={`${textColorStyles.clickable} ${transitioner.simple}`} target="_blank" rel="noreferrer" to="/terms-of-service">Terms of Service</Link>
         </div>
     </div>
 }

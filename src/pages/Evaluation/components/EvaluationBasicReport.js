@@ -17,13 +17,13 @@ const EvaluationBasicReport = ({ target, questions, evaluationInstance }) => {
 
     const generateStatable = stats => {
         if (Array.isArray(stats)) {
-            return stats.map((s, sIndex) => <div className={`${sIndex === 0 ? "border-y-2" : "border-b-2"} p-2 border-blue-400 ${sIndex % 2 === 0 ? "bg-[#eee] dark:bg-[#333]" : ""}`} key={sIndex}>{s}</div>)
+            return stats.map((s, sIndex) => <div className={`p-2 ${sIndex % 2 === 0 ? "bg-[#ddd] dark:bg-[#333]" : ""}`} key={sIndex}>{s}</div>)
         } else {
             let count = 0;
             let statable = [];
 
             for (let s in stats) {
-                statable.push(<div className={`${count === 0 ? "border-y-2" : "border-b-2"} border-blue-400 p-2 ${count % 2 === 0 ? "bg-[#eee] dark:bg-[#333]" : ""}`} key={s}>
+                statable.push(<div className={`p-2 ${count % 2 === 0 ? "bg-[#ddd] dark:bg-[#333]" : ""}`} key={s}>
                     <span className="font-bold">{stats[s]}</span> student(s) selected <span className="font-bold">"{s}"</span>
                 </div>)
                 count += 1;
@@ -44,7 +44,7 @@ const EvaluationBasicReport = ({ target, questions, evaluationInstance }) => {
                     const isTargetFacultyQuestion = report.report.statistical[q].id.includes(faculty);
 
                     if (!isFacultyQuestion || (isFacultyQuestion && isTargetFacultyQuestion)) {
-                        parts.push(<SimpleCard title={report.report.statistical[q].display} key={q}>
+                        parts.push(<SimpleCard title={report.report.statistical[q].display} key={q} customStyle={"shadow-[0_0_4px_3px_rgba(211,211,211,0.3)] dark:shadow-[0_0_4px_3px_rgba(37,99,235,0.5)]"}>
                             {report.report.statistical[q].aggregatable ? <span className="block p-2 text-[0.8rem]">Average: {(report.report.statistical[q].average.sum / report.report.statistical[q].average.count).toFixed(2)}</span> : <span className="block py-2"></span>}
                             <div className="flex flex-col w-[100%] md:w-[65%] text-[0.8rem]">
                                 {generateStatable(report.report.statistical[q].stats)}

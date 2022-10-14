@@ -105,7 +105,7 @@ const StudentMapper = () => {
         <div className="w-[100%] lg:w-[70%] mx-auto flex flex-col md:flex-row drop-shadow-lg">
             <SimpleCard title="Student Mapper">
                 <div className="mt-5 flex flex-col">
-                    <div className={`w-[100%] mx-auto flex flex-col gap-6 pb-5 ${borderColorStyles.simple}`}>
+                    <div className={`w-[100%] mx-auto flex flex-col gap-6 pb-5`}>
                         <div className="flex flex-col md:flex-row gap-6">
                             <div className="w-[100%]">
                                 <SelectInput name="convert_from" label="Convert From" options={mapper.from ? convertionOption : { null: "Convert From", ...convertionOption }} customStyle={{ card: "!drop-shadow-none" }} onChangeFn={updateConvertFrom} value={mapper.from} />
@@ -118,7 +118,7 @@ const StudentMapper = () => {
                             <PrimaryButton customStyle={"py-1"} text={<div className="flex flex-col"><span className="material-icons-round rotate-90 text-[2rem]">arrow_forward_ios</span></div>} clickFunction={mapStudents} />
                         </div>
                     </div>
-                    <div className={`w-[100%] border-t-[1px] pt-5 flex gap-10 flex-col md:flex-row ${borderColorStyles.simple}`}>
+                    <div className={`w-[100%] pt-5 flex gap-10 flex-col md:flex-row`}>
                         <div className="w-[100%] md:w-[50%]">
                             <TextInput disabled={!mapper.from || !mapper.to} label={mapper.from && mapper.to ? `${convertionOption[mapper.from]}s` : `Select convertion types`} customStyle={{ input: "!min-h-[100px] md:!min-h-[300px] text-[0.8rem] max-h-[300px] md:max-h-[400px]" }} placeholder={mapper.from && mapper.to ? `${convertionOption[mapper.from]}s` : `Select convertion types`} onChangeFn={updateInputs} />
                         </div>

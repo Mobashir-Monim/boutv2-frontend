@@ -9,7 +9,7 @@ const StudentDashboard = ({ user }) => {
                 <p className="text-center mb-5">Welcome to BracU (CSE) Online Utility Tools!!</p>
                 <p className="text-center mb-5">
                     This application is being developed for members of the CSE Department of BracU.
-                    Please let us know any feature that you would like to see on this application by filling this <a href="https://docs.google.com/forms/d/e/1FAIpQLSfUlPhnJuNjC7NwZ0PbR-WUop9PqwcsleIhNgGjNus1L1CRWw/viewform?usp=sf_link" target="_blank" className={`${textColorStyles.clickable} ${transitioner.simple}`}>form</a>!
+                    Please let us know any feature that you would like to see on this application by filling this <a href="https://docs.google.com/forms/d/e/1FAIpQLSfUlPhnJuNjC7NwZ0PbR-WUop9PqwcsleIhNgGjNus1L1CRWw/viewform?usp=sf_link" target="_blank" rel="noreferrer" className={`${textColorStyles.clickable} ${transitioner.simple}`}>form</a>!
                 </p>
                 <p className="text-center mb-5">
                     In the meantime, you can update your <Link className={`${textColorStyles.clickable} ${transitioner.simple}`} to="/profile">profile</Link>.

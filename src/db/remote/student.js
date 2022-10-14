@@ -1,8 +1,7 @@
 import { db } from "./firebase";
-import { collection, query, where, getDocs, addDoc, updateDoc, doc } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, updateDoc, doc, orderBy, limit, deleteDoc } from "firebase/firestore";
 
 import { firestoreSnapshotFormatter } from "../../utils/functions/firestoreSnapshotFormatter";
-import { FirebaseError } from "firebase/app";
 
 const studentsCollection = "students";
 const studentInfoUpdateRequestCollection = "student_info_update_requests";
@@ -73,7 +72,8 @@ const createStudent = async ({
     phone = "",
     program = "",
     school = "",
-    student_id
+    student_id,
+    discord_id = ""
 }) => {
     const docRef = await addDoc(studentsColRef, {
         department,
@@ -84,7 +84,8 @@ const createStudent = async ({
         phone,
         program,
         school,
-        student_id
+        student_id,
+        discord_id
     });
 
     return docRef;
@@ -100,7 +101,8 @@ const updateStudent = async ({
     phone = "",
     program = "",
     school = "",
-    student_id
+    student_id,
+    discord_id = ""
 }) => {
     const docRef = doc(db, studentsCollection, id);
     await updateDoc(docRef, {
@@ -112,7 +114,8 @@ const updateStudent = async ({
         phone,
         program,
         school,
-        student_id
+        student_id,
+        discord_id
     });
 
     return docRef;
@@ -121,6 +124,13 @@ const updateStudent = async ({
 export const getStudentsInfoUpdateRequest = async email => {
     let results = [];
     const snapshots = await getDocs(query(studentInfoUpdateRequestColRef, where("email", "==", email)));
+
+    return firestoreSnapshotFormatter(snapshots, results);
+}
+
+export const getStudentsInfoUpdateRequests = async () => {
+    let results = [];
+    const snapshots = await getDocs(query(studentInfoUpdateRequestColRef, orderBy("email"), limit(5)));
 
     return firestoreSnapshotFormatter(snapshots, results);
 }
@@ -134,4 +144,8 @@ export const setStudentInfoUpdateRequest = async updateRequest => {
     } else {
         return "You already have an existing request, please wait for it to be processed."
     }
+}
+
+export const deleteStudentInfoUpdateRequest = async id => {
+    await deleteDoc(doc(db, studentInfoUpdateRequestCollection, id));
 }
