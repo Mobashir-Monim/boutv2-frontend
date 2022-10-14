@@ -44,11 +44,11 @@ const StudentProfile = ({ user }) => {
     const processSubmittedUpdateRequest = () => setUpdateRequest({ ...updateRequest, pendingRequest: true });
 
     const getInfoContainerClasses = width => `flex flex-row w-[100%] ${width === "sm" ? "md:w-[35%]" : "md:w-[50%]"} justify-start bg-[#171717]/[0.1] dark:bg-[#fff]/[0.3] rounded-3xl`;
-    const getIconClasses = bgColor => `material-icons-round ${bgColorStyles[bgColor]} w-[40px] flex justify-center !h-[40px] border-2 ${borderColorStyles.simple} rounded-full p-2 text-black/[0.5] dark:text-white`;
+    const getIconClasses = bgColor => `material-icons-round ${bgColorStyles[bgColor]} w-[44px] flex justify-center border-2 ${borderColorStyles.simple} rounded-full p-2 text-black/[0.5] dark:text-white`;
 
     const getInfoUpdateForm = () => {
         if (updateRequest.pendingRequest) {
-            return <h1 className="text-center">You have an existing update request, please wait for it to be processed.</h1>;
+            return <h1 className="text-center">You have an existing update request, please visit your thesis supervisor/a full-time faculty member/DCO for approval.</h1>;
         } else {
             return <>
                 <div className={`flex justify-center ${(updateRequest.showRequestForm) ? "h-[0px]" : "h-[40px]"} ${transitioner.simple} overflow-hidden`}>
