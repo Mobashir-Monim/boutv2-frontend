@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { collection, query, where, getDocs, addDoc, updateDoc, doc } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, updateDoc, doc, orderBy } from "firebase/firestore";
 
 import { firestoreSnapshotFormatter } from "../../utils/functions/firestoreSnapshotFormatter";
 
@@ -13,9 +13,27 @@ export const getFacultyMember = async ({ email }) => {
     return firestoreSnapshotFormatter(snapshots, results);
 }
 
+export const getFacultyMemberByInitials = async ({ initials }) => {
+    let results = []
+    const snapshots = await getDocs(query(facultyColRef, where("initials", "==", initials)));
+
+    return firestoreSnapshotFormatter(snapshots, results);
+}
+
 export const getFacultyMembers = async ({ entity }) => {
     let results = [];
     const snapshots = await getDocs(facultyColRef, where("entity", "==", entity));
+
+    return firestoreSnapshotFormatter(snapshots, results);
+}
+
+export const getFacultyMembersByStatus = async ({ entity, status }) => {
+    let results = [];
+    const snapshots = await getDocs(query(
+        facultyColRef,
+        where("entity", "==", entity),
+        where("status", "==", status)
+    ));
 
     return firestoreSnapshotFormatter(snapshots, results);
 }
