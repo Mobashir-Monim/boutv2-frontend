@@ -26,12 +26,12 @@ const Thesis = () => {
             </div> */}
             <div className="flex flex-col lg:flex-row w-[100%] gap-10">
                 <SimpleCard title="Approved Applications" customStyle={"w-[100%] lg:w-[60%]"}>
-                    <div className="mt-5 h-[25vh] lg:h-[50vh] overflow-y-scroll no-scroll-bar">
+                    <div className="p-5 h-[25vh] lg:h-[50vh] overflow-y-scroll no-scroll-bar">
                         <ApprovedApplicationContainer />
                     </div>
                 </SimpleCard>
                 <SimpleCard title="Pending Applications" customStyle={"w-[100%] lg:w-[40%]"}>
-                    <div className="mt-5 h-[25vh] lg:h-[50vh] overflow-y-scroll no-scroll-bar">
+                    <div className="p-5 h-[25vh] lg:h-[50vh] overflow-y-scroll no-scroll-bar">
                         <PendingApplication />
                     </div>
                 </SimpleCard>

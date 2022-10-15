@@ -132,7 +132,7 @@ const PendingApplication = () => {
                     showTitle={false}
                     customStyle="border-none h-20 flex items-center"
                 >
-                    <h1>There is currently no pending applications.</h1>
+                    <h1 className="p-5">There is currently no pending applications.</h1>
                 </SimpleCard>
             )}
         </div>

@@ -62,7 +62,7 @@ const ApprovedApplicationContainer = () => {
                                         : ""
                                     }`}
                             >
-                                <div className="flex flex-col max-w-[70%]">
+                                <div className="flex flex-col max-w-[70%] p-5">
                                     <h1 className="line-clamp-1 lg:line-clamp-2 mb-2 font-bold text-lg break-normal">
                                         {approvedApplication.title}
                                     </h1>
@@ -100,7 +100,7 @@ const ApprovedApplicationContainer = () => {
                     showTitle={false}
                     customStyle="border-none h-20 flex items-center"
                 >
-                    <h1>There is currently no approved applications.</h1>
+                    <h1 className="p-5">There is currently no approved applications.</h1>
                 </SimpleCard>
             )}
         </div>
