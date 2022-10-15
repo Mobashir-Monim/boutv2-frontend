@@ -32,15 +32,88 @@ export const setFaculty = async faculty => {
     return docRef;
 }
 
-const createFaculty = async ({ entity, name, email, initials }) => {
-    const docRef = await addDoc(facultyColRef, { entity, name, email, initials });
+const createFaculty = async ({
+    entity,
+    name,
+    email,
+    initials,
+    usis_initials,
+    pin,
+    joining_date,
+    designation,
+    rank,
+    status,
+    degree,
+    room,
+    ranks_tel,
+    phone,
+    personal_email,
+    discord_id,
+    departmental_duty,
+}) => {
+    const docRef = await addDoc(facultyColRef, {
+        entity,
+        name,
+        email,
+        initials,
+        usis_initials,
+        pin,
+        joining_date,
+        designation,
+        rank,
+        status,
+        degree,
+        room,
+        ranks_tel,
+        phone,
+        personal_email,
+        discord_id,
+        departmental_duty,
+    });
 
     return docRef;
 }
 
-const updateFaculty = async ({ id, entity, name, email, initials }) => {
+const updateFaculty = async ({
+    id,
+    entity,
+    name,
+    email,
+    initials,
+    usis_initials,
+    pin,
+    joining_date,
+    designation,
+    rank,
+    status,
+    degree,
+    room,
+    ranks_tel,
+    phone,
+    personal_email,
+    discord_id,
+    departmental_duty,
+}) => {
     const docRef = doc(db, facultyCollection, id);
-    await updateDoc(docRef, { entity, name, email, initials });
+    await updateDoc(docRef, {
+        entity,
+        name,
+        email,
+        initials,
+        usis_initials,
+        pin,
+        joining_date,
+        designation,
+        rank,
+        status,
+        degree,
+        room,
+        ranks_tel,
+        phone,
+        personal_email,
+        discord_id,
+        departmental_duty,
+    });
 
     return docRef;
 }
