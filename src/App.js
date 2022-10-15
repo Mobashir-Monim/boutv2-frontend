@@ -58,12 +58,13 @@ const App = () => {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/" element={<Middleware checks={["orgMember"]} />}>
                         <Route path="/profile" element={<Profile />} />
+                        {/* <Route path="/thesis" element={<Thesis />} /> */}
                         <Route path="/thesis" element={<UnderDevelopment />} />
                     </Route>
 
-                    {/* <Route path="/" element={<Middleware checks={["hasRole:student-profile-manager"]} />}> */}
-                    <Route path="/profile/manage/students" element={<StudentProfileManager />} />
-                    {/* </Route> */}
+                    <Route path="/" element={<Middleware checks={["hasRole:student-profile-manager"]} />}>
+                        <Route path="/profile/manage/students" element={<StudentProfileManager />} />
+                    </Route>
 
                     <Route path="/" element={<Middleware checks={["faculty"]} />}>
                         <Route path="/students/mapper" element={<StudentMapper />} />
@@ -78,7 +79,6 @@ const App = () => {
                         <Route path="/obe" element={<UnderDevelopment />} />
                     </Route>
 
-                    {/* <Route path="/thesis" element={<Thesis />} /> */}
                     {/* <Route path="/thesis/registration" element={<ThesisRegistration />} /> */}
                 </Route>
                 <Route path="/logout" element={<Logout />} />

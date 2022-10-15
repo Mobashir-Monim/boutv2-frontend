@@ -48,7 +48,7 @@ export const modalBg = {
 
 export const inputStyles = {
     labeled: {
-        input: `outline-none peer p-2 rounded-3xl !bg-[#232323]/[0.2] dark:!bg-[#171717]/[0.3] ${textColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`,
+        input: `outline-none peer py-2 px-3 rounded-3xl !bg-[#232323]/[0.2] dark:!bg-[#171717]/[0.3] ${textColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`,
         label: `text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 peer-focus:text-orange-500 mt-1 mr-3 text-right ${transitioner.simple}`
     },
     minified: {
