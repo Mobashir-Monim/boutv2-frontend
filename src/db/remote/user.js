@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { collection, query, where, getDocs, addDoc, updateDoc, doc } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 
 import { firestoreSnapshotFormatter } from "../../utils/functions/firestoreSnapshotFormatter";
 
@@ -17,12 +17,22 @@ export const getUserRoles = async (email) => {
     return firestoreSnapshotFormatter(snapshots, results);
 }
 
-export const userHasRole = async (email, role) => {
-    const snapshots = await getDocs(query(
-        roleUserColRef,
-        where("email", "==", email),
-        where("role", "==", role),
-    ));
+const getUserRole = async (email, role) => await getDocs(query(
+    roleUserColRef,
+    where("email", "==", email),
+    where("role", "==", role),
+));
 
-    return snapshots.size > 0;
+export const userHasRole = async (email, role) => (await getUserRole(email, role)).size > 0;
+export const attachRole = async (email, role) => {
+    const snapshots = await getUserRole(email, role);
+
+    if (snapshots.size === 0)
+        await addDoc(roleUserColRef, { email, role });
+}
+export const dettachRole = async (email, role) => {
+    const snapshots = await getUserRole(email, role);
+
+    if (snapshots.size > 0)
+        await deleteDoc(doc(db, roleUserCollection, snapshots[0].id));
 }
