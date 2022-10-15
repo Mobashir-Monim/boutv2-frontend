@@ -51,7 +51,7 @@ const FacultyProfile = () => {
     return <div className={`${pageLayoutStyles.scrollable}`}>
         <div className="flex flex-col gap-10">
             <SimpleCard title="Faculty Profile" customStyle="w-[100%] h-auto mx-auto">
-                <div className="mt-5 flex flex-col gap-5">
+                <div className="p-5 flex flex-col gap-5">
                     <div className="flex flex-col md:flex-row md:justify-between gap-5">
                         <div className="flex flex-col justify-center w-[50%] mx-auto md:w-[15%]">
                             <img src={user.photoURL} className="rounded-full" alt="Student Image" referrerPolicy="no-referrer" />

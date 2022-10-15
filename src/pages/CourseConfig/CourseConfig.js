@@ -70,14 +70,14 @@ const CourseConfig = () => {
         <div className="flex flex-col md:flex-row gap-5 mb-10">
             <div className="w-[60%]">
                 <SimpleCard title={"Course Config Admin Console"}>
-                    <div className="mt-5 flex flex-row gap-5">
+                    <div className="p-5 flex flex-row gap-5">
                         <SecondaryButton text={"Configure Courses"} type={"button"} />
                     </div>
                 </SimpleCard>
             </div>
         </div>
         <SimpleCard title={"Course Config"}>
-            <div className="flex flex-col mt-5">
+            <div className="flex flex-col p-5">
                 <div className="flex flex-row">
                     <span className="w-[20%] border-b-2">Entity</span>
                     <span className="w-[7%] border-b-2">Code</span>

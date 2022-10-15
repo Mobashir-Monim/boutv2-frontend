@@ -193,7 +193,7 @@ const EvaluationQuestions = () => {
                 title={`Setting questions for ${questionState.year} ${questionState.semester}`}
                 width="w-[100%] lg:w-[60%]"
             >
-                <p className="mt-5">
+                <p className="p-5">
                     Questions for
                     <span className="mx-2 text-red-600 dark:text-rose-400 font-bold">{questionState.part.toUpperCase()}</span>
                     evaluating
@@ -204,7 +204,7 @@ const EvaluationQuestions = () => {
                 title={`Select Question target`}
                 width="w-[100%] lg:w-[35%]"
             >
-                <div className="mt-5 flex flex-col md:flex-row gap-5">
+                <div className="p-5 flex flex-col md:flex-row gap-5">
                     <div className="lg:w-[47%]">
                         <SelectInput name={"part"} label={"Questions Targetting"} options={["Theory", "Lab"]} onChangeFn={changeTargetPart} />
                     </div>

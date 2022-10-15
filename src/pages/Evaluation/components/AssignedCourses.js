@@ -45,7 +45,7 @@ const AssignedCourses = ({ evaluationState, showReport }) => {
 
     return <div className={`${evaluationState.id ? "" : "hidden"} ${transitioner.simple}`}>
         <SimpleCard title={`Evaluation completion status of ${evaluationState.year} ${evaluationState.semester} course assignments`}>
-            <div className="flex flex-col mt-5 overflow-scroll no-scroll-bar pb-5">
+            <div className="flex flex-col p-5 overflow-scroll no-scroll-bar pb-5">
                 <div className={`flex flex-row min-w-[700px] px-3 py-2.5 ${borderColorStyles.simple} bg-[#ccc] dark:bg-[#333]`}>
                     <span className={`${colSm} !text-left`}>Course Code</span>
                     <span className={`${colSm}`}>Course Section</span>

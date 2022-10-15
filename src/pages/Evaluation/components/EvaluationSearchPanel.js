@@ -17,7 +17,7 @@ const allowedUsers = [
 const EvaluationSearchPanel = ({ user, evaluationState, setSearchPhraseCode, setSearchPhraseSection, setSearchPhraseLink, setSearchPhraseFaculty, setOfferedSectionInstructor, searchOfferedSection, setOfferedSectionInstructorState, showReport }) => {
     return <div className={`${allowedUsers.includes(user.uid) && evaluationState.id ? "" : "hidden"} w-[100%] ${transitioner.simple}`}>
         <SimpleCard title={`Evaluation Search Panel`}>
-            <div className="flex flex-col mt-5">
+            <div className="flex flex-col p-5">
                 <div className="flex flex-col gap-5 mb-10">
                     <div className="flex flex-col md:flex-row justify-between md:w-[100%] gap-5">
                         <div className="md:w-[47%] flex flex-row gap-5">

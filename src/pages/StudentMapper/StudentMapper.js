@@ -104,7 +104,7 @@ const StudentMapper = () => {
     return <div className={`${pageLayoutStyles.scrollable} flex flex-col gap-10`}>
         <div className="w-[100%] lg:w-[70%] mx-auto flex flex-col md:flex-row drop-shadow-lg">
             <SimpleCard title="Student Mapper">
-                <div className="mt-5 flex flex-col">
+                <div className="p-5 flex flex-col">
                     <div className={`w-[100%] mx-auto flex flex-col gap-6 pb-5`}>
                         <div className="flex flex-col md:flex-row gap-6">
                             <div className="w-[100%]">

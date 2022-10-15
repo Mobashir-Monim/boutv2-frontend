@@ -312,7 +312,7 @@ const Evaluation = () => {
     const entityControl = <LineInput label="Evaluation Entity" onChangeFn={setEntity} value={evaluationState.entity} />;
 
     const evalAdminControls = <SimpleCard title="Evaluation Admin Checklist" width="w-[100%] lg:w-[35%]">
-        <div className="flex flex-col flex-wrap mt-2 justify-between gap-3 mx-auto">
+        <div className="flex flex-col flex-wrap p-5 justify-between gap-3 mx-auto">
             <div className="flex flex-row w-[100%]">
                 <SecondaryButton text={"Set Questions"} customStyle="w-[50%] !rounded-r-none" link={`/evaluation/questions`} />
                 <SecondaryButton text={"Set Dates"} customStyle="w-[50%] !rounded-l-none" clickFunction={toggleEvaluationDatesModal} />
@@ -339,25 +339,26 @@ const Evaluation = () => {
 
     return <div className={`${pageLayoutStyles.scrollable} flex flex-col gap-10`}>
         <div className="flex flex-col lg:flex-row gap-y-10 md:justify-between">
-            <div className={`w-[100%] lg:w-[60%] ${cardStyles.simple}`}>
-                <CardHeader title="Select evaluation semester" />
-                <div className="flex flex-col mt-2 md:flex-row w-[100%] justify-between">
-                    <div className="flex flex-col text-left md:w-[47%]">
-                        <SelectInput name={"year"} label={"Evaluation Year"} options={evaluationState.year === null ? ["Select year", ...years] : years} value={evaluationState.year} onChangeFn={selectEvaluationYear} />
+            <SimpleCard customStyle={`w-[100%] lg:w-[60%] ${cardStyles.simple}`} title="Select evaluation semester">
+                <div className="p-5">
+                    <div className="flex flex-col mt-2 md:flex-row w-[100%] justify-between">
+                        <div className="flex flex-col text-left md:w-[47%]">
+                            <SelectInput name={"year"} label={"Evaluation Year"} options={evaluationState.year === null ? ["Select year", ...years] : years} value={evaluationState.year} onChangeFn={selectEvaluationYear} />
+                        </div>
+                        <div className="flex flex-col text-left md:w-[47%]">
+                            <SelectInput name={"semester"} label={"Evaluation Semester"} options={evaluationState.semester === null ? ["Select semester", ...semesters] : semesters} value={evaluationState.semester} onChangeFn={selectEvaluationSemester} />
+                        </div>
                     </div>
-                    <div className="flex flex-col text-left md:w-[47%]">
-                        <SelectInput name={"semester"} label={"Evaluation Semester"} options={evaluationState.semester === null ? ["Select semester", ...semesters] : semesters} value={evaluationState.semester} onChangeFn={selectEvaluationSemester} />
+                    <div className="text-right flex flex-col md:flex-row mt-2 gap-5 justify-between">
+                        <div className="flex flex-col w-[100%] md:w-[47%]">
+                            {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" ? entityControl : <></>}
+                        </div>
+                        <div className="flex flex-col w-[100%] md:w-[30%] my-auto">
+                            <PrimaryButton text="Confirm semester" type="button" clickFunction={fetchEvaluationSemesterData} />
+                        </div>
                     </div>
                 </div>
-                <div className="text-right flex flex-col md:flex-row mt-2 gap-5 justify-between">
-                    <div className="flex flex-col w-[100%] md:w-[47%]">
-                        {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" ? entityControl : <></>}
-                    </div>
-                    <div className="flex flex-col w-[100%] md:w-[30%] my-auto">
-                        <PrimaryButton text="Confirm semester" type="button" clickFunction={fetchEvaluationSemesterData} />
-                    </div>
-                </div>
-            </div>
+            </SimpleCard>
             {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" && evaluationState.id ? evalAdminControls : <></>}
         </div>
 

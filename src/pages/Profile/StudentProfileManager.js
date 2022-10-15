@@ -41,7 +41,7 @@ const StudentProfileManager = () => {
     </div>
 
     const queueList = profileManager.queue.map((req, reqIndex) => <SimpleCard key={`req-${req[1]}`} showTitle={false} customStyle={`rounded-2xl !bg-blue-600/[0.4] hover:!bg-rose-600/[0.7] ${transitioner.simple} p-0 cursor-pointer border-0`}>
-        <div className="flex flex-col" onClick={() => fetchUpdateRequestInfo(reqIndex)}>
+        <div className="flex flex-col p-5" onClick={() => fetchUpdateRequestInfo(reqIndex)}>
             <div className={`flex flex-row w-[100%] justify-start rounded-3xl`}>
                 <span className={`material-icons-round w-[2.5rem] flex justify-center !h-[2.5rem] p-2 text-[1.5rem] text-black/[0.5] dark:text-white`}>email</span>
                 <span className={`my-auto text-[0.9rem] w-[100%]`}>{req[0].email}</span>
@@ -173,18 +173,22 @@ const StudentProfileManager = () => {
     }
 
     return <div className={`${pageLayoutStyles.scrollable}`}>
-        <SimpleCard showTitle={false} customStyle="p-0 flex flex-col md:flex-row !bg-[#fff]/[0.0]">
-            <SimpleCard showTitle={false} customStyle="w-[100%] md:w-[40%] rounded-t-none md:rounded-tl-xl md:rounded-r-none flex flex-col gap-5 md:order-first">
-                <div className="flex flex-row gap-3">
-                    <LineInput customStyle={{ container: "w-[calc(95%-42px)]", input: "py-1" }} label="Email Address" onChangeFn={event => setSearchPhrase(event)} value={profileManager.searchAddress} />
-                    <PrimaryButton customStyle="!rounded-full w-[42px] h-[42px] !p-0 flex flex-col justify-center" text={<span className="material-icons-round mx-auto">search</span>} clickFunction={fetchStudentInfoUpdateRequest} />
-                </div>
-                <div className={`h-[20vh] md:h-[50vh] pt-5 flex flex-col justify-start gap-4 overflow-scroll no-scroll-bar ${borderColorStyles.simple} border-t-2`}>
-                    {getListContent()}
+        <SimpleCard showTitle={false} customStyle="flex flex-col md:flex-row !bg-[#fff]/[0.0]">
+            <SimpleCard showTitle={false} customStyle="w-[100%] md:w-[40%] rounded-t-none md:rounded-tl-xl md:rounded-r-none md:order-first">
+                <div className="p-5 flex flex-col gap-5">
+                    <div className="flex flex-row gap-3">
+                        <LineInput customStyle={{ container: "w-[calc(95%-42px)]", input: "py-1" }} label="Email Address" onChangeFn={event => setSearchPhrase(event)} value={profileManager.searchAddress} />
+                        <PrimaryButton customStyle="!rounded-full w-[42px] h-[42px] !p-0 flex flex-col justify-center" text={<span className="material-icons-round mx-auto">search</span>} clickFunction={fetchStudentInfoUpdateRequest} />
+                    </div>
+                    <div className={`h-[20vh] md:h-[50vh] pt-5 flex flex-col justify-start gap-4 overflow-scroll no-scroll-bar ${borderColorStyles.simple} border-t-2`}>
+                        {getListContent()}
+                    </div>
                 </div>
             </SimpleCard>
-            <SimpleCard showTitle={false} customStyle={`min-h-[50vh] flex flex-col justify-center w-[100%] !drop-shadow-3xl md:w-[60%] rounded-b-none md:rounded-br-xl md:rounded-l-none -order-1 !bg-blue-500/[0.05] dark:!bg-blue-500/[0.1]`}>
-                {displayRequestInfo()}
+            <SimpleCard showTitle={false} customStyle={`min-h-[50vh] w-[100%] !drop-shadow-3xl md:w-[60%] rounded-b-none md:rounded-br-xl md:rounded-l-none -order-1 !bg-blue-500/[0.05] dark:!bg-blue-500/[0.1]`}>
+                <div className="p-5 flex flex-col justify-center">
+                    {displayRequestInfo()}
+                </div>
             </SimpleCard>
         </SimpleCard>
     </div>

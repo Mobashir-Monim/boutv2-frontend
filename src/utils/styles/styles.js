@@ -37,7 +37,7 @@ export const buttonStyles = {
 }
 
 export const cardStyles = {
-    simple: `p-5 drop-shadow-lg rounded-xl ${bgColorStyles.contrast}`,
+    simple: `drop-shadow-lg rounded-xl ${bgColorStyles.contrast}`,
     simpleCustomBg: `p-5 drop-shadow-lg rounded-xl border-[1px] ${borderColorStyles.simple} `,
     question: `px-10 py-10 drop-shadow-lg ${textColorStyles.simple} ${bgColorStyles.contrast} rounded-xl focus:drop-shadow-[0_0_5px_rgba(37,99,235,1)] hover:drop-shadow-[0_0_5px_rgba(37,99,235,1)] ${transitioner.simple}`,
 }
