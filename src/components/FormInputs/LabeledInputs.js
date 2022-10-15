@@ -7,9 +7,9 @@ export const DateInput = ({ name, label, onChangeFn, minDate, maxDate, value }) 
     </div>
 }
 
-export const LineInput = ({ name, label, onChangeFn, value, customStyle = {}, placeholder }) => {
+export const LineInput = ({ name, label, onChangeFn, value, customStyle = {}, placeholder, min, max, readOnly = false }) => {
     return <div className={`flex flex-col ${customStyle.container}`}>
-        <input type="text" name={name} className={`${inputStyles.labeled.input} ${customStyle.input}`} onChange={onChangeFn} value={value ? value : ""} placeholder={placeholder} />
+        <input type="text" name={name} className={`${inputStyles.labeled.input} ${customStyle.input}`} readOnly={readOnly} onChange={onChangeFn} minLength={min ? `${min}` : ""} maxLength={max ? `${max}` : ""} value={value ? value : ""} placeholder={placeholder} />
         <p className={`${inputStyles.labeled.label} ${customStyle.label}`}>{label}</p>
     </div>
 }
