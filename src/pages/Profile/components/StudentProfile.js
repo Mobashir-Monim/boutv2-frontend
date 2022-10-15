@@ -104,10 +104,6 @@ const StudentProfile = ({ user }) => {
                                 </div>
                             </div>
                             <div className="flex flex-col md:flex-row gap-5 md:gap-5 md:p-2 rounded-3xl">
-                                {/* <div className={getInfoContainerClasses("sm")}>
-                                    <span className={getIconClasses("patternB")}>phone</span>
-                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{student.phone ? student.phone : "\u00A0"}</span>
-                                </div> */}
                                 <div className={getInfoContainerClasses("md")}>
                                     <span className={getIconClasses("patternA")}>alternate_email</span>
                                     <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{student.personal_email ? student.personal_email : "\u00A0"}</span>
