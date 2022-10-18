@@ -31,6 +31,26 @@ export const SelectInput = ({ name, label, options, onChangeFn, value, customSty
     </div>
 }
 
+export const CheckboxInput = ({ name, options, onChangeFn, values = [], customStyle = {} }) => {
+    let opts = null;
+
+
+    if (Array.isArray(options)) {
+        opts = options.map((opt, optIndex) => <option value={opt} key={`es-${optIndex}`}>{opt}</option>);
+    } else {
+        opts = Object.keys(options).map((opt, optIndex) => <option value={opt} key={`es-${optIndex}`}>{options[opt]}</option>);
+    }
+
+    return <div className="flex flex-col md:flex-row mt-5 justify-start gap-5 md:gap-10 overflow-scroll no-scroll-bar">
+        <div className="flex flex-col my-auto gap-5">
+            {options.map((opt, optIndex) => <div className="flex flex-row text-center gap-3 cursor-pointer" key={`l-${name}-${optIndex}`} onClick={onChangeFn}>
+                <input type="checkbox" className={`${inputStyles.labeled.input} ${inputStyles.labeled.checkbox} ${values.includes(opt) ? inputStyles.labeled.checked : ""} ${customStyle.input}`} checked={values.includes(opt)} name={name} onChange={() => { }} />
+                <span className={`${inputStyles.labeled.label} !text-left !my-auto ${customStyle.label}`}>{opt}</span>
+            </div>)}
+        </div>
+    </div>
+}
+
 export const TextInput = ({ label, onChangeFn, value, customStyle = {}, placeholder, disabled = false }) => {
     const resizeSelf = event => {
         if (event.key === "Backspace") {

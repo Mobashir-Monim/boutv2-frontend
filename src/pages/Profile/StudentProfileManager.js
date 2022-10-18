@@ -41,7 +41,7 @@ const StudentProfileManager = () => {
     </div>
 
     const queueList = profileManager.queue.map((req, reqIndex) => <SimpleCard key={`req-${req[1]}`} showTitle={false} customStyle={`rounded-2xl !bg-blue-600/[0.4] hover:!bg-rose-600/[0.7] ${transitioner.simple} p-0 cursor-pointer border-0`}>
-        <div className="flex flex-col p-5" onClick={() => fetchUpdateRequestInfo(reqIndex)}>
+        <div className="flex flex-col p-2" onClick={() => fetchUpdateRequestInfo(reqIndex)}>
             <div className={`flex flex-row w-[100%] justify-start rounded-3xl`}>
                 <span className={`material-icons-round w-[2.5rem] flex justify-center !h-[2.5rem] p-2 text-[1.5rem] text-black/[0.5] dark:text-white`}>email</span>
                 <span className={`my-auto text-[0.9rem] w-[100%]`}>{req[0].email}</span>
@@ -81,7 +81,7 @@ const StudentProfileManager = () => {
         let student = await getStudents({ official_emails: [profileManagerClone.queue[current][0].email] })
 
         if (!student[0][1])
-            student = [[{}, null]];
+            student = [[{}, "null"]];
 
         profileManagerClone.studentContent = student[0];
         profileManagerClone.current = current;
@@ -93,7 +93,7 @@ const StudentProfileManager = () => {
             <div className="flex flex-col">
                 <div className={`flex flex-row justify-start rounded-3xl mx-auto`}>
                     <span className={`material-icons-round w-[2.5rem] flex justify-center !h-[2.5rem] p-2 text-[1.5rem] text-black/[0.5] dark:text-white`}>person</span>
-                    <span className={`my-auto text-[0.8rem]`}>{profileManager.studentContent[0].name}</span>
+                    <span className={`my-auto text-[0.8rem]`}>{profileManager.queue[profileManager.current][0].name}</span>
                 </div>
                 <div className={`flex flex-row justify-start rounded-3xl mx-auto`}>
                     <span className={`material-icons-round w-[2.5rem] flex justify-center !h-[2.5rem] p-2 text-[1.5rem] text-black/[0.5] dark:text-white`}>email</span>
@@ -125,7 +125,7 @@ const StudentProfileManager = () => {
     }
 
     const generateStudentObject = () => ({
-        id: profileManager.studentContent[1],
+        id: profileManager.studentContent[1] === "null" ? null : profileManager.studentContent[1],
         department: profileManager.queue[profileManager.current][0].department ? profileManager.queue[profileManager.current][0].department : profileManager.studentContent[0].department,
         lms_username: profileManager.queue[profileManager.current][0].lms_username ? profileManager.queue[profileManager.current][0].lms_username : profileManager.studentContent[0].lms_username,
         name: profileManager.queue[profileManager.current][0].name ? profileManager.queue[profileManager.current][0].name : profileManager.studentContent[0].name,

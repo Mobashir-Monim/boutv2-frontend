@@ -44,7 +44,7 @@ const EvaluationBasicReport = ({ target, questions, evaluationInstance }) => {
                     const isTargetFacultyQuestion = report.report.statistical[q].id.includes(faculty);
 
                     if (!isFacultyQuestion || (isFacultyQuestion && isTargetFacultyQuestion)) {
-                        parts.push(<SimpleCard title={report.report.statistical[q].display} key={q} customStyle={"shadow-[0_0_4px_3px_rgba(211,211,211,0.3)] dark:shadow-[0_0_4px_3px_rgba(37,99,235,0.5)]"}>
+                        parts.push(<SimpleCard title={report.report.statistical[q].display} key={q} customStyle={"dark:shadow-[0_0_4px_3px_rgba(23,23,23,0.5)]"}>
                             <div className="p-5">
                                 {report.report.statistical[q].aggregatable ? <span className="block p-2 text-[0.8rem]">Average: {(report.report.statistical[q].average.sum / report.report.statistical[q].average.count).toFixed(2)}</span> : <span className="block py-2"></span>}
                                 <div className="flex flex-col w-[100%] md:w-[65%] text-[0.8rem]">

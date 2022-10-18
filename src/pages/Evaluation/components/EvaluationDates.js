@@ -11,7 +11,7 @@ const EvaluationDates = ({ show, toggleDateModal, setStartDate, setEndDate, star
 
     useEffect(() => {
         return () => window.addEventListener("keydown", escapeHandler);
-    });
+    }, []);
 
 
     return <div className={`${modalBg.simple} ${show ? "" : "hidden"}`} onClick={() => { toggleDateModal(false) }}>

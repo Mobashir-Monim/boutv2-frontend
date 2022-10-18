@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PrimaryButton from "../../../components/Buttons/PrimaryButton";
 import SimpleCard from "../../../components/Card/SimpleCard";
 import { bgColorStyles, borderColorStyles, pageLayoutStyles, transitioner } from "../../../utils/styles/styles";
-import { getStudents, getStudentsInfoUpdateRequest } from "../../../db/remote/student";
+import { deleteStudentInfoUpdateRequest, getStudents, getStudentsInfoUpdateRequest } from "../../../db/remote/student";
 import { useLoadingScreen } from "../../../utils/contexts/LoadingScreenContext";
 import StudentInfoUpdateForm from "./StudentInfoUpdateForm";
 
@@ -35,7 +35,7 @@ const StudentProfile = ({ user }) => {
         const infoUpdateReq = await getStudentsInfoUpdateRequest(user.email);
 
         if (infoUpdateReq[0][1]) {
-            setUpdateRequest({ ...updateRequest, pendingRequest: true });
+            setUpdateRequest({ ...updateRequest, pendingRequest: infoUpdateReq[0][1] });
         } else {
             setUpdateRequest({ ...updateRequest, pendingRequest: false });
         }
@@ -46,13 +46,23 @@ const StudentProfile = ({ user }) => {
     const getInfoContainerClasses = width => `flex flex-row w-[100%] ${width === "sm" ? "md:w-[35%]" : "md:w-[50%]"} justify-start bg-[#171717]/[0.1] dark:bg-[#fff]/[0.3] rounded-3xl`;
     const getIconClasses = bgColor => `material-icons-round ${bgColorStyles[bgColor]} w-[44px] flex justify-center border-2 ${borderColorStyles.simple} rounded-full p-2 text-black/[0.5] dark:text-white`;
 
+    const deleteExistingUpdateRequest = async () => {
+        if (window.confirm("Are you sure you want to delete your current request?")) {
+            await deleteStudentInfoUpdateRequest(updateRequest.pendingRequest);
+            setUpdateRequest({ ...updateRequest, pendingRequest: false, showRequestForm: false });
+        }
+    }
+
     const getInfoUpdateForm = () => {
         if (updateRequest.pendingRequest) {
-            return <h1 className="text-center">You have an existing update request, please visit your thesis supervisor/a full-time faculty member/DCO for approval.</h1>;
+            return <div className="flex flex-col gap-5">
+                <h1 className="text-center">You have an existing update request, please visit your thesis supervisor/a full-time faculty member/DCO for approval.</h1>
+                <PrimaryButton text="Delete current request?" customStyle="w-[100%] md:w-[50%] mx-auto" clickFunction={deleteExistingUpdateRequest} />
+            </div>;
         } else {
             return <>
                 <div className={`flex justify-center ${(updateRequest.showRequestForm) ? "h-[0px]" : "h-[40px]"} ${transitioner.simple} overflow-hidden`}>
-                    <PrimaryButton text="Request Information Update" customStyle="w-[100%] md:w-[50%]" clickFunction={() => setUpdateRequest({ ...updateRequest, showRequestForm: true })} />
+                    <PrimaryButton text="Need to update your info?" customStyle="w-[100%] md:w-[50%]" clickFunction={() => setUpdateRequest({ ...updateRequest, showRequestForm: true })} />
                 </div>
                 <StudentInfoUpdateForm
                     updateRequest={updateRequest}

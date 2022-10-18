@@ -1,5 +1,5 @@
 import SimpleCard from "../../components/Card/SimpleCard";
-import { borderColorStyles, pageLayoutStyles } from "../../utils/styles/styles";
+import { pageLayoutStyles } from "../../utils/styles/styles";
 import { SelectInput, TextInput } from "../../components/FormInputs/LabeledInputs";
 import { useState } from "react";
 import PrimaryButton from "../../components/Buttons/PrimaryButton";
@@ -20,6 +20,7 @@ const StudentMapper = () => {
         from: null,
         to: null,
         inputs: [],
+        convertVals: "",
         mappedResults: [],
     });
 
@@ -37,6 +38,7 @@ const StudentMapper = () => {
 
     const updateInputs = event => {
         const mapperClone = deepClone(mapper);
+        mapperClone.convertVals = event.target.value;
         let inputs = event.target.value.replaceAll(" ", "").split(",").join("\n").split("\n").filter(i => i !== "");
 
         if (inputs.length <= 100) {
@@ -45,6 +47,7 @@ const StudentMapper = () => {
         } else {
             alert("Cannot map more than 100 items at a time.");
         }
+        console.log(mapperClone.convertVals, mapperClone.inputs);
     }
 
     const mapStudents = async () => {
@@ -63,43 +66,6 @@ const StudentMapper = () => {
         setMapper(mapperClone);
         hideLoadingScreen();
     }
-
-    // const createStudentEntries = async event => {
-    //     let inputs = event.target.value.replaceAll(" ", "").split("\n");
-    //     let trials = 0;
-    //     for (let index = 0; index < inputs.length;) {
-    //         try {
-    //             inputs[index] = inputs[index].split("\t");
-    //             inputs[index] = {
-    //                 department: "",
-    //                 lms_username: inputs[index][4],
-    //                 name: inputs[index][1],
-    //                 official_email: inputs[index][3],
-    //                 personal_email: inputs[index][2],
-    //                 phone: "",
-    //                 program: "",
-    //                 school: "",
-    //                 student_id: inputs[index][0]
-    //             };
-
-    //             inputs[index].res = (await getStudents({ student_ids: [inputs[index].student_id] }))[0];
-    //             inputs[index].id = inputs[index].res[1];
-
-    //             if (!inputs[index].id)
-    //                 const docRef = await setStudent(inputs[index]);
-
-    //             index += 1;
-    //             trials = 0;
-    //         } catch (error) {
-    //             trials += 1;
-    //             if (trials > 2) {
-    //                 index += 1;
-    //                 trials = 0;
-    //             }
-    //         }
-    //     }
-
-    // }
 
     return <div className={`${pageLayoutStyles.scrollable} flex flex-col gap-10`}>
         <div className="w-[100%] lg:w-[70%] mx-auto flex flex-col md:flex-row drop-shadow-lg">
@@ -120,7 +86,7 @@ const StudentMapper = () => {
                     </div>
                     <div className={`w-[100%] pt-5 flex gap-10 flex-col md:flex-row`}>
                         <div className="w-[100%] md:w-[50%]">
-                            <TextInput disabled={!mapper.from || !mapper.to} label={mapper.from && mapper.to ? `${convertionOption[mapper.from]}s` : `Select convertion types`} customStyle={{ input: "!min-h-[100px] md:!min-h-[300px] text-[0.8rem] max-h-[300px] md:max-h-[400px]" }} placeholder={mapper.from && mapper.to ? `${convertionOption[mapper.from]}s` : `Select convertion types`} onChangeFn={updateInputs} />
+                            <TextInput disabled={!mapper.from || !mapper.to} label={mapper.from && mapper.to ? `${convertionOption[mapper.from]}s` : `Select convertion types`} customStyle={{ input: "!min-h-[100px] md:!min-h-[300px] text-[0.8rem] max-h-[300px] md:max-h-[400px]" }} placeholder={mapper.from && mapper.to ? `${convertionOption[mapper.from]}s` : `Select convertion types`} onChangeFn={updateInputs} value={mapper.convertVals} />
                         </div>
                         <div className="w-[100%] md:w-[50%]">
                             <TextInput label={`Mapped Output`} customStyle={{ input: "!min-h-[100px] md:!min-h-[300px] text-[0.8rem] max-h-[500px]" }} placeholder="Mapped results will be shown here" value={mapper.mappedResults.join("\n")} />

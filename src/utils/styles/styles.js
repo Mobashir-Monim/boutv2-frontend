@@ -22,7 +22,7 @@ export const bgColorStyles = {
 };
 
 export const navStyles = {
-    optionContainer: `rounded-full flex cursor-pointer relative p-3 text-center transition-all duration-500 ease-linear`,
+    optionContainer: `rounded-full flex cursor-pointer relative px-3 py-2 text-center transition-all duration-500 ease-linear`,
     optionIcon: `material-icons-round my-auto font-bold ${transitioner.simple} text-white`,
     optionText: {
         base: `text-white my-auto`,
@@ -48,8 +48,10 @@ export const modalBg = {
 
 export const inputStyles = {
     labeled: {
-        input: `outline-none peer py-2 px-3 rounded-3xl !bg-[#232323]/[0.2] dark:!bg-[#171717]/[0.3] ${textColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`,
-        label: `text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 peer-focus:text-orange-500 mt-1 mr-3 text-right ${transitioner.simple}`
+        input: `outline-none peer py-2 px-3 rounded-3xl bg-[#232323]/[0.2] dark:bg-[#171717]/[0.3] ${textColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`,
+        label: `text-xs peer-focus:text-blue-400 peer-hover:text-blue-400 peer-focus:text-orange-500 mt-1 mr-3 text-right ${transitioner.simple}`,
+        checkbox: `w-[0.8rem] h-[0.8rem] my-auto text-left rounded-full px-[0.5rem] py-[0.5rem] cursor-pointer outline-none border-[1.5px] ${borderColorStyles.simple} before:absolute before:top-[0.1rem] before:left-[0.1rem] relative before:p-[0.4rem] before:rounded-full before:bg-[#fff]/[0.2] before:transition-all before:duration-300 before:ease-linear`,
+        checked: `before:!bg-blue-400`
     },
     minified: {
         input: `outline-none peer px-1 py-1 ${textColorStyles.simple} ${bgColorStyles.contrast} border-b-[1.5px] text-[0.9rem] ${borderColorStyles.simple} hover:border-blue-500 focus:border-orange-500 ${transitioner.simple}`

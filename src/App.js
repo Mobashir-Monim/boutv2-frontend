@@ -79,7 +79,9 @@ const App = () => {
                         <Route path="/obe" element={<UnderDevelopment />} />
                     </Route>
 
-                    {/* <Route path="/thesis/registration" element={<ThesisRegistration />} /> */}
+                    <Route path="/" element={<Middleware checks={["student"]} />}>
+                        <Route path="/thesis/registration" element={<ThesisRegistration />} />
+                    </Route>
                 </Route>
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/login" element={<Login />} />

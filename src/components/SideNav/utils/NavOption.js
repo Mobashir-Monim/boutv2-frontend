@@ -86,7 +86,7 @@ const getNavOption = (navOpt, showNav) => <span className={navStyles.optionConta
     </span>
 </span>
 
-export const generateLinkNavOption = (navOptIndex, navOpt, collapseNav, showNav) => <div key={`nav-opt-${navOptIndex}`}>
+export const generateLinkNavOption = (navOptIndex, navOpt, collapseNav, showNav) => <div className={`bg-[#171717]/[0.4] hover:bg-[#fff]/[0.2] rounded-xl my-2 ${transitioner.simple}`} key={`nav-opt-${navOptIndex}`}>
     <Link to={navOpt.action} className={`flex flex-row ${transitioner.simple} lg:hidden`} onClick={collapseNav}>
         {getNavOption(navOpt, showNav)}
     </Link>
@@ -95,7 +95,7 @@ export const generateLinkNavOption = (navOptIndex, navOpt, collapseNav, showNav)
     </Link>
 </div >;
 
-export const generateFunctionNavOption = (navOptIndex, navOpt, collapseNav, showNav) => <div key={`nav-opt-${navOptIndex}`}>
+export const generateFunctionNavOption = (navOptIndex, navOpt, collapseNav, showNav) => <div className={`bg-[#171717]/[0.4] hover:bg-[#fff]/[0.2] rounded-xl my-2 ${transitioner.simple}`} key={`nav-opt-${navOptIndex}`}>
     <div className={`flex flex-row ${transitioner.simple} lg:hidden`} onClick={() => { collapseNav(); navOpt.action(); }}>
         {getNavOption(navOpt, showNav)}
     </div>

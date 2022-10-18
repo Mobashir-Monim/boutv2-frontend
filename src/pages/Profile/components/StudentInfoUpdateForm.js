@@ -25,7 +25,13 @@ const StudentInfoUpdateForm = ({ updateRequest, setUpdateRequest, student, proce
 
     const updateInformationUpdate = (event, target) => {
         const informationUpdateClone = deepClone(informationUpdate);
-        informationUpdateClone[target] = event.target.value;
+
+        if (target === "discord_id") {
+
+        } else {
+            informationUpdateClone[target] = event.target.value;
+        }
+
 
         setInformationUpdate(informationUpdateClone);
     }
@@ -35,17 +41,22 @@ const StudentInfoUpdateForm = ({ updateRequest, setUpdateRequest, student, proce
             "How to find Discord ID",
             <div className="flex flex-col gap-16">
                 <div>
-                    <h4 className={`border-b-2 ${borderColorStyles.simple}`}>First method</h4>
+                    <h4 className={`border-b-2 ${borderColorStyles.simple} text-[1.5rem] font-bold`}>What is the discord ID?</h4>
+                    <p>Discord ID is a 18/19 digit number used to identify your account. It is not the same as your discord username. You can use one of the following methods to find your discord id:</p>
+                </div>
+
+                <div>
+                    <h4 className={`border-b-2 ${borderColorStyles.simple} font-bold`}>First method</h4>
                     <p>Join the <a className={linkStyles.primary} target="_blank" href="https://discord.gg/SrfrSzQzpE">CSE Thesis Server</a>; The bot will send you your Discord User ID. Paste the ID in the following field.</p>
                 </div>
 
                 <div>
-                    <h4 className={`border-b-2 ${borderColorStyles.simple}`}>Second method</h4>
+                    <h4 className={`border-b-2 ${borderColorStyles.simple} font-bold`}>Second method</h4>
                     <p>Send the message <span className={`font-bold italic ${textColorStyles.clickable} ${transitioner.simple} cursor-copy`} onClick={() => navigator.clipboard.writeText("!myid")}>!myid</span> to the bot to get your Discord User ID.</p>
                 </div>
 
                 <div>
-                    <h4 className={`border-b-2 ${borderColorStyles.simple}`}>Third method</h4>
+                    <h4 className={`border-b-2 ${borderColorStyles.simple} font-bold`}>Third method</h4>
                     <p>Follow instructions in this <a className={linkStyles.primary} target="_blank" href="https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID">this article</a></p>
                 </div>
             </div>
@@ -54,10 +65,17 @@ const StudentInfoUpdateForm = ({ updateRequest, setUpdateRequest, student, proce
 
     const submitUpdateRequest = async () => {
         showLoadingScreen("Processing request, please wait.")
-        const message = await setStudentInfoUpdateRequest(informationUpdate);
-        processSubmittedUpdateRequest();
-        showLoadingScreen(message);
-        setTimeout(() => { hideLoadingScreen(); }, 2000);
+
+        if (/^\d+$/.test(informationUpdate.discord_id) && (informationUpdate.discord_id.length === 18 || informationUpdate.discord_id.length === 19)) {
+            const message = await setStudentInfoUpdateRequest(informationUpdate);
+            processSubmittedUpdateRequest();
+            showLoadingScreen(message);
+        } else {
+            showLoadingScreen("INVALID DISCORD ID")
+            displayDiscordInfo()
+        }
+
+        setTimeout(() => { hideLoadingScreen(); }, 5000);
     }
 
     return <div className={`flex flex-col gap-2.5 ${updateRequest.showRequestForm ? "h-[460px] md:h-[260px] mt-5" : "h-[0px] mt-0"} ${transitioner.simple} overflow-hidden`}>

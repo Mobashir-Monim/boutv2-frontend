@@ -21,7 +21,7 @@ const EvaluationForm = () => {
                     alert("Something went wrong. Please refresh the page and check if you have access to the internet");
                 });
         }
-    });
+    }, []);
 
     const buildQuestions = (questions, facultyMembers) => {
         const printableQuestions = { course: {}, faculty: {} };

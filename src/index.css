@@ -52,3 +52,32 @@ code {
     stroke-dashoffset: -124;
   }
 }
+
+input[type="checkbox"] {
+  /* removing default appearance */
+  -webkit-appearance: none;
+  appearance: none;
+  /* creating a custom design */
+  /* width: 1.6em;
+  height: 1.6em; */
+  /* width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 100%;
+  margin-right: 2px;
+  border: 1px solid white;
+  cursor: pointer;
+  outline: none;
+  padding: 0.5rem; */
+}
+
+/* input.checked {
+  position: relative;
+}
+
+input.checked::before {
+  font-size: 1.5em;
+  color: #fff;
+  position: absolute;
+  right: 1px;
+  top: -5px;
+} */
