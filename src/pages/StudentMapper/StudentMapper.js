@@ -47,7 +47,6 @@ const StudentMapper = () => {
         } else {
             alert("Cannot map more than 100 items at a time.");
         }
-        console.log(mapperClone.convertVals, mapperClone.inputs);
     }
 
     const mapStudents = async () => {
