@@ -27,7 +27,13 @@ const StudentInfoUpdateForm = ({ updateRequest, setUpdateRequest, student, proce
         const informationUpdateClone = deepClone(informationUpdate);
 
         if (target === "discord_id") {
+            if (!/^\d+$/.test(informationUpdateClone[target])) {
+                informationUpdateClone[target] = "";
+                console.log(informationUpdateClone);
+            }
 
+            if (/^\d+$/.test(event.target.value) || event.target.value === "")
+                informationUpdateClone[target] = event.target.value;
         } else {
             informationUpdateClone[target] = event.target.value;
         }
