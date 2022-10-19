@@ -8,37 +8,13 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../../utils/contexts/AuthContext";
 import { setStudentInfoUpdateRequest } from "../../../db/remote/student";
 import { useLoadingScreen } from "../../../utils/contexts/LoadingScreenContext";
+import { isEmail } from "../../../utils/functions/inputValidators";
 
 const StudentInfoUpdateForm = ({ updateRequest, setUpdateRequest, student, processSubmittedUpdateRequest }) => {
     const { user } = useAuth();
     const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
     const { showModal } = useModal();
     const [informationUpdate, setInformationUpdate] = useState(student);
-
-    useEffect(() => {
-        const studentClone = deepClone(student);
-        studentClone.name = user.displayName;
-        studentClone.email = user.email;
-
-        setInformationUpdate(studentClone);
-    }, [student])
-
-    const updateInformationUpdate = (event, target) => {
-        const informationUpdateClone = deepClone(informationUpdate);
-
-        if (target === "discord_id") {
-            if (!/^\d+$/.test(informationUpdateClone[target]))
-                informationUpdateClone[target] = "";
-
-            if (/^\d+$/.test(event.target.value) || event.target.value === "")
-                informationUpdateClone[target] = event.target.value;
-        } else {
-            informationUpdateClone[target] = event.target.value;
-        }
-
-
-        setInformationUpdate(informationUpdateClone);
-    }
 
     const displayDiscordInfo = () => {
         showModal(
@@ -67,25 +43,109 @@ const StudentInfoUpdateForm = ({ updateRequest, setUpdateRequest, student, proce
         );
     }
 
+    useEffect(() => {
+        const studentClone = deepClone(student);
+        studentClone.name = user.displayName;
+        studentClone.email = user.email;
+
+        setInformationUpdate(studentClone);
+    }, [student]);
+
+    const validPersonalEmail = () => isEmail({ value: informationUpdate.personal_email });
+    const validPhone = () => informationUpdate.phone.length === 11 && informationUpdate.phone.startsWith("01");
+    const validStudentID = () =>
+        informationUpdate.student_id.length === 8 &&
+        (
+            `${informationUpdate.student_id[3]}${informationUpdate.student_id[4]}` === "41"
+            || `${informationUpdate.student_id[3]}${informationUpdate.student_id[4]}` === "01"
+            || `${informationUpdate.student_id[3]}${informationUpdate.student_id[4]}` === "99"
+        );
+    const validDiscordID = () =>
+        /^\d+$/.test(informationUpdate.discord_id)
+        && (
+            informationUpdate.discord_id.length === 18
+            || informationUpdate.discord_id.length === 19
+        );
+    const validStudentProgram = () => {
+        let flag = ["CS", "CSE"].includes(informationUpdate.program);
+
+        if (`${informationUpdate.student_id[3]}${informationUpdate.student_id[4]}` === "41") {
+            flag = flag && informationUpdate.program === "CS";
+        } else if (`${informationUpdate.student_id[3]}${informationUpdate.student_id[4]}` === "01"
+            || `${informationUpdate.student_id[3]}${informationUpdate.student_id[4]}` === "99") {
+            flag = flag && informationUpdate.program === "CSE";
+        } else {
+            flag = false;
+        }
+
+        return flag;
+    }
+
+    const submitValidations = [
+        { check: validStudentID, error: "Invalid Student ID" },
+        { check: validPersonalEmail, error: "Invalid Personal Email Address" },
+        { check: validStudentProgram, error: "Invalid Program" },
+        { check: validPhone, error: "Invalid Phone Number" },
+        { check: validDiscordID, error: <p>Invalid Discord ID, read more <span className={`${textColorStyles.clickable} cursor-pointer`} onClick={displayDiscordInfo}>here</span></p> },
+    ];
+
+    const validateInformationUpdate = () => {
+        let errors = [];
+
+        for (let i in submitValidations) {
+            if (!submitValidations[i].check())
+                errors.push(submitValidations[i].error);
+        }
+
+        return errors;
+    }
+
+    const updateInformationUpdate = (event, target) => {
+        const informationUpdateClone = deepClone(informationUpdate);
+
+        if (target === "discord_id") {
+            if (!/^\d+$/.test(informationUpdateClone[target]))
+                informationUpdateClone[target] = "";
+
+            if (/^\d+$/.test(event.target.value) || event.target.value === "")
+                informationUpdateClone[target] = event.target.value.trim();
+        } else if (target === "phone") {
+            if (/^\d+$/.test(event.target.value) || event.target.value === "") {
+                if (event.target.value.startsWith("+880")) {
+                    informationUpdateClone.phone = event.target.value.replace("+880", "0");
+                } else if (event.target.value.startsWith("880")) {
+                    informationUpdateClone.phone = event.target.value.replace("880", "0");
+                } else {
+                    informationUpdateClone.phone = event.target.value;
+                }
+            }
+        } else {
+            informationUpdateClone[target] = event.target.value.trim();
+        }
+
+
+        setInformationUpdate(informationUpdateClone);
+    }
+
     const submitUpdateRequest = async () => {
         showLoadingScreen("Processing request, please wait.")
+        const errors = validateInformationUpdate();
 
-        if (/^\d+$/.test(informationUpdate.discord_id) && (informationUpdate.discord_id.length === 18 || informationUpdate.discord_id.length === 19)) {
+        if (errors.length === 0) {
             const message = await setStudentInfoUpdateRequest(informationUpdate);
             processSubmittedUpdateRequest();
             showLoadingScreen(message);
         } else {
-            showLoadingScreen("INVALID DISCORD ID")
-            displayDiscordInfo()
+            showModal("Invalid Data in update request", <div className="flex flex-col gap-2">{errors.map((e, eIndex) => <div className="" key={eIndex}>{e}</div>)}</div>)
         }
 
-        setTimeout(() => { hideLoadingScreen(); }, 5000);
+        hideLoadingScreen();
     }
 
     return <div className={`flex flex-col gap-2.5 ${updateRequest.showRequestForm ? "h-[460px] md:h-[260px] mt-5" : "h-[0px] mt-0"} ${transitioner.simple} overflow-hidden`}>
         <div className="flex flex-col md:flex-row gap-2.5">
             <SelectInput
-                options={["CS", "CSE"]}
+                options={["CS", "CSE"].includes(informationUpdate.program) ? ["CS", "CSE"] : ["Select Program", "CS", "CSE"]}
                 label={<span className="flex flex-row justify-end gap-3">
                     <span className={`material-icons-round text-[0.9rem]`}>school</span>
                     <span className="my-auto">Program</span>
@@ -111,6 +171,8 @@ const StudentInfoUpdateForm = ({ updateRequest, setUpdateRequest, student, proce
                     <span className="my-auto">Phone Number</span>
                 </span>}
                 customStyle={{ container: "basis-1/2" }}
+                min="11"
+                max="11"
                 value={informationUpdate.phone}
                 onChangeFn={event => updateInformationUpdate(event, "phone")}
             />
