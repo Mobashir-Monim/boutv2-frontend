@@ -72,7 +72,7 @@ const ThesisRegistration = () => {
         (async () => {
             showLoadingScreen("Loading your profile, please wait");
             const hasExistingReg = await fetchExistingReg();
-            if (!hasExistingReg) {
+            if (hasExistingReg) {
                 await loadStudentProfile();
                 await fetchThesisInstance();
             } else {
