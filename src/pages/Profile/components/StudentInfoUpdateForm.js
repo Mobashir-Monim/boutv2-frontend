@@ -142,7 +142,17 @@ const StudentInfoUpdateForm = ({ updateRequest, setUpdateRequest, student, proce
         hideLoadingScreen();
     }
 
-    return <div className={`flex flex-col gap-2.5 ${updateRequest.showRequestForm ? "h-[460px] md:h-[260px] mt-5" : "h-[0px] mt-0"} ${transitioner.simple} overflow-hidden`}>
+    return <div className={`flex flex-col gap-2.5 ${updateRequest.showRequestForm ? "h-[500px] md:h-[350px]" : "h-[0px]"} ${transitioner.simple} overflow-hidden`}>
+        <div className="flex flex-col mx-auto justify-around">
+            <div className={`flex flex-row justify-start rounded-3xl mx-auto`}>
+                <span className={`material-icons-round w-[1rem] flex justify-center !h-[1rem] mr-2 text-[1rem] my-auto text-black/[0.5] dark:text-white`}>person</span>
+                <span className={`my-auto`}>{user.displayName}</span>
+            </div>
+            <div className={`flex flex-row justify-start rounded-3xl mx-auto`}>
+                <span className={`material-icons-round w-[1rem] flex justify-center !h-[1rem] mr-2 text-[1rem] my-auto text-black/[0.5] dark:text-white`}>email</span>
+                <span className={`my-auto`}>{user.email}</span>
+            </div>
+        </div>
         <div className="flex flex-col md:flex-row gap-2.5">
             <SelectInput
                 options={["CS", "CSE"].includes(informationUpdate.program) ? ["CS", "CSE"] : ["Select Program", "CS", "CSE"]}
@@ -201,9 +211,9 @@ const StudentInfoUpdateForm = ({ updateRequest, setUpdateRequest, student, proce
             />
         </div>
 
-        <div className="flex flex-col md:flex-row gap-5">
+        <div className="flex flex-row gap-5">
             <PrimaryButton text="Cancel" customStyle="basis-1/2" clickFunction={() => setUpdateRequest({ ...updateRequest, showRequestForm: false })} />
-            <SecondaryButton text="Submit Update Request" customStyle="basis-1/2" clickFunction={submitUpdateRequest} />
+            <SecondaryButton text="Submit" customStyle="basis-1/2" clickFunction={submitUpdateRequest} />
         </div>
     </div>
 }

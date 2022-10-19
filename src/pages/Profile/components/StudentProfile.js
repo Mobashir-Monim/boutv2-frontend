@@ -76,9 +76,9 @@ const StudentProfile = ({ user }) => {
 
     return <div className={`${pageLayoutStyles.scrollable}`}>
         <div className="flex flex-col md:flex-row gap-10">
-            <SimpleCard title="Student Profile" customStyle="w-[100%] h-auto mx-auto">
-                <div className="p-5 flex flex-col gap-5">
-                    <div className="flex flex-col md:flex-row md:justify-between gap-5">
+            <SimpleCard title="Student Profile" customStyle={`w-[100%] mx-auto`}>
+                <div className={`p-5 flex flex-col ${transitioner.simple} ${updateRequest.showRequestForm ? "gap-0" : "gap-5"}`}>
+                    <div className={`flex flex-col md:flex-row md:justify-between gap-5 ${updateRequest.showRequestForm ? "h-[0px]" : "h-[545px] md:h-[270px]"} overflow-hidden ${transitioner.simple}`}>
                         <div className="flex flex-col justify-center w-[50%] mx-auto md:w-[15%]">
                             <img src={user.photoURL} className="rounded-full" alt="Student Image" referrerPolicy="no-referrer" />
                         </div>
