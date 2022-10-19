@@ -34,12 +34,11 @@ export const getThesisRegistrations = async ({ member_email, supervisor_email, c
     let snapshots = [];
 
     if (member_email) {
-
-        snapshots = await getDocs(query(thesisRegColRef, where("member_emails", "in", [member_email])));
+        snapshots = await getDocs(query(thesisRegColRef, where("member_emails", "array-contains", member_email)));
     } else if (supervisor_email) {
-        snapshots = await getDocs(query(thesisRegColRef, where("supervisor", "in", [supervisor_email])));
+        snapshots = await getDocs(query(thesisRegColRef, where("supervisor", "array-contains", supervisor_email)));
     } else {
-        snapshots = await getDocs(query(thesisRegColRef, where("co_supervisor_emails", "in", [co_supervisor_email])));
+        snapshots = await getDocs(query(thesisRegColRef, where("co_supervisor_emails", "array-contains", co_supervisor_email)));
     }
 
     return firestoreSnapshotFormatter(snapshots, results);

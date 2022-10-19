@@ -202,17 +202,17 @@ const ThesisRegistration = () => {
     }
 
     const updateMemberStudentID = async (event, index) => {
-        if (/^\d+$/.test(event.target.value) && index > 0) {
+        if ((/^\d+$/.test(event.target.value) || event.target.value === "") && index > 0) {
             const applicationClone = deepClone(application);
             applicationClone.member_details[index].student_id = event.target.value;
 
             if (applicationClone.member_details[index].student_id.length === 8) {
                 await fetchMemberInfo(index, applicationClone);
             } else {
-                memberDetails.forEach(detail => {
-                    if (detail !== "student_id")
-                        applicationClone.member_details[index][detail] = "";
-                });
+                for (let i in memberDetails) {
+                    if (i !== "student_id")
+                        applicationClone.member_details[index][i] = "";
+                }
             }
 
             setApplication(applicationClone);
@@ -353,7 +353,7 @@ const ThesisRegistration = () => {
                     <div className="flex flex-col gap-5">
                         <p>
                             Have you and your group members read the thesis policy as described
-                            <a className={`${textColorStyles.clickable} mx-1 ${transitioner.simple}`} href="https://docs.google.com/document/d/1pAMjuQAxSEcLgkbvmx9qJGvK2BlPQhvXhgev8OeJTas/edit#heading=h.rc6keegzd4k2" rel="noreferrer" target="_blank">here</a>
+                            <a className={`${textColorStyles.clickable} mx-1 ${transitioner.simple}`} href="https://docs.google.com/document/d/1pAMjuQAxSEcLgkbvmx9qJGvK2BlPQhvXhgev8OeJTas/edit" rel="noreferrer" target="_blank">here</a>
                             and agree to it?
                         </p>
                         <CheckboxInput
