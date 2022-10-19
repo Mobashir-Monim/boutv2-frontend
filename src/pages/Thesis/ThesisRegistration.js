@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { CheckboxInput, LineInput, SelectInput, TextInput } from "../../components/FormInputs/LabeledInputs";
-import { pageLayoutStyles, textColorStyles, transitioner } from "../../utils/styles/styles";
+import { buttonStyles, pageLayoutStyles, textColorStyles, transitioner } from "../../utils/styles/styles";
 import { deepClone } from "../../utils/functions/deepClone";
 import SimpleCard from "../../components/Card/SimpleCard";
 import PrimaryButton from "../../components/Buttons/PrimaryButton";
@@ -49,6 +49,20 @@ const ThesisRegistration = () => {
         return flag;
     }
     const validMembers = () => {
+        let flag = true;
+        let temp = [];
+
+        application.member_details.forEach(member => {
+            if (!temp.includes(member.email)) {
+                temp.push(member.email)
+            } else {
+                flag = false;
+            }
+        });
+
+        return flag;
+    }
+    const validMemberDetails = () => {
         let flag = application.type === "internship" ? application.members === 1 : application.members <= 5;
 
         application.member_details.forEach(member => {
@@ -58,12 +72,15 @@ const ThesisRegistration = () => {
         return flag;
     }
 
+
+
     const submitValidations = [
         { check: validThesisType, error: "Please select a valid thesis type" },
         { check: validTheisTitle, error: "Thesis title must be atleast 5 words long" },
         { check: validThesisAbstract, error: "Thesis abstract must be between 50 and 600 words" },
         { check: validSupervisor, error: "Please choose a valid supervisor" },
-        { check: validMembers, error: "Please update your profiles and get it approved" },
+        { check: validMembers, error: "Duplicate members" },
+        { check: validMemberDetails, error: "Incomplete profile information, please update your profiles and have it approved" },
         { check: validCreditsCompleted, error: "Please enter credits completed for each member" },
         { check: validPolicyAcceptance, error: "You and, your team members, must agree that you have read the thesis policy and have accepted it" },
     ]
@@ -294,6 +311,9 @@ const ThesisRegistration = () => {
                 <div className="flex flex-col gap-5 p-5">
                     <div className="flex flex-col md:flex-row gap-5">
                         <LineInput label="Supervisor Initials" customStyle={{ container: "w-[100%] md:w-[calc(50%-0.75rem)]" }} onChangeFn={event => updateApplication(event, "supervisor")} placeholder="Supervisor Initials" max={3} min={3} value={application.supervisor} />
+                        <div className="flex flex-col">
+                            <a target="_blank" rel="noreferrer" href={"https://docs.google.com/spreadsheets/d/1u8v_o6g5QQLVH-O8PU9oTXaqmJQiBrv8LUGUpx9CC9o/edit#gid=1386339045"} className={`${buttonStyles.secondary}`}>View Faculty Initials</a>
+                        </div>
                     </div>
                     <div className={`flex flex-col md:flex-row gap-5 ${application.supervisor_details.name !== "" ? "h-[140px] md:h-[60px]" : "h-[0px]"} overflow-hidden ${transitioner.simple}`}>
                         <LineInput label="Supervisor Name" customStyle={{ container: "w-[100%] md:w-[calc(50%-0.75rem)]" }} placeholder="Supervisor Name" readOnly={true} value={application.supervisor_details.name} />
@@ -302,7 +322,7 @@ const ThesisRegistration = () => {
                 </div>
             </SimpleCard>
 
-            <SimpleCard title={`Your information`}>
+            <SimpleCard title={`Your information (Member 1)`}>
                 <div className="flex flex-col gap-5 p-5">
                     <div className="flex flex-col md:flex-row gap-5">
                         <LineInput label={`Your Student ID`} customStyle={{ container: "w-[100%] md:w-[calc(50%-0.75rem)]" }} placeholder={`Your ID`} min={8} max={8} readOnly={true} value={application.member_details[0].student_id} />
@@ -315,7 +335,7 @@ const ThesisRegistration = () => {
                 </div>
             </SimpleCard>
 
-            {Array(application.members - 1 > 4 ? 4 : application.members - 1).fill(1).map((_, mIndex) => <SimpleCard title={`Member ${mIndex + 1} information`} key={`member-${mIndex}`}>
+            {Array(application.members - 1 > 4 ? 4 : application.members - 1).fill(1).map((_, mIndex) => <SimpleCard title={`Member ${mIndex + 2} information`} key={`member-${mIndex}`}>
                 <div className="flex flex-col gap-5 p-5">
                     <div className="flex flex-col md:flex-row gap-5">
                         <LineInput label={`Student ID`} customStyle={{ container: "w-[100%] md:w-[calc(50%-0.75rem)]" }} placeholder={`Member ${mIndex + 1} Student ID`} min={8} max={8} onChangeFn={event => updateMemberStudentID(event, mIndex + 1)} value={application.member_details[mIndex + 1].student_id} />
