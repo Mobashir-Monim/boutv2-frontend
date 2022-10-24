@@ -5,9 +5,11 @@ import { bgColorStyles, borderColorStyles, pageLayoutStyles, transitioner } from
 import { deleteStudentInfoUpdateRequest, getStudents, getStudentsInfoUpdateRequest } from "../../../db/remote/student";
 import { useLoadingScreen } from "../../../utils/contexts/LoadingScreenContext";
 import StudentInfoUpdateForm from "./StudentInfoUpdateForm";
+import { useParams } from "react-router-dom";
 
 
 const StudentProfile = ({ user }) => {
+    const params = useParams();
     const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
     const [student, setStudent] = useState({});
     const [updateRequest, setUpdateRequest] = useState({
@@ -19,13 +21,15 @@ const StudentProfile = ({ user }) => {
         (async () => {
             showLoadingScreen("Loading Profile...");
             loadProfile();
-            loadProfileUpdateRequests();
+            if (user)
+                loadProfileUpdateRequests();
             hideLoadingScreen();
         })();
     }, []);
 
     const loadProfile = async () => {
-        const profile = await getStudents({ official_emails: [user.email] });
+        let email = user ? user.email : params.email;
+        const profile = await getStudents({ official_emails: [email] });
 
         if (profile[0][1])
             setStudent(profile[0][0]);
@@ -54,23 +58,25 @@ const StudentProfile = ({ user }) => {
     }
 
     const getInfoUpdateForm = () => {
-        if (updateRequest.pendingRequest) {
-            return <div className="flex flex-col gap-5">
-                <h1 className="text-center">You have an existing update request, please visit your thesis supervisor/a full-time faculty member/DCO for approval.</h1>
-                <PrimaryButton text="Delete current request?" customStyle="w-[100%] md:w-[50%] mx-auto" clickFunction={deleteExistingUpdateRequest} />
-            </div>;
-        } else {
-            return <>
-                <div className={`flex justify-center ${(updateRequest.showRequestForm) ? "h-[0px]" : "h-[40px]"} ${transitioner.simple} overflow-hidden`}>
-                    <PrimaryButton text="Need to update your info?" customStyle="w-[100%] md:w-[50%]" clickFunction={() => setUpdateRequest({ ...updateRequest, showRequestForm: true })} />
-                </div>
-                <StudentInfoUpdateForm
-                    updateRequest={updateRequest}
-                    setUpdateRequest={setUpdateRequest}
-                    student={student}
-                    processSubmittedUpdateRequest={processSubmittedUpdateRequest}
-                />
-            </>;
+        if (user) {
+            if (updateRequest.pendingRequest) {
+                return <div className="flex flex-col gap-5">
+                    <h1 className="text-center">You have an existing update request, please visit your thesis supervisor/a full-time faculty member/DCO for approval.</h1>
+                    <PrimaryButton text="Delete current request?" customStyle="w-[100%] md:w-[50%] mx-auto" clickFunction={deleteExistingUpdateRequest} />
+                </div>;
+            } else {
+                return <>
+                    <div className={`flex justify-center ${(updateRequest.showRequestForm) ? "h-[0px]" : "h-[40px]"} ${transitioner.simple} overflow-hidden`}>
+                        <PrimaryButton text="Need to update your info?" customStyle="w-[100%] md:w-[50%]" clickFunction={() => setUpdateRequest({ ...updateRequest, showRequestForm: true })} />
+                    </div>
+                    <StudentInfoUpdateForm
+                        updateRequest={updateRequest}
+                        setUpdateRequest={setUpdateRequest}
+                        student={student}
+                        processSubmittedUpdateRequest={processSubmittedUpdateRequest}
+                    />
+                </>;
+            }
         }
     }
 
@@ -79,10 +85,10 @@ const StudentProfile = ({ user }) => {
             <SimpleCard title="Student Profile" customStyle={`w-[100%] mx-auto`}>
                 <div className={`p-5 flex flex-col ${transitioner.simple} ${updateRequest.showRequestForm ? "gap-0" : "gap-5"}`}>
                     <div className={`flex flex-col md:flex-row md:justify-between gap-5 ${updateRequest.showRequestForm ? "h-[0px]" : "h-[545px] md:h-[270px]"} overflow-hidden ${transitioner.simple}`}>
-                        <div className="flex flex-col justify-center w-[50%] mx-auto md:w-[15%]">
-                            <img src={user.photoURL} className="rounded-full" alt="Student Image" referrerPolicy="no-referrer" />
+                        <div className={`flex flex-col justify-center w-[50%] mx-auto md:w-[15%] ${user ? "" : "hidden"}`}>
+                            <img src={user?.photoURL} className="rounded-full" alt="Student Image" referrerPolicy="no-referrer" />
                         </div>
-                        <div className="flex flex-col w-[100%] lg:w-[70%] gap-2.5">
+                        <div className={`flex flex-col w-[100%] lg:w-[70%] gap-2.5 ${user ? "" : "mx-auto"}`}>
                             <div className="flex flex-col md:flex-row gap-2.5 md:gap-5 md:p-2 rounded-3xl">
                                 <div className={getInfoContainerClasses("sm")}>
                                     <span className={getIconClasses("patternA")}>badge</span>
@@ -90,7 +96,7 @@ const StudentProfile = ({ user }) => {
                                 </div>
                                 <div className={getInfoContainerClasses("md")}>
                                     <span className={getIconClasses("patternB")}>person</span>
-                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{user.displayName}</span>
+                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{user ? user.displayName : student.name}</span>
                                 </div>
                             </div>
                             <div className="flex flex-col md:flex-row gap-2.5 md:gap-5 md:p-2 rounded-3xl">
@@ -100,7 +106,7 @@ const StudentProfile = ({ user }) => {
                                 </div>
                                 <div className={getInfoContainerClasses("md")}>
                                     <span className={getIconClasses("patternA")}>email</span>
-                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{user.email}</span>
+                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{user ? user.email : student.official_email}</span>
                                 </div>
                             </div>
                             <div className="flex flex-col md:flex-row gap-2.5 md:gap-5 md:p-2 rounded-3xl">

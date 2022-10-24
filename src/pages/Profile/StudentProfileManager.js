@@ -51,7 +51,7 @@ const StudentProfileManager = () => {
 
     useEffect(() => {
         (async () => {
-            if (profileManager.queue.length === 0) {
+            if (profileManager.queue.length === 0 && profileManager.searchAddress === "") {
                 setProfileManager({ ...profileManager, queueLoading: true });
                 const profileManagerClone = deepClone(profileManager);
                 const queue = await getStudentsInfoUpdateRequests();
@@ -63,7 +63,7 @@ const StudentProfileManager = () => {
                 setProfileManager(profileManagerClone);
             }
         })();
-    }, [profileManager.queue])
+    }, [profileManager.queue, profileManager.searchAddress])
 
     const getListContent = () => {
         if (profileManager.queueLoading) {

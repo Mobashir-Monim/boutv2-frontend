@@ -72,3 +72,26 @@ export const pageLayoutStyles = {
 export const linkStyles = {
     primary: `text-blue-400 hover:text-rose-400 ${transitioner.simple}`
 }
+
+export const thesisStyles = {
+    approved: {
+        cardCustomStyle: `max-w-[800px] border-none flex flex-row items-center justify-between`,
+        cardContent: `flex flex-col max-w-[calc(100%-40px-0.5rem)] pr-5`,
+        cardContentTitle: `line-clamp-1 lg:line-clamp-2 mb-2 font-bold break-normal text-[0.9rem] border-b-2 ${borderColorStyles.simple}`,
+        cardContentBody: `line-clamp-1 lg:line-clamp-3 text-justify text-[0.8rem]`,
+    },
+    pending: {
+        container: `flex flex-row items-center gap-4 cursor-pointer group hover:bg-blue-500 ${transitioner.simple} p-2 rounded-xl`,
+        icon: `material-icons-round p-2 rounded-full ${transitioner.simple} group-hover:bg-blue-500 group-hover:text-white`,
+        title: `line-clamp-1 font-bold group-hover:text-white text-[1rem] ${transitioner.simple}`,
+        details: `ml-2 text-black dark:text-gray-200 uppercase text-[0.8rem] flex flex-row items-center gap-2 group-hover:text-white ${transitioner.simple}`,
+        textColor: `text-black dark:text-white group-hover:text-white ${transitioner.simple}`,
+    },
+    cardIcon: `material-icons-round my-auto font-bold bg-black dark:bg-[#fff]/[0.3] bg-opacity-10 p-2 rounded-lg drop-shadow-xl`
+}
+
+export const applicationTypeColors = {
+    thesis: "bg-[#fcf3fd] dark:bg-[#9AB086]",
+    project: "bg-[#ffefe2] dark:bg-[#7BAAB3]",
+    internship: "bg-[#F7FAE9] dark:bg-[#9C7FAD]"
+};

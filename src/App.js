@@ -26,6 +26,7 @@ import TermsOfService from "./pages/StaticPage/TermsOfService";
 import Middleware from "./routes/Middleware";
 import Logout from "./pages/Auth/Logout";
 import StudentProfileManager from "./pages/Profile/StudentProfileManager";
+import StudentProfile from "./pages/Profile/components/StudentProfile";
 
 const App = () => {
     const [sideNavStatus, setSideNavStatus] = useState({ currentRoute: "/", showNav: false });
@@ -58,12 +59,12 @@ const App = () => {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/" element={<Middleware checks={["orgMember"]} />}>
                         <Route path="/profile" element={<Profile />} />
-                        {/* <Route path="/thesis" element={<Thesis />} /> */}
-                        <Route path="/thesis" element={<UnderDevelopment />} />
+                        <Route path="/thesis" element={<Thesis />} />
                     </Route>
 
                     <Route path="/" element={<Middleware checks={["hasRole:student-profile-manager"]} />}>
                         <Route path="/profile/manage/students" element={<StudentProfileManager />} />
+                        <Route path="/profile/view/:email/student" element={<StudentProfile />} />
                     </Route>
 
                     <Route path="/" element={<Middleware checks={["faculty"]} />}>

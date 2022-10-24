@@ -44,6 +44,19 @@ export const getThesisRegistrations = async ({ member_email, supervisor_email, c
     return firestoreSnapshotFormatter(snapshots, results);
 }
 
+export const getPendingThesisRegistrations = async (level, email) => {
+    let results = [];
+    let snapshots = [];
+
+    if (level === "supervisor") {
+        snapshots = await getDocs(query(thesisRegColRef, where("supervisor", "array-contains", email), where("supervisor_approval", "==", 0)));
+    } else {
+        snapshots = await getDocs(query(thesisRegColRef, where("coordinator_approval", "==", 0)));
+    }
+
+    return firestoreSnapshotFormatter(snapshots, results);
+}
+
 export const setThesisRegistration = async (thesisRegApplication) => {
     let docRef = null;
 

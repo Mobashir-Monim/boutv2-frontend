@@ -1,4 +1,4 @@
-import { inputStyles } from "../../utils/styles/styles";
+import { inputStyles, transitioner } from "../../utils/styles/styles";
 
 export const DateInput = ({ name, label, onChangeFn, minDate, maxDate, value }) => {
     return <div className="flex flex-col">
@@ -64,7 +64,7 @@ export const TextInput = ({ label, onChangeFn, value, customStyle = {}, placehol
     }
 
     return <div className={`flex flex-col ${customStyle.container}`}>
-        <textarea type="text" className={`resize-none ${inputStyles.labeled.input} ${customStyle.input} !rounded-xl`} onChange={onChangeFn} onKeyUp={resizeSelf} value={value ? value : ""} placeholder={placeholder} disabled={disabled ? "disabled" : ""} />
+        <textarea type="text" className={`resize-none ${inputStyles.labeled.input} ${customStyle.input} !rounded-xl ${transitioner.simple}`} onChange={onChangeFn} onKeyUp={resizeSelf} value={value ? value : ""} placeholder={placeholder} disabled={disabled ? "disabled" : ""} />
         <p className={`${inputStyles.labeled.label}`}>{label}</p>
     </div>
 }
