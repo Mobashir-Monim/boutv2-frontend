@@ -27,6 +27,7 @@ import Middleware from "./routes/Middleware";
 import Logout from "./pages/Auth/Logout";
 import StudentProfileManager from "./pages/Profile/StudentProfileManager";
 import StudentProfile from "./pages/Profile/components/StudentProfile";
+import ThesisCoordination from "./pages/Thesis/ThesisCoordination";
 
 const App = () => {
     const [sideNavStatus, setSideNavStatus] = useState({ currentRoute: "/", showNav: false });
@@ -75,6 +76,14 @@ const App = () => {
                                 <Route path="/evaluation/questions" element={<EvaluationQuestions />} />
                             </Route>
                         </Route>
+
+                        <Route path="/" element={<Middleware checks={["hasRole:thesis-coordinator"]} />}>
+                            <Route path="/thesis/coordinate" element={<ThesisCoordination />} />
+                        </Route>
+                        <Route path="/" element={<Middleware checks={["hasRole:thesis-manager"]} />}>
+                            <Route path="/thesis/manage" element={<UnderDevelopment />} />
+                        </Route>
+
                         <Route path="/routine" element={<UnderDevelopment />} />
                         <Route path="/course-config" element={<UnderDevelopment />} />
                         <Route path="/obe" element={<UnderDevelopment />} />

@@ -12,24 +12,31 @@ import { deepClone } from "../../../utils/functions/deepClone";
 import { useLoadingScreen } from "../../../utils/contexts/LoadingScreenContext";
 import { getPendingThesisRegistrations } from "../../../db/remote/thesis";
 
-const PendingApplication = () => {
+const PendingApplication = ({ user, coordinatorPending, thesis_instance }) => {
     const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
     const { showModal } = useModal();
-    const { user } = useAuth();
+    const [registrationInstances, setRegistrationInstances] = useState([]);
     const [isThesisCoordinator, setIsThesisCoordinator] = useState(false);
+    const [pendingApplications, setPendingApplications] = useState([]);
 
     useEffect(() => {
         (async () => {
             showLoadingScreen("Loading registrations, please wait");
             const isCoordinator = await userHasRole(user.email, "thesis-coordinator");
             setIsThesisCoordinator(isCoordinator);
-            const pendingApps = await getPendingThesisRegistrations("supervisor", user.email);
-            setPendingApplications(pendingApps);
+
+            if (coordinatorPending) {
+                const pendingApps = await getPendingThesisRegistrations("coordinator", user.email);
+                setPendingApplications(pendingApps);
+            } else {
+                const pendingApps = await getPendingThesisRegistrations("supervisor", user.email);
+                // const pendingApps = await getPendingThesisRegistrations("supervisor", "amitabha@bracu.ac.bd");
+                setPendingApplications(pendingApps);
+            }
             hideLoadingScreen();
         })()
     }, [])
 
-    const [pendingApplications, setPendingApplications] = useState([]);
 
     const updatePendingApplicationList = id => {
         let pendingApplicationsClone = [];
@@ -42,20 +49,27 @@ const PendingApplication = () => {
         setPendingApplications(pendingApplicationsClone);
     }
 
+    const getModalHeading = index => <div className="flex flex-col gap-2">
+        <div className="flex flex-row justify-between">
+            <p className="text-orange-500 font-bold font-mono my-auto text-[0.9rem]">[ PENDING {pendingApplications[index][0].type.toUpperCase()} ]</p>
+            <span className={`${thesisStyles.cardIcon}`}>{applicationTypeIcons[pendingApplications[index][0].type]}</span>
+        </div>
+        <div className="">{pendingApplications[index][0].title}</div>
+    </div>
+
+    const getRegistrationInstance = index => {
+
+    }
+
     const showApplicationDetails = (index) => {
         showModal(
-            <div className="flex flex-col gap-2">
-                <div className="flex flex-row justify-between">
-                    <p className="text-orange-500 font-bold font-mono my-auto text-[0.9rem]">[ PENDING {pendingApplications[index][0].type.toUpperCase()} ]</p>
-                    <span className={`${thesisStyles.cardIcon}`}>{applicationTypeIcons[pendingApplications[index][0].type]}</span>
-                </div>
-                <div className="">{pendingApplications[index][0].title}</div>
-            </div>,
+            getModalHeading(index),
             <ThesisApplicationDetails
                 application={pendingApplications[index]}
                 isThesisCoordinator={isThesisCoordinator}
                 user={user}
                 updatePendingApplicationList={updatePendingApplicationList}
+                thesis_instance={thesis_instance}
             />
         )
     }

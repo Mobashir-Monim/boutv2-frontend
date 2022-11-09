@@ -276,8 +276,9 @@ const ThesisRegistration = () => {
     }
 
     const formatApplication = () => {
-        let members = [];
+        let members = [], credits_completed = [];
         application.member_details.forEach(member => { members.push(member.email) });
+        application.member_details.forEach(member => { credits_completed.push(member.credits) });
 
         return {
             type: application.type,
@@ -285,6 +286,8 @@ const ThesisRegistration = () => {
             abstract: application.abstract,
             supervisor: [application.supervisor_details.email],
             member_emails: members,
+            instance_id: application.instance_id,
+            credits_completed: credits_completed
         };
     }
 
