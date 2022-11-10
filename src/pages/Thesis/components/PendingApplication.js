@@ -30,11 +30,10 @@ const PendingApplication = ({ user, coordinatorPending, thesis_instance }) => {
                 setPendingApplications(pendingApps);
             } else {
                 const pendingApps = await getPendingThesisRegistrations("supervisor", user.email);
-                // const pendingApps = await getPendingThesisRegistrations("supervisor", "amitabha@bracu.ac.bd");
                 setPendingApplications(pendingApps);
             }
             hideLoadingScreen();
-        })()
+        })();
     }, [])
 
 
