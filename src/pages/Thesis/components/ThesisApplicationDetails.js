@@ -1,10 +1,9 @@
-import { useState } from "react";
-import { TextInput } from "../../../components/FormInputs/LabeledInputs";
 import { generateThesisNumber, setThesisRegistration } from "../../../db/remote/thesis";
 import { useModal } from "../../../utils/contexts/ModalContext";
 import { deepClone } from "../../../utils/functions/deepClone";
-import { borderColorStyles, transitioner } from "../../../utils/styles/styles";
+import { transitioner } from "../../../utils/styles/styles";
 import ThesisRegistrationApprovalForm from "./approval/ThesisRegistrationApprovalForm";
+import ThesisAbstract from "./displayable/ThesisAbstract";
 import ThesisApprovalStatus from "./displayable/ThesisApprovalStatus";
 import ThesisMembers from "./displayable/ThesisMembers";
 
@@ -60,10 +59,7 @@ const ThesisApplicationDetails = ({ application, isThesisCoordinator, user, upda
     }
 
     return <div className="flex flex-col gap-10">
-        <div>
-            <h4 className={`border-b-4 mb-2 ${borderColorStyles.simple}`}>Abstract</h4>
-            <p className="text-justify text-[0.9rem] px-2">{application[0].abstract}</p>
-        </div>
+        <ThesisAbstract application={application[0]} />
         <ThesisMembers application={application[0]} />
         <ThesisApprovalStatus application={application[0]} />
 

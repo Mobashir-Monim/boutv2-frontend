@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import PrimaryButton from "../../../components/Buttons/PrimaryButton";
 import SimpleCard from "../../../components/Card/SimpleCard";
-import { transitioner, applicationTypeColors, thesisStyles } from "../../../utils/styles/styles";
+import { applicationTypeColors, thesisStyles } from "../../../utils/styles/styles";
 import { applicationTypeIcons } from "../../../utils/styles/icons";
 import { useModal } from "../../../utils/contexts/ModalContext";
 import ThesisApplicationDetails from "./ThesisApplicationDetails";
 import { userHasRole } from "../../../db/remote/user";
-import { useAuth } from "../../../utils/contexts/AuthContext";
 import { deepClone } from "../../../utils/functions/deepClone";
 import { useLoadingScreen } from "../../../utils/contexts/LoadingScreenContext";
 import { getPendingThesisRegistrations } from "../../../db/remote/thesis";

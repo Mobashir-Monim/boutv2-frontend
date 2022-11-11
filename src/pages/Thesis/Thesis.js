@@ -4,6 +4,7 @@ import { useAuth } from "../../utils/contexts/AuthContext";
 import { domainKey, studentDomainValue, staffDomainValue } from "../../utils/contants";
 import UnderDevelopment from "../UnderDevelopment/UnderDevelopment";
 import FacultyDashboard from "./components/FacultyDashboard";
+import StudentDashboard from "./components/StudentDashboard";
 
 const Thesis = () => {
     const { user } = useAuth();
@@ -11,7 +12,7 @@ const Thesis = () => {
     if (user[domainKey] === staffDomainValue) {
         return <FacultyDashboard user={user} />
     } else {
-        return <UnderDevelopment />
+        return <StudentDashboard />
     }
 
 };

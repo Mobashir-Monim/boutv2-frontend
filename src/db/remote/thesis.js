@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { collection, query, where, getDocs, addDoc, updateDoc, doc, orderBy, limit, deleteDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, updateDoc, doc, orderBy, limit, deleteDoc, getDoc } from "firebase/firestore";
 
 import { firestoreSnapshotFormatter } from "../../utils/functions/firestoreSnapshotFormatter";
 
@@ -8,7 +8,7 @@ const thesisRegCollection = "thesis_registrations";
 const thesisInstanceColRef = collection(db, thesisInstanceCollection);
 const thesisRegColRef = collection(db, thesisRegCollection);
 
-export const getThesisInstance = async ({ semester = null, year = null }) => {
+export const getThesisInstance = async ({ semester = null, year = null, instance_id }) => {
     let results = [];
     let snapshots = null;
 
@@ -18,6 +18,10 @@ export const getThesisInstance = async ({ semester = null, year = null }) => {
             where("semester", "==", semester),
             where("year", "==", year),
         ))
+    } else if (instance_id) {
+        snapshots = await getDoc(doc(db, thesisInstanceCollection, instance_id));
+
+        return [[snapshots.data(), instance_id]];
     } else {
         const now = new Date().getTime()
         snapshots = await getDocs(query(
