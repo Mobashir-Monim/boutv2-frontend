@@ -24,7 +24,7 @@ const FacultyDashboard = ({ user }) => {
         if (canManageThesis === null) {
             return <Spinner dimensions={"h-10 w-10"} />;
         } else if (canManageThesis) {
-            return <PrimaryButton text="Thesis Management" type="link" link={"/thesis/manage"} />
+            return <PrimaryButton text="Thesis Registrations" type="link" link={"/thesis/registrations"} />
         } else {
             return <></>
         }

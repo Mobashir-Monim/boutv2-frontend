@@ -28,6 +28,8 @@ import Logout from "./pages/Auth/Logout";
 import StudentProfileManager from "./pages/Profile/StudentProfileManager";
 import StudentProfile from "./pages/Profile/components/StudentProfile";
 import ThesisCoordination from "./pages/Thesis/ThesisCoordination";
+import ThesisRegistrations from "./pages/Thesis/ThesisRegistrations";
+
 
 const App = () => {
     const [sideNavStatus, setSideNavStatus] = useState({ currentRoute: "/", showNav: false });
@@ -81,7 +83,7 @@ const App = () => {
                             <Route path="/thesis/coordinate" element={<ThesisCoordination />} />
                         </Route>
                         <Route path="/" element={<Middleware checks={["hasRole:thesis-manager"]} />}>
-                            <Route path="/thesis/manage" element={<UnderDevelopment />} />
+                            <Route path="/thesis/registrations" element={<ThesisRegistrations />} />
                         </Route>
 
                         <Route path="/routine" element={<UnderDevelopment />} />

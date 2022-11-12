@@ -51,7 +51,7 @@ export const CheckboxInput = ({ name, options, onChangeFn, values = [], customSt
     </div>
 }
 
-export const TextInput = ({ label, onChangeFn, value, customStyle = {}, placeholder, disabled = false }) => {
+export const TextInput = ({ label, onChangeFn = () => { }, value, customStyle = {}, placeholder, disabled = false }) => {
     const resizeSelf = event => {
         if (event.key === "Backspace") {
             event.target.style.height = `40px`;

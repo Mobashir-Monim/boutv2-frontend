@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { deepCopy } from "@firebase/util";
 import { transitioner, borderColorStyles } from "../../../../utils/styles/styles";
-import { deepClone } from "../../../../utils/functions/deepClone";
 import { TextInput } from "../../../../components/FormInputs/LabeledInputs";
 
 const ThesisRegistrationApprovalForm = ({ application, user, isThesisCoordinator, level, setPrimaryApplicationApproval, rejectRequest }) => {
@@ -10,7 +10,7 @@ const ThesisRegistrationApprovalForm = ({ application, user, isThesisCoordinator
     });
 
     const updateComment = event => {
-        const approvalStatusClone = deepClone(approvalStatus);
+        const approvalStatusClone = deepCopy(approvalStatus);
         approvalStatusClone.comment_error = false;
         approvalStatusClone.comment = event.target.value;
         setApprovalStatus(approvalStatusClone);

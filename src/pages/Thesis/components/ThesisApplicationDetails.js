@@ -2,10 +2,11 @@ import { generateThesisNumber, setThesisRegistration } from "../../../db/remote/
 import { useModal } from "../../../utils/contexts/ModalContext";
 import { deepClone } from "../../../utils/functions/deepClone";
 import { transitioner } from "../../../utils/styles/styles";
-import ThesisRegistrationApprovalForm from "./approval/ThesisRegistrationApprovalForm";
+import ThesisRegistrationApprovalForm from "./admin/ThesisRegistrationApprovalForm";
 import ThesisAbstract from "./displayable/ThesisAbstract";
 import ThesisApprovalStatus from "./displayable/ThesisApprovalStatus";
 import ThesisMembers from "./displayable/ThesisMembers";
+import ThesisRegistrationInfo from "./displayable/ThesisRegistrationInfo";
 
 const ThesisApplicationDetails = ({ application, isThesisCoordinator, user, updatePendingApplicationList, thesis_instance }) => {
     const { showModal, hideModal } = useModal();
@@ -59,6 +60,7 @@ const ThesisApplicationDetails = ({ application, isThesisCoordinator, user, upda
     }
 
     return <div className="flex flex-col gap-10">
+        <ThesisRegistrationInfo thesis_instance={thesis_instance[0][0]} registration_instance={application[0]} />
         <ThesisAbstract application={application[0]} />
         <ThesisMembers application={application[0]} />
         <ThesisApprovalStatus application={application[0]} />

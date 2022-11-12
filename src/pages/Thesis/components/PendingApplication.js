@@ -15,6 +15,8 @@ const PendingApplication = ({ user, coordinatorPending, thesis_instance }) => {
     const [registrationInstances, setRegistrationInstances] = useState([]);
     const [isThesisCoordinator, setIsThesisCoordinator] = useState(false);
     const [pendingApplications, setPendingApplications] = useState([]);
+    const statusNameMap = ["Pending", "Hard Reject", "Soft Reject", "Approved"];
+    const statusColorMap = ["text-orange-600", "text-rose-600", "text-orange-600", "text-teal-600"];
 
     useEffect(() => {
         (async () => {
@@ -98,6 +100,14 @@ const PendingApplication = ({ user, coordinatorPending, thesis_instance }) => {
                                 <span className={`${thesisStyles.pending.details}`}>
                                     <div className="w-1 h-1 rounded-full bg-gray-600 dark:bg-gray-200"></div>
                                     {pendingApplication[0].type}
+                                </span>
+                                <span className={`${thesisStyles.pending.details}`}>
+                                    <div className="w-1 h-1 rounded-full bg-gray-600 dark:bg-gray-200"></div>
+                                    <span className={`${statusColorMap[pendingApplication[0].supervisor_approval]}`}>[ {statusNameMap[pendingApplication[0].supervisor_approval]} ]</span>
+                                </span>
+                                <span className={`${thesisStyles.pending.details}`}>
+                                    <div className="w-1 h-1 rounded-full bg-gray-600 dark:bg-gray-200"></div>
+                                    <span className={`${statusColorMap[pendingApplication[0].coordinator_approval]}`}>[ {statusNameMap[pendingApplication[0].coordinator_approval]} ]</span>
                                 </span>
                             </div>
                         </div>
