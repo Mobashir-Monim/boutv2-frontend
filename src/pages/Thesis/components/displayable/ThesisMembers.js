@@ -12,7 +12,6 @@ const ThesisMembers = ({ application }) => {
 
     useEffect(() => {
         (async () => {
-            console.log("calling");
             const students = await getStudents({ official_emails: application.member_emails });
             setStudents(students);
         })();
@@ -30,7 +29,7 @@ const ThesisMembers = ({ application }) => {
     const showSupervisorType = (type, personIndex) => type === "supervisor" ? <span className={`${borderColorStyles.simple} border-t-2 text-right`}>{personIndex === 0 ? "Primary" : "Secondary"}</span> : <></>
     const showStudentInfo = (type, personIndex) => {
         if (type === "member_emails" && application.credits_completed) {
-            if (application.credits_completed.length > 0) {
+            if (application.credits_completed.length > 0 && students.length > 0) {
                 const student = students.find(student => student[0].official_email === application.member_emails[personIndex]);
                 return <div className="flex flex-col gap-1 text-[0.8rem]">
                     <div className="flex flex-row gap-3">
