@@ -11,7 +11,7 @@ import ThesisRegistrationInfo from "./displayable/ThesisRegistrationInfo";
 const ThesisApplicationDetails = ({ application, isThesisCoordinator, user, updatePendingApplicationList, thesis_instance }) => {
     const { showModal, hideModal } = useModal();
 
-    const rejectRequest = () => showModal("Invalid Request", "The requested changes cannot be made")
+    const rejectRequest = () => showModal("Invalid Request", "The requested changes cannot be made");
 
     const setPrimaryApplicationApproval = async (level, state, comment) => {
         const applicationClone = { ...deepClone(application[0]), id: application[1] };
