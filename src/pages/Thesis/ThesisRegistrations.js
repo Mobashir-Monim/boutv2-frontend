@@ -73,7 +73,7 @@ const ThesisRegistrations = () => {
 
     const getApplications = () => {
         if (thesisApplications[0][1]) {
-            return thesisApplications.map((application, index) => <div className={`flex flex-row w-[1150px] ${index % 2 === 0 ? "" : "bg-[#ccc] dark:bg-[#333]"} py-5 px-10 text-[0.8rem]`} key={application[1]}>
+            return thesisApplications.map((application, index) => <div className={`flex flex-row min-w-[1150px] w-[100%] ${index % 2 === 0 ? "" : "bg-[#ccc] dark:bg-[#333]"} py-5 px-10 text-[0.8rem]`} key={application[1]}>
                 <span className="inline-block min-w-[100px] max-w-[100px] my-auto">{application[0].type.slice(0, 1).toUpperCase()}{application[0].type.slice(1)}</span>
                 <span className="inline-block min-w-[300px] max-w-[300px] my-auto">{application[0].supervisor[0]}</span>
                 <span className="inline-block min-w-[300px] max-w-[300px] text-justify my-auto">{application[0].title}</span>
@@ -86,9 +86,9 @@ const ThesisRegistrations = () => {
                         [ {statusMap[application[0].coordinator_approval].display} ]
                     </div>
                 </span>
-                <span className="flex flex-col gap-2 min-w-[100px] max-w-[100px] text-center my-auto">
-                    <PrimaryButton text={"visibility"} customStyle={"material-icons-round py-1"} clickFunction={() => showApplicationDetails(index)} />
-                    {/* <SecondaryButton text={"delete"} customStyle={"material-icons-round py-1"} /> */}
+                <span className="flex flex-row flex-wrap gap-2 min-w-[100px] max-w-[100px] justify-center my-auto">
+                    <PrimaryButton text={"visibility"} customStyle={"material-icons-round !p-1"} clickFunction={() => showApplicationDetails(index)} />
+                    <SecondaryButton text={"delete"} customStyle={"material-icons-round !p-1"} />
                 </span>
             </div>)
         }
@@ -110,16 +110,21 @@ const ThesisRegistrations = () => {
         </div>
         <div className="">
             <SimpleCard title={"CSE400 Registrations"}>
-                <div className="overflow-scroll h-[40vh] relative no-scroll-bar">
-                    <div className="flex flex-row w-[1150px] bg-[#ccc] dark:bg-[#333] py-2 px-10 text-[0.8rem]">
-                        <span className="inline-block min-w-[100px] max-w-[100px]">Type</span>
-                        <span className="inline-block min-w-[300px] max-w-[300px]">Supervisor</span>
-                        <span className="inline-block min-w-[300px] max-w-[300px] text-center">Title</span>
-                        <span className="inline-block min-w-[150px] max-w-[150px] text-center">Members</span>
-                        <span className="inline-block min-w-[150px] max-w-[150px] text-center">Status</span>
-                        <span className="inline-block min-w-[100px] max-w-[100px] text-center">Action</span>
+                <div>
+                    <div className="p-5">
+                        afafas
                     </div>
-                    {getApplications()}
+                    <div className="overflow-scroll h-[40vh] relative no-scroll-bar">
+                        <div className="flex flex-row min-w-[1150px] w-[100%] bg-[#aaa] dark:bg-[#222] py-2 px-10 text-[0.8rem] sticky top-0 z-10 font-bold">
+                            <span className="inline-block min-w-[100px] max-w-[100px]">Type</span>
+                            <span className="inline-block min-w-[300px] max-w-[300px]">Supervisor</span>
+                            <span className="inline-block min-w-[300px] max-w-[300px] text-center">Title</span>
+                            <span className="inline-block min-w-[150px] max-w-[150px] text-center">Members</span>
+                            <span className="inline-block min-w-[150px] max-w-[150px] text-center">Status</span>
+                            <span className="inline-block min-w-[100px] max-w-[100px] text-center">Action</span>
+                        </div>
+                        {getApplications()}
+                    </div>
                 </div>
             </SimpleCard>
         </div>

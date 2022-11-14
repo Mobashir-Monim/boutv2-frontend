@@ -60,7 +60,7 @@ const ThesisApplicationDetails = ({ application, isThesisCoordinator, user, upda
     }
 
     return <div className="flex flex-col gap-10">
-        <ThesisRegistrationInfo thesis_instance={thesis_instance[0][0]} registration_instance={application[0]} />
+        {thesis_instance ? <ThesisRegistrationInfo thesis_instance={thesis_instance[0][0]} registration_instance={application[0]} /> : <></>}
         <ThesisAbstract application={application[0]} />
         <ThesisMembers application={application[0]} />
         <ThesisApprovalStatus application={application[0]} />
