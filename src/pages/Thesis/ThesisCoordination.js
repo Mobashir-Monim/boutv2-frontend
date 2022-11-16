@@ -53,7 +53,7 @@ const ThesisCoordination = () => {
         <div className="flex flex-col md:flex-row gap-10">
             <div className="w-[100%] md:w-[40%] xl:w-[30%] flex flex-col gap-10">
                 <SimpleCard title={"Thesis Semester"} customStyle={"w-[100%]"}>
-                    <div className="p-5 overflow-scroll flex flex-col gap-5">
+                    <div className="p-5 flex flex-col gap-5">
                         <SelectInput onChangeFn={event => updateThesisSemester(event, "semester")} options={!thesisSemester.semester ? ["Select Semester", ...semesters] : semesters} label="Semester" value={thesisSemester.semester} />
                         <SelectInput onChangeFn={event => updateThesisSemester(event, "year")} options={!thesisSemester.year ? ["Select Year", ...years] : years} label="Year" value={thesisSemester.year} />
                     </div>
