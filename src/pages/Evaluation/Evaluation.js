@@ -169,7 +169,7 @@ const Evaluation = () => {
 
     const setSearchPhraseCode = event => {
         const evaluationStateClone = deepCopy(evaluationState);
-        evaluationStateClone.search.phrase.code = event.target.value;
+        evaluationStateClone.search.phrase.code = event.target.value.toUpperCase();
 
         setevaluationState(evaluationStateClone);
     }
@@ -375,6 +375,7 @@ const Evaluation = () => {
             searchOfferedSection={searchOfferedSection}
             setOfferedSectionInstructorState={setOfferedSectionInstructorState}
             showReport={showReport}
+            searchObject={evaluationState.search}
         />
         {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" ? evaluationDatesModal : <></>}
     </div>

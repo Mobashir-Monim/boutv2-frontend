@@ -14,7 +14,7 @@ const allowedUsers = [
     "QnNrtpRAj9hMwlxlcBiBOU16XZB2",
 ]
 
-const EvaluationSearchPanel = ({ user, evaluationState, setSearchPhraseCode, setSearchPhraseSection, setSearchPhraseLink, setSearchPhraseFaculty, setOfferedSectionInstructor, searchOfferedSection, setOfferedSectionInstructorState, showReport }) => {
+const EvaluationSearchPanel = ({ user, evaluationState, setSearchPhraseCode, setSearchPhraseSection, setSearchPhraseLink, setSearchPhraseFaculty, setOfferedSectionInstructor, searchOfferedSection, setOfferedSectionInstructorState, showReport, searchObject }) => {
     return <div className={`${allowedUsers.includes(user.uid) && evaluationState.id ? "" : "hidden"} w-[100%] ${transitioner.simple}`}>
         <SimpleCard title={`Evaluation Search Panel`}>
             <div className="flex flex-col p-5">
@@ -22,19 +22,19 @@ const EvaluationSearchPanel = ({ user, evaluationState, setSearchPhraseCode, set
                     <div className="flex flex-col md:flex-row justify-between md:w-[100%] gap-5">
                         <div className="md:w-[47%] flex flex-row gap-5">
                             <div className="w-[75%]">
-                                <LineInput label="Course Code" onChangeFn={setSearchPhraseCode} />
+                                <LineInput label="Course Code" onChangeFn={setSearchPhraseCode} value={searchObject.phrase.code} />
                             </div>
                             <div className="w-[25%]">
-                                <LineInput label="Section" onChangeFn={setSearchPhraseSection} />
+                                <LineInput label="Section" onChangeFn={setSearchPhraseSection} value={searchObject.phrase.section} />
                             </div>
                         </div>
                         <div className="md:w-[47%]">
-                            <LineInput label="Evaluation Code" onChangeFn={setSearchPhraseLink} />
+                            <LineInput label="Evaluation Code" onChangeFn={setSearchPhraseLink} value={searchObject.phrase.link} />
                         </div>
                     </div>
                     <div className="flex flex-col md:flex-row justify-between md:w-[100%] gap-5">
                         <div className="md:w-[47%]">
-                            <LineInput label="Faculty Email" onChangeFn={setSearchPhraseFaculty} />
+                            <LineInput label="Faculty Email" onChangeFn={setSearchPhraseFaculty} value={searchObject.phrase.faculty} />
                         </div>
                         <div className="md:w-[37%] justify-center flex my-auto">
                             <PrimaryButton text="Fetch Data" customStyle={"w-[100%]"} type="button" clickFunction={searchOfferedSection} />
@@ -78,7 +78,7 @@ const EvaluationSearchPanel = ({ user, evaluationState, setSearchPhraseCode, set
                                                     part
                                                 )}
                                             >
-                                                <span className="material-icons-round">description</span>
+                                                <span className={`material-icons-round ${borderColorStyles.simple}`}>description</span>
                                             </div>
                                         </div>
                                     </div>)}
