@@ -72,7 +72,7 @@ const ThesisRegistrations = () => {
         showModal(
             getModalHeading(index),
             <ThesisApplicationDetails
-                application={thesisApplications[index]}
+                application={filteredApplications[index]}
                 isThesisCoordinator={false}
                 user={user}
                 updatePendingApplicationList={() => { }}

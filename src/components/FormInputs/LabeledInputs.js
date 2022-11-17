@@ -35,7 +35,10 @@ export const CheckboxInput = ({ name, options, onChangeFn, values = [], customSt
     let opts = null;
 
     if (Array.isArray(options)) {
-        opts = options.map((opt, optIndex) => <option value={opt} key={`es-${optIndex}`}>{opt}</option>);
+        opts = options.map((opt, optIndex) => <div className="flex flex-row text-center gap-2 cursor-pointer" key={`l-${name}-${optIndex}`} value={opt} onClick={() => onChangeFn(opt)}>
+            <input type="checkbox" className={`${inputStyles.labeled.input} ${inputStyles.labeled.checkbox} ${values.includes(opt) ? `${inputStyles.labeled.checked}` : ""} ${customStyle.input}`} checked={values.includes(opt)} name={name} onChange={() => { }} />
+            <span className={`${inputStyles.labeled.label} !text-left !my-auto ${customStyle.label} order-1`}>{opt}</span>
+        </div>);
     } else {
         opts = Object.keys(options).map((opt, optIndex) => <div className="flex flex-row text-center gap-2 cursor-pointer" key={`l-${name}-${optIndex}`} value={opt} onClick={() => onChangeFn(opt)}>
             <input type="checkbox" className={`${inputStyles.labeled.input} ${inputStyles.labeled.checkbox} ${values.includes(opt) ? `${inputStyles.labeled.checked}` : ""} ${customStyle.input}`} checked={values.includes(opt)} name={name} onChange={() => { }} />
