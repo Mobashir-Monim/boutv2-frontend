@@ -3,7 +3,7 @@ import { deepCopy } from "@firebase/util";
 import SimpleCard from "../../components/Card/SimpleCard";
 import { pageLayoutStyles, thesisStyles, } from "../../utils/styles/styles";
 import { applicationTypeIcons } from "../../utils/styles/icons";
-import { CheckboxInput, LineInput, SelectInput } from "../../components/FormInputs/LabeledInputs";
+import { CheckboxInput, LineInput } from "../../components/FormInputs/LabeledInputs";
 import { useLoadingScreen } from "../../utils/contexts/LoadingScreenContext";
 import { getThesisInstance, getThesisRegistrations } from "../../db/remote/thesis";
 import ThesisRegistrationStats from "./components/displayable/ThesisRegistrationStats";
@@ -13,12 +13,13 @@ import { useModal } from "../../utils/contexts/ModalContext";
 import { useAuth } from "../../utils/contexts/AuthContext";
 import ThesisApplicationDetails from "./components/ThesisApplicationDetails";
 import { deepClone } from "../../utils/functions/deepClone";
+import { useSemesterSelect } from "../../utils/hooks/useSemesterSelect";
 
 const ThesisRegistrations = () => {
+    const semesterSelection = useSemesterSelect();
     const { user } = useAuth();
     const { showModal } = useModal()
     const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
-    const [thesisSemester, setThesisSemester] = useState({ semester: null, year: null });
     const [thesisInstance, setThesisInstance] = useState([[null, null]]);
     const [thesisApplications, setThesisApplications] = useState([[null, null]]);
     const [filteredApplications, setFilteredApplications] = useState([[null, null]]);
@@ -28,8 +29,6 @@ const ThesisRegistrations = () => {
         type: ["project", "internship", "thesis"],
         supervisor: "",
     });
-    const years = Array((new Date()).getUTCFullYear() - 2020 + 1).fill().map((_, idx) => `${2020 + idx}`);
-    const semesters = ["Spring", "Summer", "Fall"];
     const statusMap = [
         { display: "Pending", color: "text-orange-600" },
         { display: "Hard Reject", color: "text-rose-600" },
@@ -39,20 +38,14 @@ const ThesisRegistrations = () => {
 
     useEffect(() => {
         (async () => {
-            if (thesisSemester.year && thesisSemester.semester)
+            if (semesterSelection.isValidSelection())
                 await confirmSemester();
         })();
-    }, [thesisSemester]);
-
-    const updateThesisSemester = (event, target) => {
-        const thesisSemesterClone = deepCopy(thesisSemester);
-        thesisSemesterClone[target] = event.target.value;
-        setThesisSemester(thesisSemesterClone);
-    }
+    }, [semesterSelection.values]);
 
     const confirmSemester = async () => {
         showLoadingScreen("Loading thesis instance, please wait...");
-        const thesisInst = await getThesisInstance(thesisSemester);
+        const thesisInst = await getThesisInstance(semesterSelection.values);
         const applications = await getThesisRegistrations({ instance_id: thesisInst[0][1] });
         setThesisInstance(thesisInst);
         setThesisApplications(applications);
@@ -145,12 +138,7 @@ const ThesisRegistrations = () => {
     return <div className={`${pageLayoutStyles.scrollable} flex flex-col gap-10`}>
         <div className="w-[100%] flex flex-col md:flex-row gap-10">
             <div className="w-[100%] md:w-[50%]">
-                <SimpleCard title={"Thesis Semester"}>
-                    <div className="p-5 flex flex-col gap-5">
-                        <SelectInput onChangeFn={event => updateThesisSemester(event, "semester")} options={!thesisSemester.semester ? ["Select Semester", ...semesters] : semesters} label="Semester" value={thesisSemester.semester} />
-                        <SelectInput onChangeFn={event => updateThesisSemester(event, "year")} options={!thesisSemester.year ? ["Select Year", ...years] : years} label="Year" value={thesisSemester.year} />
-                    </div>
-                </SimpleCard>
+                {semesterSelection.semesterSelect}
             </div>
             <ThesisRegistrationStats thesisInstanceID={thesisInstance[0][1]} display={"row"} />
         </div>
