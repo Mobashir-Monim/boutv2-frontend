@@ -13,6 +13,7 @@ export const useSemesterSelect = (years = defaultYears) => {
     const isValidSelection = _ => yearsValues.includes(selection.year) && defaultSemesters.includes(selection.semester);
 
     return {
+        values: selection,
         updateSelection,
         hasSelected,
         isValidSelection,
