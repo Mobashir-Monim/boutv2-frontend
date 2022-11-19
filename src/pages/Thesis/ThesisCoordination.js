@@ -7,9 +7,10 @@ import { pageLayoutStyles } from "../../utils/styles/styles";
 import PendingApplication from "./components/PendingApplication";
 import ThesisRegistrationStats from "./components/displayable/ThesisRegistrationStats";
 import { useSemesterSelect } from "../../utils/hooks/useSemesterSelect";
+import { useModal } from "../../utils/contexts/ModalContext";
 
 const ThesisCoordination = () => {
-    const semesterSelection = useSemesterSelect();
+    const { showModal } = useModal();
     const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
     const { user } = useAuth();
     const [thesisInstance, setThesisInstance] = useState([[null, null]]);
@@ -26,19 +27,18 @@ const ThesisCoordination = () => {
         }
     }
 
-    useEffect(() => {
-        (async () => {
-            if (semesterSelection.isValidSelection())
-                await confirmSemester();
-        })();
-    }, [semesterSelection.values]);
-
     const confirmSemester = async () => {
-        showLoadingScreen("Loading thesis instance, please wait...");
-        const thesisInst = await getThesisInstance(semesterSelection.values);
-        setThesisInstance(thesisInst);
-        hideLoadingScreen();
+        if (semesterSelection.isValidSelection()) {
+            showLoadingScreen("Loading thesis instance, please wait...");
+            const thesisInst = await getThesisInstance(semesterSelection.values);
+            setThesisInstance(thesisInst);
+            hideLoadingScreen();
+        } else {
+            showModal("INVALID SEMESTER", "Please select a valid semester and year");
+        }
     }
+
+    const semesterSelection = useSemesterSelect(confirmSemester);
 
     return <div className={`${pageLayoutStyles.scrollable} flex flex-col gap-5`}>
         <div className="flex flex-col md:flex-row gap-10">

@@ -16,7 +16,6 @@ import { deepClone } from "../../utils/functions/deepClone";
 import { useSemesterSelect } from "../../utils/hooks/useSemesterSelect";
 
 const ThesisRegistrations = () => {
-    const semesterSelection = useSemesterSelect();
     const { user } = useAuth();
     const { showModal } = useModal()
     const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
@@ -34,24 +33,23 @@ const ThesisRegistrations = () => {
         { display: "Hard Reject", color: "text-rose-600" },
         { display: "Soft Reject", color: "text-orange-600" },
         { display: "Approved", color: "text-teal-600" },
-    ]
-
-    useEffect(() => {
-        (async () => {
-            if (semesterSelection.isValidSelection())
-                await confirmSemester();
-        })();
-    }, [semesterSelection.values]);
+    ];
 
     const confirmSemester = async () => {
-        showLoadingScreen("Loading thesis instance, please wait...");
-        const thesisInst = await getThesisInstance(semesterSelection.values);
-        const applications = await getThesisRegistrations({ instance_id: thesisInst[0][1] });
-        setThesisInstance(thesisInst);
-        setThesisApplications(applications);
-        setFilteredApplications(applications);
-        hideLoadingScreen();
+        if (semesterSelection.isValidSelection()) {
+            showLoadingScreen("Loading thesis instance, please wait...");
+            const thesisInst = await getThesisInstance(semesterSelection.values);
+            const applications = await getThesisRegistrations({ instance_id: thesisInst[0][1] });
+            setThesisInstance(thesisInst);
+            setThesisApplications(applications);
+            setFilteredApplications(applications);
+            hideLoadingScreen();
+        } else {
+            showModal("INVALID SEMESTER", "Please select a valid semester and year");
+        }
     }
+
+    const semesterSelection = useSemesterSelect(confirmSemester);
 
     const getModalHeading = index => <div className="flex flex-col gap-2">
         <div className="flex flex-row justify-between">
@@ -96,7 +94,6 @@ const ThesisRegistrations = () => {
     }
 
     const updateFilteredApplications = (email = "") => {
-        console.log("calling");
         let filteredApplicationsClone = deepCopy(thesisApplications.filter(app => filterSettings.supervisor_approval.includes(`${app[0].supervisor_approval}`)));
         filteredApplicationsClone = filteredApplicationsClone.filter(app => filterSettings.coordinator_approval.includes(`${app[0].coordinator_approval}`));
         filteredApplicationsClone = filteredApplicationsClone.filter(app => filterSettings.type.includes(app[0].type));

@@ -1,7 +1,8 @@
+import PrimaryButton from "../Buttons/PrimaryButton";
 import SimpleCard from "../Card/SimpleCard";
 import { SelectInput } from "../FormInputs/LabeledInputs";
 
-const SemesterSelect = ({ semesters, years, selection, updateSelection }) => {
+const SemesterSelect = ({ semesters, years, selection, updateSelection, confirmCall }) => {
     const optionsGenerator = (target, optionsContainer) => selection[target] ?
         optionsContainer :
         [`Select ${target.slice(0, 1).toUpperCase()}${target.slice(1)}`, ...optionsContainer];
@@ -21,6 +22,7 @@ const SemesterSelect = ({ semesters, years, selection, updateSelection }) => {
                 label="Year"
                 value={selection.year}
             />
+            <PrimaryButton text={"Confirm Semester"} clickFunction={confirmCall} />
         </div>
     </SimpleCard>
 }
