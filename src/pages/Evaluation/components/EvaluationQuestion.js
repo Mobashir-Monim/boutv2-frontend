@@ -2,7 +2,7 @@ import { TextInput } from "../../../components/FormInputs/LabeledInputs";
 import { LineInput } from "../../../components/FormInputs/LabeledInputs";
 import { SelectInput } from "../../../components/FormInputs/LabeledInputs";
 
-import { cardStyles } from "../../../utils/styles/styles";
+import { borderColorStyles, cardStyles } from "../../../utils/styles/styles";
 import { transitioner } from "../../../utils/styles/styles";
 import { buttonStyles } from "../../../utils/styles/styles";
 
@@ -22,12 +22,15 @@ const EvaluationQuestion = ({ qState, identifier, removeQuestion, setRowValue, s
     const getChoiceRow = () => {
         const rows = [...qState.rows, ""];
 
-        return <div className="flex flex-col text-[0.9rem]">
+        return <div className="flex flex-col gap-5 text-[0.9rem]">
             {rows.map((row, rowIndex) => {
                 return <div className="flex flex-row gap-3" key={`r-${rowIndex}`}>
-                    <div className="w-[60%] flex flex-col">
-                        <LineInput value={row} onChangeFn={event => setRowValue(event, rowIndex, identifier)} label={`Option ${rowIndex + 1}`} />
-                    </div>
+                    <LineInput
+                        value={row}
+                        onChangeFn={event => setRowValue(event, rowIndex, identifier)}
+                        label={`Option ${rowIndex + 1}`}
+                        customStyle={{ container: "w-[60%] flex flex-col" }}
+                    />
                 </div>
             })}
         </div>
@@ -37,18 +40,29 @@ const EvaluationQuestion = ({ qState, identifier, removeQuestion, setRowValue, s
         const rows = [...qState.rows.filter(r => r !== ""), ""];
         const columns = [...qState.columns.filter(c => c !== ""), ""];
 
-        return <div className="flex flex-row text-[0.9rem] gap-5">
-            <div className="w-[45%] flex flex-col">
+        return <div className="flex flex-row text-[0.9rem]">
+            <div className="w-[100%] flex flex-col gap-5">
                 {rows.map((row, rowIndex) => {
-                    return <div className="w-[100%] flex flex-col" key={`r-${rowIndex}`}>
-                        <LineInput value={row} onChangeFn={event => setRowValue(event, rowIndex, identifier)} label={`Row ${rowIndex + 1}`} />
-                    </div>
-                })}
-            </div>
-            <div className="w-[30%] flex flex-col">
-                {columns.map((column, columnIndex) => {
-                    return <div className="w-[100%] flex flex-col" key={`c-${columnIndex}`}>
-                        <LineInput value={column} onChangeFn={event => setColumnValue(event, columnIndex, identifier)} label={`Column ${columnIndex + 1}`} />
+                    return <div className="flex flex-row" key={`r-${rowIndex}`}>
+                        <LineInput
+                            value={row}
+                            onChangeFn={event => setRowValue(event, rowIndex, identifier)}
+                            label={`Row ${rowIndex + 1}`}
+                            customStyle={{
+                                container: "w-[60%] flex flex-col",
+                                input: `rounded-r-none border-r-2 ${borderColorStyles.simple}`
+                            }}
+                        />
+                        <LineInput
+                            key={`c-${rowIndex}`}
+                            value={columns[rowIndex]}
+                            onChangeFn={event => setColumnValue(event, rowIndex, identifier)}
+                            label={`Column ${rowIndex + 1}`}
+                            customStyle={{
+                                container: "w-[20%] flex flex-col",
+                                input: `rounded-l-none border-l-2 ${borderColorStyles.simple}`
+                            }}
+                        />
                     </div>
                 })}
             </div>
@@ -72,19 +86,33 @@ const EvaluationQuestion = ({ qState, identifier, removeQuestion, setRowValue, s
         </div>
     }
 
-    return <div className={`${cardStyles.simple} flex flex-col gap-5`}>
+    return <div className={`${cardStyles.simple} flex flex-col gap-5 p-5`}>
         <div className="flex flex-col md:flex-row justify-between gap-5 text-[0.9rem]">
-            <div className="w-[100%] lg:w-[70%]">
-                <TextInput label="Question" onChangeFn={event => setQuestionDisplay(event, identifier)} value={qState.display} />
-            </div>
-            <div className="w-[100%] lg:w-[20%]">
-                <SelectInput name={"type"} label={"Question Type"} options={questionTypes} onChangeFn={event => changeQuestionType(event, identifier)} />
-            </div>
+            <TextInput
+                label="Question"
+                onChangeFn={event => setQuestionDisplay(event, identifier)}
+                value={qState.display}
+                customStyle={{
+                    container: "w-[100%] lg:w-[calc(80%-1.25rem/2)]",
+                    label: "!-order-1 !text-left pl-2 mb-2 !text-[1.2rem]"
+                }}
+            />
+            <SelectInput
+                name={"type"}
+                label={"Type"}
+                options={questionTypes}
+                onChangeFn={event => changeQuestionType(event, identifier)}
+                value={qState.type}
+                customStyle={{
+                    container: "w-[100%] lg:w-[calc(20%-1.25rem/2)]",
+                    label: "!-order-1 !text-left pl-2 mb-2 !text-[1.2rem]"
+                }}
+            />
         </div>
 
         {getConfigRows()}
 
-        <div className="flex flex-col md:flex-row justify-end gap-3 mt-5">
+        <div className="flex flex-col md:flex-row justify-end gap-3">
             <p className="my-auto">Required</p>
             <div className={`w-[40px] h-[20px] bg-zinc-300 my-auto rounded-full flex flex-row relative ${qState.required ? "bg-blue-200" : "bg-zinc-300"} ${transitioner.simple} drop-shadow-md`} onClick={() => toggleRequired(identifier)}>
                 <span className={`${transitioner.simple} h-[20px] ${qState.required ? "w-[20px]" : "w-[0px]"}`}></span>

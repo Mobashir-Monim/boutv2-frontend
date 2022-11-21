@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../utils/contexts/AuthContext";
 import { getEvaluationInstance, getEvaluationSubmissions, setEvaluationInstance } from "../../db/remote/evaluation";
-import { getOfferedSections, getOfferedSectionsByFaculty, setOfferedSection } from "../../db/remote/course";
+import { getDelinkableSections, getLinkableSections, getOfferedSections, getOfferedSectionsByFaculty, setOfferedSection } from "../../db/remote/course";
 import { cardStyles, pageLayoutStyles } from "../../utils/styles/styles";
 import { deepCopy } from "@firebase/util";
 import { useEvaluationInstance, useEvaluationQuestions } from "../../utils/contexts/EvaluationContext";
@@ -17,6 +17,7 @@ import EvaluationDates from "./components/EvaluationDates";
 import AssignedCourses from "./components/AssignedCourses";
 import EvaluationSearchPanel from "./components/EvaluationSearchPanel";
 import EvaluationBasicReport from "./components/EvaluationBasicReport";
+import { useSemesterSelect } from "../../utils/hooks/useSemesterSelect";
 
 const Evaluation = () => {
     const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
@@ -69,48 +70,44 @@ const Evaluation = () => {
     }
 
     const fetchEvaluationInstance = async () => {
-        if (semesters.includes(evaluationState.semester) && years.includes(evaluationState.year)) {
-            showLoadingScreen("Fetching data, please wait");
-            const evaluationStateClone = deepCopy(evaluationState);
-            let [evaluationInstance, id] = (await getEvaluationInstance({ year: evaluationState.year, semester: evaluationState.semester, entity: evaluationState.entity }))[0];
+        showLoadingScreen("Fetching data, please wait");
+        const evaluationStateClone = deepCopy(evaluationState);
+        let [evaluationInstance, id] = (await getEvaluationInstance({ year: evaluationState.year, semester: evaluationState.semester, entity: evaluationState.entity }))[0];
 
-            if (!id && user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1") {
-                if (window.confirm(`Are you sure that you want to create a new evaluation instance for ${evaluationState.year} ${evaluationState.semester}`)) {
-                    await setEvaluationInstance({ year: evaluationState.year, semester: evaluationState.semester, entity: evaluationState.entity, initiated: false, published: false, start: "", end: "" });
-                    [evaluationInstance, id] = (await getEvaluationInstance({ year: evaluationState.year, semester: evaluationState.semester, entity: evaluationState.entity }))[0];
-                }
+        if (!id && user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1") {
+            if (window.confirm(`Are you sure that you want to create a new evaluation instance for ${evaluationState.year} ${evaluationState.semester}`)) {
+                await setEvaluationInstance({ year: evaluationState.year, semester: evaluationState.semester, entity: evaluationState.entity, initiated: false, published: false, start: "", end: "" });
+                [evaluationInstance, id] = (await getEvaluationInstance({ year: evaluationState.year, semester: evaluationState.semester, entity: evaluationState.entity }))[0];
             }
-
-            if (id) {
-                evaluationStateClone.dates.start = evaluationInstance.start;
-                evaluationStateClone.dates.end = evaluationInstance.end;
-                evaluationStateClone.initiated = evaluationInstance.initiated;
-                evaluationStateClone.published = evaluationInstance.published;
-                evaluationStateClone.id = id;
-                evaluationStateClone.offered_sections = await getOfferedSectionsByFaculty(user.email);
-                evaluationStateClone.submissions.theory = await fetchSubmissions(evaluationStateClone.offered_sections.theory.map(x => x[1]), "theory");
-                evaluationStateClone.submissions.lab = await fetchSubmissions(evaluationStateClone.offered_sections.lab.map(x => x[1]), "lab");
-
-                storeEvaluationInstance(evaluationStateClone);
-                setevaluationState(evaluationStateClone);
-            } else {
-                setevaluationState({
-                    ...evaluationState,
-                    dates: { show: false, start: (new Date()).toISOString().split("T")[0], end: null },
-                    entity: "CSE",
-                    initiated: false,
-                    published: false,
-                    id: null,
-                    offered_sections: { theory: [], lab: [] },
-                    submissions: { theory: [], lab: [] },
-                });
-                alert("Evaluation not set.")
-            }
-
-            hideLoadingScreen();
-        } else {
-            alert("Please select a valid year and semester");
         }
+
+        if (id) {
+            evaluationStateClone.dates.start = evaluationInstance.start;
+            evaluationStateClone.dates.end = evaluationInstance.end;
+            evaluationStateClone.initiated = evaluationInstance.initiated;
+            evaluationStateClone.published = evaluationInstance.published;
+            evaluationStateClone.id = id;
+            evaluationStateClone.offered_sections = await getOfferedSectionsByFaculty(user.email);
+            evaluationStateClone.submissions.theory = await fetchSubmissions(evaluationStateClone.offered_sections.theory.map(x => x[1]), "theory");
+            evaluationStateClone.submissions.lab = await fetchSubmissions(evaluationStateClone.offered_sections.lab.map(x => x[1]), "lab");
+
+            storeEvaluationInstance(evaluationStateClone);
+            setevaluationState(evaluationStateClone);
+        } else {
+            setevaluationState({
+                ...evaluationState,
+                dates: { show: false, start: (new Date()).toISOString().split("T")[0], end: null },
+                entity: "CSE",
+                initiated: false,
+                published: false,
+                id: null,
+                offered_sections: { theory: [], lab: [] },
+                submissions: { theory: [], lab: [] },
+            });
+            alert("Evaluation not set.")
+        }
+
+        hideLoadingScreen();
     }
 
     const toggleEvaluationDatesModal = (show) => {
@@ -121,28 +118,23 @@ const Evaluation = () => {
         setevaluationState(evaluationStateClone);
     }
 
-    const fetchEvaluationSemesterData = async event => {
-        await fetchEvaluationInstance();
-        event.preventDefault();
+    const fetchEvaluationSemesterData = async () => {
+        if (semesterSelection.isValidSelection()) {
+            await fetchEvaluationInstance();
+        } else {
+            showModal("INVALID SEMESTER", "Please select a valid semester and year");
+        }
     }
 
-    const selectEvaluationSemester = event => {
+    const semesterSelection = useSemesterSelect(fetchEvaluationSemesterData);
+
+    useEffect(() => {
         const evaluationStateClone = deepCopy(evaluationState);
-        evaluationStateClone.semester = event.target.value;
-
+        evaluationStateClone.semester = semesterSelection.values.semester;
+        evaluationStateClone.year = semesterSelection.values.year;
         storeEvaluationInstance(evaluationStateClone);
-
         setevaluationState(evaluationStateClone);
-    }
-
-    const selectEvaluationYear = event => {
-        const evaluationStateClone = deepCopy(evaluationState);
-        evaluationStateClone.year = event.target.value;
-
-        storeEvaluationInstance(evaluationStateClone);
-
-        setevaluationState(evaluationStateClone);
-    }
+    }, [semesterSelection.values])
 
     const setStartDate = event => {
         const evaluationStateClone = deepCopy(evaluationState);
@@ -261,12 +253,79 @@ const Evaluation = () => {
         hideLoadingScreen();
     }
 
-    const toggleInitializedState = event => {
+    const delinkNonInstanceSections = async () => {
+        const delinableSections = await getDelinkableSections(evaluationState.semester, evaluationState.year);
+
+        if (delinableSections[0][1]) {
+            for (let offeredSection of delinableSections) {
+                offeredSection[0].id = offeredSection[1];
+                offeredSection[0].lab_evaluation_link = "";
+                offeredSection[0].theory_evaluation_link = "";
+                await setOfferedSection(offeredSection[0]);
+            }
+        }
+    }
+
+    const generateNewCode = usedCodes => {
+        const base = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let code = "";
+
+        do {
+            code = "";
+
+            while (code.length !== 6)
+                code = `${code}${base[Math.round(Math.random() * 62)]}`;
+
+        } while (!usedCodes.includes(code));
+
+        return code;
+    }
+
+    const linkInstanceSections = async () => {
+        const linkableSections = await getLinkableSections(evaluationState.semester, evaluationState.year);
+
+        if (linkableSections[0][1]) {
+            let usedCodes = [];
+
+            for (let offeredSection of linkableSections) {
+                offeredSection[0].id = offeredSection[1];
+
+                for (let prefix of ["theory", "lab"]) {
+                    if (offeredSection[0][`${prefix}_instructor_emails`].length !== 0) {
+                        let code = generateNewCode(usedCodes);
+
+                        do {
+                            let linkedSection = await getOfferedSections({ link_code: code });
+
+                            if (!linkedSection[0][1]) {
+                                usedCodes.push(code);
+                            } else {
+                                break;
+                            }
+
+                            code = generateNewCode(usedCodes);
+                        } while (true);
+
+                        usedCodes.push(code);
+                        offeredSection[0][`${prefix}_evaluation_link`] = code;
+                    }
+                }
+            }
+        }
+    }
+
+    const toggleInitializedState = async event => {
+        showLoadingScreen("This may take some time, please do not close the window/browser");
+        console.log("delinking");
+        await delinkNonInstanceSections();
+        console.log("linking");
+        await linkInstanceSections();
         const evaluationStateClone = deepCopy(evaluationState);
         evaluationStateClone.initiated = !evaluationStateClone.initiated;
         evaluationStateClone.published = false;
 
         setevaluationState(evaluationStateClone);
+        hideLoadingScreen();
     }
 
     const togglePublishedState = event => {
@@ -311,20 +370,14 @@ const Evaluation = () => {
 
     const entityControl = <LineInput label="Evaluation Entity" onChangeFn={setEntity} value={evaluationState.entity} />;
 
-    const evalAdminControls = <SimpleCard title="Evaluation Admin Checklist" width="w-[100%] lg:w-[35%]">
-        <div className="flex flex-col flex-wrap p-5 justify-between gap-3 mx-auto">
-            <div className="flex flex-row w-[100%]">
-                <SecondaryButton text={"Set Questions"} customStyle="w-[50%] !rounded-r-none" link={`/evaluation/questions`} />
-                <SecondaryButton text={"Set Dates"} customStyle="w-[50%] !rounded-l-none" clickFunction={toggleEvaluationDatesModal} />
-            </div>
-            <div className="flex flex-row w-[100%]">
-                <SecondaryButton customStyle="w-[50%] !rounded-r-none" text={"Set Matrix"} link={"/evaluation/analysis"} />
-                <SecondaryButton customStyle="w-[50%] !rounded-l-none" text={`${evaluationState.initiated ? "Unpublish Form" : "Publish Form"}`} clickFunction={toggleInitializedState} />
-            </div>
-            <div className="flex flex-row w-[100%]">
-                <SecondaryButton customStyle="w-[50%] !rounded-r-none" text={`${evaluationState.published ? "Unpublish Results" : "Publish Results"}`} clickFunction={togglePublishedState} />
-                <SecondaryButton customStyle="w-[50%] !rounded-l-none" text={"Save Settings"} clickFunction={saveEvaluationSettings} />
-            </div>
+    const evalAdminControls = <SimpleCard title="Evaluation Admin Console">
+        <div className="flex flex-row flex-wrap p-5 justify-between gap-3 mx-auto">
+            <SecondaryButton customStyle="w-[calc(50%-0.75rem/2)]" text={"Set Questions"} link={`/evaluation/questions`} />
+            <SecondaryButton customStyle="w-[calc(50%-0.75rem/2)]" text={"Set Dates"} clickFunction={toggleEvaluationDatesModal} />
+            <SecondaryButton customStyle="w-[calc(50%-0.75rem/2)]" text={"Set Matrix"} link={"/evaluation/analysis"} />
+            <SecondaryButton customStyle="w-[calc(50%-0.75rem/2)]" text={`${evaluationState.initiated ? "Unpublish Form" : "Publish Form"}`} clickFunction={toggleInitializedState} />
+            <SecondaryButton customStyle="w-[calc(50%-0.75rem/2)]" text={`${evaluationState.published ? "Unpublish Results" : "Publish Results"}`} clickFunction={togglePublishedState} />
+            <SecondaryButton customStyle="w-[calc(50%-0.75rem/2)]" text={"Save Settings"} clickFunction={saveEvaluationSettings} />
         </div>
     </SimpleCard>;
 
@@ -339,27 +392,12 @@ const Evaluation = () => {
 
     return <div className={`${pageLayoutStyles.scrollable} flex flex-col gap-10`}>
         <div className="flex flex-col lg:flex-row gap-y-10 md:justify-between">
-            <SimpleCard customStyle={`w-[100%] lg:w-[60%] ${cardStyles.simple}`} title="Select evaluation semester">
-                <div className="p-5">
-                    <div className="flex flex-col mt-2 md:flex-row w-[100%] justify-between">
-                        <div className="flex flex-col text-left md:w-[47%]">
-                            <SelectInput name={"year"} label={"Evaluation Year"} options={evaluationState.year === null ? ["Select year", ...years] : years} value={evaluationState.year} onChangeFn={selectEvaluationYear} />
-                        </div>
-                        <div className="flex flex-col text-left md:w-[47%]">
-                            <SelectInput name={"semester"} label={"Evaluation Semester"} options={evaluationState.semester === null ? ["Select semester", ...semesters] : semesters} value={evaluationState.semester} onChangeFn={selectEvaluationSemester} />
-                        </div>
-                    </div>
-                    <div className="text-right flex flex-col md:flex-row mt-2 gap-5 justify-between">
-                        <div className="flex flex-col w-[100%] md:w-[47%]">
-                            {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" ? entityControl : <></>}
-                        </div>
-                        <div className="flex flex-col w-[100%] md:w-[30%] my-auto">
-                            <PrimaryButton text="Confirm semester" type="button" clickFunction={fetchEvaluationSemesterData} />
-                        </div>
-                    </div>
-                </div>
-            </SimpleCard>
-            {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" && evaluationState.id ? evalAdminControls : <></>}
+            <div className="w-[100%] md:w-[calc(40%-1.25rem)]">
+                {semesterSelection.semesterSelect}
+            </div>
+            <div className="w-[100%] lg:w-[calc(60%-1.25rem)]">
+                {user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1" && evaluationState.id ? evalAdminControls : <></>}
+            </div>
         </div>
 
         <AssignedCourses evaluationState={evaluationState} showReport={showReport} />

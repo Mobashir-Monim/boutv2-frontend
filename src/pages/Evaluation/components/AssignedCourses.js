@@ -33,14 +33,14 @@ const AssignedCourses = ({ evaluationState, showReport }) => {
             className={`flex w-[200px] justify-center ${textColorStyles.clickable} cursor-copy ${transitioner.simple} font-['Source_Code_Pro']`}
             onClick={() => copyEvaluationCode(course, cIndex)}
         >
-            <span className="material-icons-round mr-3">content_copy</span> {getEvaluationCode(course, cIndex)}
+            <span className="material-icons-round mr-3">{getEvaluationCode(course, cIndex) === "" ? "" : "content_copy"}</span> {getEvaluationCode(course, cIndex)}
         </span>
-        <span
+        {evaluationState.published ? <span
             className={`flex w-[200px] justify-center ${textColorStyles.clickable} cursor-pointer ${transitioner.simple}`}
             onClick={() => openReport(course, cIndex)}
         >
             <span className="material-icons-round mr-3">description</span> Report
-        </span>
+        </span> : <span className="flex w-[200px] justify-center">Not Published</span>}
     </div>;
 
     return <div className={`${evaluationState.id ? "" : "hidden"} ${transitioner.simple}`}>

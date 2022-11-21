@@ -11,8 +11,9 @@ import { SelectInput } from "../../components/FormInputs/LabeledInputs";
 
 import EvaluationQuestion from "./components/EvaluationQuestion";
 
-import { buttonStyles } from "../../utils/styles/styles";
 import { pageLayoutStyles } from "../../utils/styles/styles";
+import PrimaryButton from "../../components/Buttons/PrimaryButton";
+import SecondaryButton from "../../components/Buttons/SecondaryButton";
 
 const questionTypes = {
     short: "Short",
@@ -32,6 +33,8 @@ const EvaluationQuestions = () => {
     const { user } = useAuth();
     const { evaluationInstance } = useEvaluationInstance();
     const { id: evalInstId, year, semester, entity } = evaluationInstance;
+    const parts = { theory: "Theory", lab: "Lab" };
+    const types = { course: "Course", faculty: "Faculty" };
 
     const [questionState, setQuestionState] = useState({
         year: year,
@@ -206,16 +209,16 @@ const EvaluationQuestions = () => {
             >
                 <div className="p-5 flex flex-col md:flex-row gap-5">
                     <div className="lg:w-[47%]">
-                        <SelectInput name={"part"} label={"Questions Targetting"} options={["Theory", "Lab"]} onChangeFn={changeTargetPart} />
+                        <SelectInput name={"part"} label={"Questions Targetting"} options={parts} value={questionState.part} onChangeFn={changeTargetPart} />
                     </div>
                     <div className="lg:w-[47%]">
-                        <SelectInput name={"type"} label={"Questions Evaluating"} options={["Course", "Faculty"]} onChangeFn={changeTargetType} />
+                        <SelectInput name={"type"} label={"Questions Evaluating"} options={types} value={questionState.type} onChangeFn={changeTargetType} />
                     </div>
                 </div>
             </SimpleCard>
         </div>
 
-        <div className={`w-[100%] xl:w-[70%] flex flex-col gap-10 mx-auto pb-24 pt-10`}>
+        <div className={`w-[100%] xl:w-[70%] flex flex-col gap-10 mx-auto pt-10`}>
             {
                 Object.keys(questionState[getCurrentTarget()])
                     .map(id => <EvaluationQuestion
@@ -230,28 +233,10 @@ const EvaluationQuestions = () => {
                         questionTypes={questionTypes}
                     />)
             }
-        </div>
-
-        {/* <div className="fixed dark:bg-[#444]/[0.7] bottom-0 bg-[#ccc]/[0.7] w-[100%] h-[10vh] md:w-[5rem] md: left-0"> */}
-        <div className="fixed dark:bg-[#444]/[0.7] bottom-0 bg-[#ccc]/[0.7] w-[100%] h-[10vh] md:w-[10rem] md:h-[5rem] md:rounded-full left-0 md:left-[calc(100%-10rem)]">
-            <span
-                className={`
-                ${buttonStyles.primary} fixed 
-                bottom-[calc(5vh-3.5rem/2)] md:bottom-[calc(5rem/2-3.5rem/2)]
-                left-[calc(50vw-50px-3.5rem/2)] md:left-[calc(100%-9.2rem)]
-                !rounded-full material-icons-round text-[3rem] !p-[0.25rem] w-[3.5rem] h-[3.5rem] flex flex-col justify-center`} onClick={addQuestion}
-            >
-                add
-            </span>
-            <span
-                className={`
-                ${buttonStyles.secondary} fixed 
-                bottom-[calc(5vh-3.5rem/2)] md:bottom-[calc(5rem/2-3.5rem/2)]
-                left-[calc(50vw-50px-3.5rem/2)] md:left-[calc(100%-4.2rem)]
-                !rounded-full material-icons-round text-[3rem] !p-[0.25rem] w-[3.5rem] h-[3.5rem] flex flex-col justify-center`} onClick={saveQuestions}
-            >
-                done
-            </span>
+            <div className="flex flex-row justify-center w-[100%] gap-10">
+                <PrimaryButton text={"Add Question"} clickFunction={addQuestion} customStyle={"py-1"} />
+                <SecondaryButton text={"Save Questions"} clickFunction={saveQuestions} customStyle={"py-1"} />
+            </div>
         </div>
     </div>
 }
