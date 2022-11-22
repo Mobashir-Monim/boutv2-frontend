@@ -8,18 +8,21 @@ import { useAuth } from "../../../utils/contexts/AuthContext";
 import Spinner from "../../../components/Utils/Spinner";
 import { userHasRole } from "../../../db/remote/user";
 
-const FacultyProfile = () => {
-    const { user } = useAuth();
+const FacultyProfile = ({ user }) => {
     const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
     const [faculty, setFaculty] = useState({});
     const [studentProfileManager, setStudentProfileManager] = useState(null);
+    const [facultyProfileManager, setFacultyProfileManager] = useState(null);
 
     useEffect(() => {
         (async () => {
-            showLoadingScreen("Loading Profile...");
-            loadProfile();
-            isStudentProfileManager();
-            hideLoadingScreen();
+            if (studentProfileManager === null || facultyProfileManager === null) {
+                showLoadingScreen("Loading Profile...");
+                loadProfile();
+                await isStudentProfileManager();
+                await isFacultyProfileManager();
+                hideLoadingScreen();
+            }
         })();
     }, []);
 
@@ -35,11 +38,26 @@ const FacultyProfile = () => {
         setStudentProfileManager(canManage);
     }
 
+    const isFacultyProfileManager = async () => {
+        const canManage = await userHasRole(user.email, "faculty-profile-manager");
+        setFacultyProfileManager(canManage);
+    }
+
     const getStudentManagerButton = () => {
         if (studentProfileManager === null) {
             return <Spinner dimensions={"h-10 w-10"} />;
         } else if (studentProfileManager) {
             return <PrimaryButton text="Student Profile Management" type="link" link={"/profile/manage/students"} />
+        } else {
+            return <></>
+        }
+    }
+
+    const getFacultyManagerButton = () => {
+        if (facultyProfileManager === null) {
+            return <Spinner dimensions={"h-10 w-10"} />;
+        } else if (facultyProfileManager) {
+            return <PrimaryButton text="Faculty Profile Management" type="link" link={"/profile/manage/faculty"} />
         } else {
             return <></>
         }
@@ -102,9 +120,10 @@ const FacultyProfile = () => {
                 </div>
             </SimpleCard>
 
-            <span className="mx-auto">
+            <div className="flex flex-row flex-wrap justify-center gap-5">
                 {getStudentManagerButton()}
-            </span>
+                {getFacultyManagerButton()}
+            </div>
         </div>
     </div>
 }

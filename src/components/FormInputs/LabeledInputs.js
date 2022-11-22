@@ -72,6 +72,6 @@ export const TextInput = ({ label, onChangeFn = () => { }, value, customStyle = 
 
     return <div className={`flex flex-col ${customStyle.container}`}>
         <textarea type="text" className={`resize-none ${inputStyles.labeled.input} ${customStyle.input} !rounded-xl ${transitioner.simple}`} onChange={onChangeFn} onKeyUp={resizeSelf} value={value ? value : ""} placeholder={placeholder} disabled={disabled ? "disabled" : ""} />
-        <p className={`${inputStyles.labeled.label}`}>{label}</p>
+        <p className={`${inputStyles.labeled.label} ${customStyle.label}`}>{label}</p>
     </div>
 }

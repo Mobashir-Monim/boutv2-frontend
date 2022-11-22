@@ -20,6 +20,13 @@ export const getFacultyMemberByInitials = async ({ initials }) => {
     return firestoreSnapshotFormatter(snapshots, results);
 }
 
+export const getFacultyMemberByUsisInitials = async ({ initials }) => {
+    let results = []
+    const snapshots = await getDocs(query(facultyColRef, where("usis_initials", "==", initials)));
+
+    return firestoreSnapshotFormatter(snapshots, results);
+}
+
 export const getFacultyMembers = async ({ entity }) => {
     let results = [];
     const snapshots = await getDocs(facultyColRef, where("entity", "==", entity));

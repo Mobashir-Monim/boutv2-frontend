@@ -10,7 +10,7 @@ const Profile = () => {
     if (user[domainKey] === studentDomainValue) {
         return <StudentProfile user={user} />;
     } else if (user[domainKey] === staffDomainValue) {
-        return <FacultyProfile />;
+        return <FacultyProfile user={user} />;
     }
 }
 

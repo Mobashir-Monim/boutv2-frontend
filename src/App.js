@@ -29,6 +29,9 @@ import StudentProfileManager from "./pages/Profile/StudentProfileManager";
 import StudentProfile from "./pages/Profile/components/StudentProfile";
 import ThesisCoordination from "./pages/Thesis/ThesisCoordination";
 import ThesisRegistrations from "./pages/Thesis/ThesisRegistrations";
+import RoutineConfig from "./pages/Routine/RoutineConfig";
+import FacultyProfileManager from "./pages/Profile/FacultyProfileManager";
+import FacultyProfile from "./pages/Profile/components/FacultyProfile";
 
 
 const App = () => {
@@ -70,6 +73,11 @@ const App = () => {
                         <Route path="/profile/view/:email/student" element={<StudentProfile />} />
                     </Route>
 
+                    <Route path="/" element={<Middleware checks={["hasRole:faculty-profile-manager"]} />}>
+                        <Route path="/profile/manage/faculty" element={<FacultyProfileManager />} />
+                        <Route path="/profile/view/:email/faculty" element={<FacultyProfile />} />
+                    </Route>
+
                     <Route path="/" element={<Middleware checks={["faculty"]} />}>
                         <Route path="/students/mapper" element={<StudentMapper />} />
                         <Route path="/" element={<EvaluationInstanceProvider />}>
@@ -84,6 +92,10 @@ const App = () => {
                         </Route>
                         <Route path="/" element={<Middleware checks={["hasRole:thesis-manager"]} />}>
                             <Route path="/thesis/registrations" element={<ThesisRegistrations />} />
+                        </Route>
+
+                        <Route path="/" element={<Middleware checks={["hasRole:routine-team"]} />}>
+                            <Route path="/routine/config" element={<RoutineConfig />} />
                         </Route>
 
                         <Route path="/routine" element={<UnderDevelopment />} />

@@ -16,6 +16,7 @@ export const transitioner = {
 export const bgColorStyles = {
     body: "bg-[#FDFBF9] dark:bg-[#232323]",
     contrast: "bg-[#fff] dark:bg-[#444]",
+    inverse: "bg-[#ccc] dark:bg-[#333]",
     patternA: "bg-[#fcf3fd] dark:bg-[#9AB086]",
     patternB: "bg-[#ffefe2] dark:bg-[#7BAAB3]",
     patternC: "bg-[#F7FAE9] dark:bg-[#9C7FAD]",
