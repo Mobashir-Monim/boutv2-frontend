@@ -73,21 +73,27 @@ export const getOfferedSections = async ({ section, code, year, semester, link_c
     return firestoreSnapshotFormatter(snapshots, results);
 }
 
-export const getDelinkableSections = async (semester, year) => await getDocs(query(
-    offeredSectionColRef,
-    where("year", "!=", `${year}`),
-    where("semester", "!=", semester),
-    where("lab_evaluation_link", "!=", ""),
-    where("theory_evaluation_link", "!=", ""),
-))
+export const getDelinkableSections = async (semester, year) => {
+    let snapshots = null, results = [];
+    snapshots = await getDocs(query(offeredSectionColRef, where("theory_evaluation_link", "!=", "")));
+    results = firestoreSnapshotFormatter(snapshots, results);
+    snapshots = await getDocs(query(offeredSectionColRef, where("lab_evaluation_link", "!=", "")));
 
-export const getLinkableSections = async (semester, year) => await getDocs(query(
-    offeredSectionColRef,
-    where("year", "==", `${year}`),
-    where("semester", "==", semester),
-    where("lab_evaluation_link", "==", ""),
-    where("theory_evaluation_link", "==", ""),
-))
+    return firestoreSnapshotFormatter(snapshots, results);
+}
+
+export const getLinkableSections = async (semester, year) => {
+    let results = []
+    const snapshots = await getDocs(query(
+        offeredSectionColRef,
+        where("year", "==", `${year}`),
+        where("semester", "==", semester),
+        where("lab_evaluation_link", "==", ""),
+        where("theory_evaluation_link", "==", ""),
+    ));
+
+    return firestoreSnapshotFormatter(snapshots, results);
+}
 
 const getOfferedSection = async (section, code, year, semester) => await getDocs(query(
     offeredSectionColRef,

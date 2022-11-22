@@ -258,10 +258,12 @@ const Evaluation = () => {
 
         if (delinableSections[0][1]) {
             for (let offeredSection of delinableSections) {
-                offeredSection[0].id = offeredSection[1];
-                offeredSection[0].lab_evaluation_link = "";
-                offeredSection[0].theory_evaluation_link = "";
-                await setOfferedSection(offeredSection[0]);
+                if (!(offeredSection[0].semester === evaluationState.semester && offeredSection[0].year === evaluationState.year)) {
+                    offeredSection[0].id = offeredSection[1];
+                    offeredSection[0].lab_evaluation_link = "";
+                    offeredSection[0].theory_evaluation_link = "";
+                    await setOfferedSection(offeredSection[0]);
+                }
             }
         }
     }
@@ -270,53 +272,57 @@ const Evaluation = () => {
         const base = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         let code = "";
 
-        do {
+        while (usedCodes.includes(code) || code === "") {
             code = "";
 
-            while (code.length !== 6)
-                code = `${code}${base[Math.round(Math.random() * 62)]}`;
+            while (code.length < 6) {
+                code = `${code}${base[Math.round(Math.random() * 61)]}`;
+            }
 
-        } while (!usedCodes.includes(code));
+        }
 
         return code;
     }
 
     const linkInstanceSections = async () => {
         const linkableSections = await getLinkableSections(evaluationState.semester, evaluationState.year);
+        let index = 0;
 
         if (linkableSections[0][1]) {
             let usedCodes = [];
 
             for (let offeredSection of linkableSections) {
+                console.log(index);
                 offeredSection[0].id = offeredSection[1];
 
                 for (let prefix of ["theory", "lab"]) {
                     if (offeredSection[0][`${prefix}_instructor_emails`].length !== 0) {
                         let code = generateNewCode(usedCodes);
 
-                        do {
+                        while (true) {
                             let linkedSection = await getOfferedSections({ link_code: code });
 
-                            if (!linkedSection[0][1]) {
+                            if (linkedSection[0][1] !== null) {
                                 usedCodes.push(code);
                             } else {
                                 break;
                             }
 
                             code = generateNewCode(usedCodes);
-                        } while (true);
-
+                        }
                         usedCodes.push(code);
                         offeredSection[0][`${prefix}_evaluation_link`] = code;
                     }
                 }
+                index += 1;
+                await setOfferedSection(offeredSection[0]);
             }
+
         }
     }
 
     const toggleInitializedState = async event => {
         showLoadingScreen("This may take some time, please do not close the window/browser");
-        console.log("delinking");
         await delinkNonInstanceSections();
         console.log("linking");
         await linkInstanceSections();

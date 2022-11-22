@@ -189,30 +189,27 @@ const EvaluationForm = () => {
     const validateCode = async () => {
         showLoadingScreen("Validating code, please wait");
         let flag = false;
+        const [section, section_id] = (await getOfferedSections({ link_code: formState.code }))[0];
+        if (section_id) {
+            const [evaluationInstance, evalInstId] = (await getEvaluationInstance({ year: section.year, semester: section.semester }))[0];
 
-        if (formState.code.length === 10) {
-            const [section, section_id] = (await getOfferedSections({ link_code: formState.code }))[0];
-            if (section_id) {
-                const [evaluationInstance, evalInstId] = (await getEvaluationInstance({ year: section.year, semester: section.semester }))[0];
+            if (evalInstId) {
+                const now = (new Date()).getTime();
 
-                if (evalInstId) {
-                    const now = (new Date()).getTime();
-
-                    if (
-                        now > (new Date(`${evaluationInstance.start}T00:00:01.000+06:00`)).getTime()
-                        && now < (new Date(`${evaluationInstance.end}T23:59:59.000+06:00`).getTime())
-                        && evaluationInstance.initiated
-                        && !evaluationInstance.published
-                    ) {
-                        flag = true;
-                        showForm(evalInstId, evaluationInstance, section, section_id);
-                    }
+                if (
+                    now > (new Date(`${evaluationInstance.start}T00:00:01.000+06:00`)).getTime()
+                    && now < (new Date(`${evaluationInstance.end}T23:59:59.000+06:00`).getTime())
+                    && evaluationInstance.initiated
+                    && !evaluationInstance.published
+                ) {
+                    flag = true;
+                    showForm(evalInstId, evaluationInstance, section, section_id);
                 }
             }
         }
 
-        if (!flag)
-            setFormState({ ...formState, invalid_code: true });
+        if (!flag) { }
+        setFormState({ ...formState, invalid_code: true });
 
         hideLoadingScreen();
     }
@@ -231,15 +228,15 @@ const EvaluationForm = () => {
         setFormState(formStateClone);
     }
 
-    const setCheckboxInput = (event, identifier) => {
+    const setCheckboxInput = (value, identifier) => {
         const formStateClone = deepClone(formState);
 
-        if (formStateClone.responses[identifier].indexOf(event.target.value) !== -1) {
+        if (formStateClone.responses[identifier].indexOf(value) !== -1) {
             let temp = [...formStateClone.responses[identifier]];
-            temp.splice(temp.indexOf(event.target.value), 1);
+            temp.splice(temp.indexOf(value), 1);
             formStateClone.responses[identifier] = temp;
         } else {
-            formStateClone.responses[identifier].push(event.target.value);
+            formStateClone.responses[identifier].push(value);
         }
 
         setFormState(formStateClone);
@@ -248,7 +245,7 @@ const EvaluationForm = () => {
     const enterCode = event => setFormState({ ...formState, code: event.target.value, invalid_code: false });
     const getLinearInput = (question, identifier) => <LinearInput required={question.required && !isFilled(identifier)} question={question.display} onChangeFn={event => setStringInput(event, identifier)} options={question.columns} labels={question.rows} identifier={identifier} />
     const getRadioInput = (question, identifier) => <RadioInput required={question.required && !isFilled(identifier)} question={question.display} onChangeFn={event => setStringInput(event, identifier)} options={question.rows} identifier={identifier} />
-    const getCheckboxInput = (question, identifier) => <CheckboxInput required={question.required && !isFilled(identifier)} question={question.display} onChangeFn={event => setCheckboxInput(event, identifier)} options={question.rows} identifier={identifier} />
+    const getCheckboxInput = (question, identifier) => <CheckboxInput required={question.required && !isFilled(identifier)} question={question.display} onChangeFn={event => setCheckboxInput(event, identifier)} options={question.rows} values={formState.responses[identifier]} identifier={identifier} />
     const getTextInput = (question, identifier) => <TextInput required={question.required && !isFilled(identifier)} question={question.display} onChangeFn={event => setStringInput(event, identifier)} options={question.rows} identifier={identifier} />
     const getLineInput = (question, identifier) => <LineInput required={question.required && !isFilled(identifier)} preventPaste={true} question={question.display} onChangeFn={event => setStringInput(event, identifier)} options={question.rows} identifier={identifier} />
     const getDateInput = (question, identifier) => <DateInput required={question.required && !isFilled(identifier)} question={question.display} onChangeFn={event => setStringInput(event, identifier)} options={question.rows} identifier={identifier} />
@@ -332,8 +329,7 @@ const EvaluationForm = () => {
         if (formState.submitted) {
             return getPostSubmit();
         } else if (
-            formState.code.length < 10
-            || formState.invalid_code
+            formState.invalid_code
             || formState.semester === null
             || formState.year === null
         ) {

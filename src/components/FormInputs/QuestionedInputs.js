@@ -94,14 +94,39 @@ export const RadioInput = ({ question, onChangeFn, options, identifier, required
     </QuestionCard>
 }
 
-export const CheckboxInput = ({ question, onChangeFn, options, identifier, required }) => {
+export const CheckboxInput = ({ question, onChangeFn, options, identifier, required, values, customStyle = {} }) => {
+    let opts = null;
+
+    if (Array.isArray(options)) {
+        opts = options.map((opt, optIndex) => <div className="flex flex-row text-center gap-2 cursor-pointer" key={`l-${optIndex}`} value={opt} onClick={() => onChangeFn(opt)}>
+            <input type="checkbox" className={`${inputStyles.labeled.input} ${inputStyles.labeled.checkbox} ${values.includes(opt) ? `${inputStyles.labeled.checked}` : ""} ${customStyle.input}`} checked={values.includes(opt)} onChange={() => { }} />
+            <span className={`${inputStyles.labeled.label} !text-left !my-auto ${customStyle.label} order-1`}>{opt}</span>
+        </div>);
+    } else {
+        opts = Object.keys(options).map((opt, optIndex) => <div className="flex flex-row text-center gap-2 cursor-pointer" key={`l-${optIndex}`} value={opt} onClick={() => onChangeFn(opt)}>
+            <input type="checkbox" className={`${inputStyles.labeled.input} ${inputStyles.labeled.checkbox} ${values.includes(opt) ? `${inputStyles.labeled.checked}` : ""} ${customStyle.input}`} checked={values.includes(opt)} onChange={() => { }} />
+            <span className={`${inputStyles.labeled.label} !text-left !my-auto ${customStyle.label} order-1`}>{options[opt]}</span>
+        </div>);
+    }
+
+    // return <div className={`flex flex-col md:flex-row mt-5 justify-start gap-5 md:gap-10 overflow-scroll no-scroll-bar ${customStyle.container}`}>
+    //     <div className={`flex flex-col my-auto gap-5 ${customStyle.labels_container}`}>
+    //         {opts}
+    //         {/* {opts.map((opt, optIndex) => <div className="flex flex-row text-center gap-3 cursor-pointer" key={`l-${name}-${optIndex}`} onClick={onChangeFn}>
+    //             <input type="checkbox" className={`${inputStyles.labeled.input} ${inputStyles.labeled.checkbox} ${values.includes(opt) ? inputStyles.labeled.checked : ""} ${customStyle.input}`} checked={values.includes(opt)} name={name} onChange={() => { }} />
+    //             <span className={`${inputStyles.labeled.label} !text-left !my-auto ${customStyle.label}`}>{opt}</span>
+    //         </div>)} */}
+    //     </div>
+    //     <p className={`${inputStyles.labeled.label} ${customStyle.label}`}>{label}</p>
+    // </div>
     return <QuestionCard title={required ? <>{question}<div className="italic text-right text-red-400 font-bold text-[0.8rem]">[ Response Required ]</div></> : question}>
         <div className="flex flex-col md:flex-row mt-5 justify-start gap-5 md:gap-10 overflow-scroll no-scroll-bar">
             <div className="flex flex-col my-auto gap-5">
-                {options.map((opt, optIndex) => <div className="flex flex-row text-center gap-3" key={`l-${identifier}-${optIndex}`}>
+                {opts}
+                {/* {options.map((opt, optIndex) => <div className="flex flex-row text-center gap-3" key={`l-${identifier}-${optIndex}`}>
                     <input type="checkbox" className="my-auto text-left" value={opt} name={identifier} onChange={onChangeFn} />
                     <span className={`${inputStyles.questioned.label} !text-left !my-auto`}>{opt}</span>
-                </div>)}
+                </div>)} */}
             </div>
         </div>
     </QuestionCard>
