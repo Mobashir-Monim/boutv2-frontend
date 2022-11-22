@@ -40,29 +40,18 @@ const EvaluationQuestion = ({ qState, identifier, removeQuestion, setRowValue, s
         const rows = [...qState.rows.filter(r => r !== ""), ""];
         const columns = [...qState.columns.filter(c => c !== ""), ""];
 
-        return <div className="flex flex-row text-[0.9rem]">
-            <div className="w-[100%] flex flex-col gap-5">
+        return <div className="flex flex-row text-[0.9rem] gap-5">
+            <div className="w-[45%] flex flex-col">
                 {rows.map((row, rowIndex) => {
-                    return <div className="flex flex-row" key={`r-${rowIndex}`}>
-                        <LineInput
-                            value={row}
-                            onChangeFn={event => setRowValue(event, rowIndex, identifier)}
-                            label={`Row ${rowIndex + 1}`}
-                            customStyle={{
-                                container: "w-[60%] flex flex-col",
-                                input: `rounded-r-none border-r-2 ${borderColorStyles.simple}`
-                            }}
-                        />
-                        <LineInput
-                            key={`c-${rowIndex}`}
-                            value={columns[rowIndex]}
-                            onChangeFn={event => setColumnValue(event, rowIndex, identifier)}
-                            label={`Column ${rowIndex + 1}`}
-                            customStyle={{
-                                container: "w-[20%] flex flex-col",
-                                input: `rounded-l-none border-l-2 ${borderColorStyles.simple}`
-                            }}
-                        />
+                    return <div className="w-[100%] flex flex-col" key={`r-${rowIndex}`}>
+                        <LineInput value={row} onChangeFn={event => setRowValue(event, rowIndex, identifier)} label={`Row ${rowIndex + 1}`} />
+                    </div>
+                })}
+            </div>
+            <div className="w-[30%] flex flex-col">
+                {columns.map((column, columnIndex) => {
+                    return <div className="w-[100%] flex flex-col" key={`c-${columnIndex}`}>
+                        <LineInput value={column} onChangeFn={event => setColumnValue(event, columnIndex, identifier)} label={`Column ${columnIndex + 1}`} />
                     </div>
                 })}
             </div>
