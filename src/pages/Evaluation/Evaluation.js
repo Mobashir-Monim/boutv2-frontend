@@ -71,7 +71,7 @@ const Evaluation = () => {
 
     const fetchEvaluationInstance = async () => {
         showLoadingScreen("Fetching data, please wait");
-        const evaluationStateClone = deepCopy(evaluationState);
+        const eSClone = deepCopy(evaluationState);
         let [evaluationInstance, id] = (await getEvaluationInstance({ year: evaluationState.year, semester: evaluationState.semester, entity: evaluationState.entity }))[0];
 
         if (!id && user.uid === "36QlTRZox2Oc6QEqVFdSSK8eg4y1") {
@@ -82,17 +82,17 @@ const Evaluation = () => {
         }
 
         if (id) {
-            evaluationStateClone.dates.start = evaluationInstance.start;
-            evaluationStateClone.dates.end = evaluationInstance.end;
-            evaluationStateClone.initiated = evaluationInstance.initiated;
-            evaluationStateClone.published = evaluationInstance.published;
-            evaluationStateClone.id = id;
-            evaluationStateClone.offered_sections = await getOfferedSectionsByFaculty(user.email);
-            evaluationStateClone.submissions.theory = await fetchSubmissions(evaluationStateClone.offered_sections.theory.map(x => x[1]), "theory");
-            evaluationStateClone.submissions.lab = await fetchSubmissions(evaluationStateClone.offered_sections.lab.map(x => x[1]), "lab");
+            eSClone.dates.start = evaluationInstance.start;
+            eSClone.dates.end = evaluationInstance.end;
+            eSClone.initiated = evaluationInstance.initiated;
+            eSClone.published = evaluationInstance.published;
+            eSClone.id = id;
+            eSClone.offered_sections = await getOfferedSectionsByFaculty(user.email, eSClone.semester, eSClone.year);
+            eSClone.submissions.theory = await fetchSubmissions(eSClone.offered_sections.theory.map(x => x[1]), "theory");
+            eSClone.submissions.lab = await fetchSubmissions(eSClone.offered_sections.lab.map(x => x[1]), "lab");
 
-            storeEvaluationInstance(evaluationStateClone);
-            setevaluationState(evaluationStateClone);
+            storeEvaluationInstance(eSClone);
+            setevaluationState(eSClone);
         } else {
             setevaluationState({
                 ...evaluationState,
@@ -112,10 +112,10 @@ const Evaluation = () => {
 
     const toggleEvaluationDatesModal = (show) => {
         show = typeof (show) === "boolean" ? show : !evaluationState.dates.show;
-        const evaluationStateClone = deepCopy(evaluationState);
-        evaluationStateClone.dates.show = show;
+        const eSClone = deepCopy(evaluationState);
+        eSClone.dates.show = show;
 
-        setevaluationState(evaluationStateClone);
+        setevaluationState(eSClone);
     }
 
     const fetchEvaluationSemesterData = async () => {
@@ -129,62 +129,62 @@ const Evaluation = () => {
     const semesterSelection = useSemesterSelect(fetchEvaluationSemesterData);
 
     useEffect(() => {
-        const evaluationStateClone = deepCopy(evaluationState);
-        evaluationStateClone.semester = semesterSelection.values.semester;
-        evaluationStateClone.year = semesterSelection.values.year;
-        storeEvaluationInstance(evaluationStateClone);
-        setevaluationState(evaluationStateClone);
+        const eSClone = deepCopy(evaluationState);
+        eSClone.semester = semesterSelection.values.semester;
+        eSClone.year = semesterSelection.values.year;
+        storeEvaluationInstance(eSClone);
+        setevaluationState(eSClone);
     }, [semesterSelection.values])
 
     const setStartDate = event => {
-        const evaluationStateClone = deepCopy(evaluationState);
-        evaluationStateClone.dates.start = event.target.value;
+        const eSClone = deepCopy(evaluationState);
+        eSClone.dates.start = event.target.value;
 
-        setevaluationState(evaluationStateClone);
+        setevaluationState(eSClone);
     }
 
     const setEndDate = event => {
-        const evaluationStateClone = deepCopy(evaluationState);
-        evaluationStateClone.dates.end = event.target.value;
+        const eSClone = deepCopy(evaluationState);
+        eSClone.dates.end = event.target.value;
 
-        setevaluationState(evaluationStateClone);
+        setevaluationState(eSClone);
     }
 
     const setEntity = event => {
-        const evaluationStateClone = deepCopy(evaluationState);
-        evaluationStateClone.entity = event.target.value;
+        const eSClone = deepCopy(evaluationState);
+        eSClone.entity = event.target.value;
 
-        storeEvaluationInstance(evaluationStateClone);
+        storeEvaluationInstance(eSClone);
 
-        setevaluationState(evaluationStateClone);
+        setevaluationState(eSClone);
     }
 
     const setSearchPhraseCode = event => {
-        const evaluationStateClone = deepCopy(evaluationState);
-        evaluationStateClone.search.phrase.code = event.target.value.toUpperCase();
+        const eSClone = deepCopy(evaluationState);
+        eSClone.search.phrase.code = event.target.value.toUpperCase();
 
-        setevaluationState(evaluationStateClone);
+        setevaluationState(eSClone);
     }
 
     const setSearchPhraseSection = event => {
-        const evaluationStateClone = deepCopy(evaluationState);
-        evaluationStateClone.search.phrase.section = event.target.value;
+        const eSClone = deepCopy(evaluationState);
+        eSClone.search.phrase.section = event.target.value;
 
-        setevaluationState(evaluationStateClone);
+        setevaluationState(eSClone);
     }
 
     const setSearchPhraseLink = event => {
-        const evaluationStateClone = deepCopy(evaluationState);
-        evaluationStateClone.search.phrase.link = event.target.value;
+        const eSClone = deepCopy(evaluationState);
+        eSClone.search.phrase.link = event.target.value;
 
-        setevaluationState(evaluationStateClone);
+        setevaluationState(eSClone);
     }
 
     const setSearchPhraseFaculty = event => {
-        const evaluationStateClone = deepCopy(evaluationState);
-        evaluationStateClone.search.phrase.faculty = event.target.value;
+        const eSClone = deepCopy(evaluationState);
+        eSClone.search.phrase.faculty = event.target.value;
 
-        setevaluationState(evaluationStateClone);
+        setevaluationState(eSClone);
     }
 
     const constructSearchResultObject = (results) => {
@@ -218,18 +218,18 @@ const Evaluation = () => {
             link_code: evaluationState.search.phrase.link,
             faculty: evaluationState.search.phrase.faculty
         });
-        const evaluationStateClone = deepCopy(evaluationState);
-        evaluationStateClone.search.results = constructSearchResultObject(offered_sections);
+        const eSClone = deepCopy(evaluationState);
+        eSClone.search.results = constructSearchResultObject(offered_sections);
 
-        setevaluationState(evaluationStateClone);
+        setevaluationState(eSClone);
         hideLoadingScreen();
     }
 
     const setOfferedSectionInstructorState = (part, identifier, target, index, event) => {
-        const evaluationStateClone = deepCopy(evaluationState);
-        evaluationStateClone.search.results[part][identifier][`${part}_instructor_${target}`][index] = event.target.value;
+        const eSClone = deepCopy(evaluationState);
+        eSClone.search.results[part][identifier][`${part}_instructor_${target}`][index] = event.target.value;
 
-        setevaluationState(evaluationStateClone);
+        setevaluationState(eSClone);
     }
 
     const setOfferedSectionInstructor = async identifier => {
@@ -320,20 +320,20 @@ const Evaluation = () => {
         await delinkNonInstanceSections();
         console.log("linking");
         await linkInstanceSections();
-        const evaluationStateClone = deepCopy(evaluationState);
-        evaluationStateClone.initiated = !evaluationStateClone.initiated;
-        evaluationStateClone.published = false;
+        const eSClone = deepCopy(evaluationState);
+        eSClone.initiated = !eSClone.initiated;
+        eSClone.published = false;
 
-        setevaluationState(evaluationStateClone);
+        setevaluationState(eSClone);
         hideLoadingScreen();
     }
 
     const togglePublishedState = event => {
         if ((new Date()).getTime() > (new Date(`${evaluationState.dates.end} 11:59:59 PM`)).getTime() && evaluationState.initiated) {
-            const evaluationStateClone = deepCopy(evaluationState);
-            evaluationStateClone.published = !evaluationStateClone.published;
+            const eSClone = deepCopy(evaluationState);
+            eSClone.published = !eSClone.published;
 
-            setevaluationState(evaluationStateClone);
+            setevaluationState(eSClone);
 
         } else {
             alert(`Evaluation collection must be over before publishing results`);

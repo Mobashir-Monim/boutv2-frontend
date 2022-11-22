@@ -129,11 +129,21 @@ const getOfferedSectionsInSemester = async (year, semester) => await getDocs(que
     where("semester", "==", semester),
 ));
 
-export const getOfferedSectionsByFaculty = async (email) => {
+export const getOfferedSectionsByFaculty = async (email, semester, year) => {
     let snapshots = { theory: [], lab: [] };
 
-    const theory = await getDocs(query(offeredSectionColRef, where("theory_instructor_emails", "array-contains", email)));
-    const lab = await getDocs(query(offeredSectionColRef, where("lab_instructor_emails", "array-contains", email)));
+
+
+    let theory = await getDocs(query(offeredSectionColRef, where("theory_instructor_emails", "array-contains", email)));
+    let lab = await getDocs(query(offeredSectionColRef, where("lab_instructor_emails", "array-contains", email)));
+
+    if (semester && year) {
+        theory = await getDocs(query(offeredSectionColRef, where("theory_instructor_emails", "array-contains", email), where("semester", "==", semester), where("year", "==", year)));
+        lab = await getDocs(query(offeredSectionColRef, where("lab_instructor_emails", "array-contains", email), where("semester", "==", semester), where("year", "==", year)));
+    } else {
+        theory = await getDocs(query(offeredSectionColRef, where("theory_instructor_emails", "array-contains", email)));
+        lab = await getDocs(query(offeredSectionColRef, where("lab_instructor_emails", "array-contains", email)));
+    }
 
     theory.forEach(t => snapshots.theory.push([t.data(), t.id]));
     lab.forEach(l => snapshots.lab.push([l.data(), l.id]));
