@@ -73,7 +73,7 @@ export const getOfferedSections = async ({ section, code, year, semester, link_c
     return firestoreSnapshotFormatter(snapshots, results);
 }
 
-export const getDelinkableSections = async (semester, year) => {
+export const getDelinkableSections = async () => {
     let snapshots = null, results = [];
     snapshots = await getDocs(query(offeredSectionColRef, where("theory_evaluation_link", "!=", "")));
     results = firestoreSnapshotFormatter(snapshots, results);

@@ -132,6 +132,30 @@ const ThesisRegistrations = () => {
         return <></>
     }
 
+    const copySupervisorEmails = () => {
+        let emails = [];
+
+        for (let app of filteredApplications) {
+            if (!emails.includes(app[0].supervisor[0]))
+                emails.push(app[0].supervisor[0])
+        }
+
+        navigator.clipboard.writeText(emails.join(","));
+    }
+
+    const copyStudentEmails = () => {
+        let emails = [];
+
+        for (let app of filteredApplications) {
+            for (let student of app[0].member_emails) {
+                if (!emails.includes(student))
+                    emails.push(student)
+            }
+        }
+
+        navigator.clipboard.writeText(emails.join(","));
+    }
+
     return <div className={`${pageLayoutStyles.scrollable} flex flex-col gap-10`}>
         <div className="w-[100%] flex flex-col md:flex-row gap-10">
             <div className="w-[100%] md:w-[50%]">
@@ -196,6 +220,10 @@ const ThesisRegistrations = () => {
                                 <LineInput label={"Supervisor Email"} onChangeFn={updateFilterSupervisor} value={filterSettings.supervisor} />
                             </div>
                         </SimpleCard>
+                        <div className="w-[100%] flex flex-col md:flex-row gap-10">
+                            <PrimaryButton customStyle={"w-[100%] md:w-[calc(50%-1.25rem)]"} clickFunction={copySupervisorEmails} text={"Copy supervisor emails in selection"} />
+                            <PrimaryButton customStyle={"w-[100%] md:w-[calc(50%-1.25rem)]"} clickFunction={copyStudentEmails} text={"Copy student emails in selection"} />
+                        </div>
                     </div>
                     <div className="overflow-scroll h-[40vh] relative no-scroll-bar">
                         <div className="flex flex-row min-w-[1150px] w-[100%] bg-[#aaa] dark:bg-[#222] py-2 px-10 text-[0.8rem] sticky top-0 z-10 font-bold">
@@ -210,8 +238,8 @@ const ThesisRegistrations = () => {
                     </div>
                 </div>
             </SimpleCard>
-        </div>
-    </div>
+        </div >
+    </div >
 }
 
 export default ThesisRegistrations;

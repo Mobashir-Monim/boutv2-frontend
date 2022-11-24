@@ -254,16 +254,15 @@ const Evaluation = () => {
     }
 
     const delinkNonInstanceSections = async () => {
-        const delinableSections = await getDelinkableSections(evaluationState.semester, evaluationState.year);
+        const delinableSections = await getDelinkableSections();
 
         if (delinableSections[0][1]) {
-            for (let offeredSection of delinableSections) {
-                if (!(offeredSection[0].semester === evaluationState.semester && offeredSection[0].year === evaluationState.year)) {
-                    offeredSection[0].id = offeredSection[1];
-                    offeredSection[0].lab_evaluation_link = "";
-                    offeredSection[0].theory_evaluation_link = "";
-                    await setOfferedSection(offeredSection[0]);
-                }
+            for (let offeredSection of
+                delinableSections.filter(c => !(c[0].semester == evaluationState.semester && c[0].year === evaluationState.year))) {
+                offeredSection[0].id = offeredSection[1];
+                offeredSection[0].lab_evaluation_link = "";
+                offeredSection[0].theory_evaluation_link = "";
+                await setOfferedSection(offeredSection[0]);
             }
         }
     }
@@ -321,17 +320,26 @@ const Evaluation = () => {
         }
     }
 
-    const toggleInitializedState = async event => {
+    const toggleInitializedState = async () => {
         showLoadingScreen("This may take some time, please do not close the window/browser");
-        await delinkNonInstanceSections();
-        console.log("linking");
-        await linkInstanceSections();
+        createLinks(false);
         const eSClone = deepCopy(evaluationState);
         eSClone.initiated = !eSClone.initiated;
         eSClone.published = false;
 
         setevaluationState(eSClone);
         hideLoadingScreen();
+    }
+
+    const createLinks = async (loadingScreen = true) => {
+        if (loadingScreen)
+            showLoadingScreen("This may take some time, please do not close the window/browser");
+
+        await delinkNonInstanceSections();
+        await linkInstanceSections();
+
+        if (loadingScreen)
+            hideLoadingScreen();
     }
 
     const togglePublishedState = event => {
@@ -381,6 +389,7 @@ const Evaluation = () => {
             <SecondaryButton customStyle="w-[calc(50%-0.75rem/2)]" text={"Set Questions"} link={`/evaluation/questions`} />
             <SecondaryButton customStyle="w-[calc(50%-0.75rem/2)]" text={"Set Dates"} clickFunction={toggleEvaluationDatesModal} />
             <SecondaryButton customStyle="w-[calc(50%-0.75rem/2)]" text={"Set Matrix"} link={"/evaluation/analysis"} />
+            <SecondaryButton customStyle="w-[calc(50%-0.75rem/2)]" text={`${"Create evaluation codes"}`} clickFunction={createLinks} />
             <SecondaryButton customStyle="w-[calc(50%-0.75rem/2)]" text={`${evaluationState.initiated ? "Unpublish Form" : "Publish Form"}`} clickFunction={toggleInitializedState} />
             <SecondaryButton customStyle="w-[calc(50%-0.75rem/2)]" text={`${evaluationState.published ? "Unpublish Results" : "Publish Results"}`} clickFunction={togglePublishedState} />
             <SecondaryButton customStyle="w-[calc(50%-0.75rem/2)]" text={"Save Settings"} clickFunction={saveEvaluationSettings} />
