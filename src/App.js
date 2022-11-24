@@ -110,6 +110,7 @@ const App = () => {
                 <Route path="/logout" element={<Logout />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/evaluation/form" element={<EvaluationForm />} />
+                <Route path="/evaluation-form" element={<EvaluationForm />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/terms-of-service" element={<TermsOfService />} />
                 <Route path="*" element={<NotFound />} />
