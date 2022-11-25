@@ -62,6 +62,10 @@ export const getOfferedSections = async ({ section, code, year, semester, link_c
         snapshots = await getOfferedSectionsByCode(code, year, semester);
     } else if (link_code) {
         snapshots = await getOfferedSectionByLinkCode(link_code);
+    } else if (faculty && semester && year) {
+        snapshots = await getDocs(query(offeredSectionColRef, where("semester", "==", semester), where("year", "==", `${year}`), where("theory_instructor_emails", "array-contains", faculty)));
+        firestoreSnapshotFormatter(snapshots, results);
+        snapshots = await getDocs(query(offeredSectionColRef, where("semester", "==", semester), where("year", "==", `${year}`), where("lab_instructor_emails", "array-contains", faculty)));
     } else if (faculty) {
         snapshots = await getDocs(query(offeredSectionColRef, where("theory_instructor_emails", "array-contains", faculty)));
         firestoreSnapshotFormatter(snapshots, results);
