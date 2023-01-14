@@ -14,6 +14,7 @@ import { useAuth } from "../../utils/contexts/AuthContext";
 import ThesisApplicationDetails from "./components/ThesisApplicationDetails";
 import { deepClone } from "../../utils/functions/deepClone";
 import { useSemesterSelect } from "../../utils/hooks/useSemesterSelect";
+import { getStudents } from "../../db/remote/student";
 
 const ThesisRegistrations = () => {
     const { user } = useAuth();
@@ -22,6 +23,7 @@ const ThesisRegistrations = () => {
     const [thesisInstance, setThesisInstance] = useState([[null, null]]);
     const [thesisApplications, setThesisApplications] = useState([[null, null]]);
     const [filteredApplications, setFilteredApplications] = useState([[null, null]]);
+    const [studentInfo, setStudentInfo] = useState({});
     const [filterSettings, setFilterSettings] = useState({
         supervisor_approval: ["0", "1", "2", "3"],
         coordinator_approval: ["0", "1", "2", "3"],
@@ -43,6 +45,7 @@ const ThesisRegistrations = () => {
             setThesisInstance(thesisInst);
             setThesisApplications(applications);
             setFilteredApplications(applications);
+            await fetchStudentInfo(applications);
             hideLoadingScreen();
         } else {
             showModal("INVALID SEMESTER", "Please select a valid semester and year");
@@ -50,6 +53,26 @@ const ThesisRegistrations = () => {
     }
 
     const semesterSelection = useSemesterSelect(confirmSemester);
+
+    const fetchStudentInfo = async applications => {
+        let emails = [];
+
+        for (let app of applications)
+            emails = [...emails, ...app[0].member_emails]
+
+        const studentInstances = await getStudents({ official_emails: emails });
+        let info = {};
+
+        for (let student of studentInstances)
+            info[student[0].official_email] = {
+                name: student[0].name,
+                student_id: student[0].student_id,
+                discord_id: student[0].discord_id,
+                phone: student[0].phone,
+            }
+
+        setStudentInfo(info);
+    }
 
     const getModalHeading = index => <div className="flex flex-col gap-2">
         <div className="flex flex-row justify-between">
@@ -238,7 +261,62 @@ const ThesisRegistrations = () => {
                     </div>
                 </div>
             </SimpleCard>
-        </div >
+        </div>
+
+        {/* {thesisApplications[0][1] && Object.keys(studentInfo).length > 0 ? <SimpleCard title={"Table Format"}>
+            <div className="p-5">
+                <div className="overflow-scroll no-scroll-bar">
+                    <table className="text-[0.8rem] w-[2600px] border-[1px]">
+                        <thead>
+                            <tr>
+                                <th className="w-[100px] border-[1px]">Number</th>
+                                <th className="w-[100px] border-[1px]">Level</th>
+                                <th className="w-[100px] border-[1px]">Type</th>
+                                <th className="w-[100px] border-[1px]">Panel</th>
+                                <th className="w-[100px] border-[1px]">Serial</th>
+                                <th className="w-[200px] border-[1px]">Primary Supervisor</th>
+                                <th className="w-[200px] border-[1px]">Secondary Supervisor</th>
+                                <th className="w-[200px] border-[1px]">Co-supervisor 1</th>
+                                <th className="w-[200px] border-[1px]">Co-supervisor 2</th>
+                                <th className="w-[200px] border-[1px]">Title</th>
+                                <th className="w-[400px] border-[1px]">Abstract</th>
+                                <th className="w-[100px] border-[1px]">Registration</th>
+                                <th className="w-[100px] border-[1px]">Members</th>
+                                <th className="w-[200px] border-[1px]">Email</th>
+                                <th className="w-[100px] border-[1px]">Credits</th>
+                                <th className="w-[200px] border-[1px]">Name</th>
+                                <th className="w-[100px] border-[1px]">Phone</th>
+                                <th className="w-[100px] border-[1px]">Student ID</th>
+                                <th className="w-[250px] border-[1px]">Discord ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {thesisApplications.map(app => app[0].member_emails.map((row, rowIndex) => <tr>
+                                {rowIndex === 0 ? <td className="w-[100px] border-[1px]" rowSpan={app[0].member_emails.length}>{app[0].type.slice(0, 1).toUpperCase()}{app[0].number}</td> : <></>}
+                                {rowIndex === 0 ? <td className="w-[100px] border-[1px]" rowSpan={app[0].member_emails.length}>{app[0].level}</td> : <></>}
+                                {rowIndex === 0 ? <td className="w-[100px] border-[1px]" rowSpan={app[0].member_emails.length}>{app[0].type}</td> : <></>}
+                                {rowIndex === 0 ? <td className="w-[100px] border-[1px]" rowSpan={app[0].member_emails.length}></td> : <></>}
+                                {rowIndex === 0 ? <td className="w-[100px] border-[1px]" rowSpan={app[0].member_emails.length}></td> : <></>}
+                                {rowIndex === 0 ? <td className="w-[200px] border-[1px]" rowSpan={app[0].member_emails.length}>{app[0].supervisor[0]}</td> : <></>}
+                                {rowIndex === 0 ? <td className="w-[200px] border-[1px]" rowSpan={app[0].member_emails.length}></td> : <></>}
+                                {rowIndex === 0 ? <td className="w-[200px] border-[1px]" rowSpan={app[0].member_emails.length}></td> : <></>}
+                                {rowIndex === 0 ? <td className="w-[200px] border-[1px]" rowSpan={app[0].member_emails.length}></td> : <></>}
+                                {rowIndex === 0 ? <td className="w-[200px] border-[1px]" rowSpan={app[0].member_emails.length}>{app[0].title}</td> : <></>}
+                                {rowIndex === 0 ? <td className="w-[400px] border-[1px]" rowSpan={app[0].member_emails.length}>{app[0].abstract}</td> : <></>}
+                                {rowIndex === 0 ? <td className="w-[100px] border-[1px]" rowSpan={app[0].member_emails.length}>2022 Fall</td> : <></>}
+                                {rowIndex === 0 ? <td className="w-[100px] border-[1px]" rowSpan={app[0].member_emails.length}>{app[0].member_emails.length}</td> : <></>}
+                                <td className="w-[200px] border-[1px]">{row}</td>
+                                <td className="w-[200px] border-[1px]">{app[0].credits_completed[rowIndex]}</td>
+                                <td className="w-[200px] border-[1px]">{studentInfo[row].name}</td>
+                                <td className="w-[100px] border-[1px]">{studentInfo[row].phone}</td>
+                                <td className="w-[100px] border-[1px]">{studentInfo[row].student_id}</td>
+                                <td className="w-[250px] border-[1px]">{studentInfo[row].discord_id}</td>
+                            </tr>))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </SimpleCard> : <></>} */}
     </div >
 }
 

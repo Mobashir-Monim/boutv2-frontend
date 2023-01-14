@@ -27,7 +27,6 @@ export const getStudents = async ({ official_emails = [], personal_emails = [], 
         firestoreSnapshotFormatter(snapshots, results);
     }
 
-
     return results;
 }
 
@@ -73,7 +72,8 @@ const createStudent = async ({
     program = "",
     school = "",
     student_id,
-    discord_id = ""
+    discord_id = "",
+    advising_verification_code = "",
 }) => {
     const docRef = await addDoc(studentsColRef, {
         department,
@@ -85,7 +85,8 @@ const createStudent = async ({
         program,
         school,
         student_id,
-        discord_id
+        discord_id,
+        advising_verification_code,
     });
 
     return docRef;
@@ -102,7 +103,8 @@ const updateStudent = async ({
     program = "",
     school = "",
     student_id,
-    discord_id = ""
+    discord_id = "",
+    advising_verification_code = "",
 }) => {
     const docRef = doc(db, studentsCollection, id);
     await updateDoc(docRef, {
@@ -115,7 +117,8 @@ const updateStudent = async ({
         program,
         school,
         student_id,
-        discord_id
+        discord_id,
+        advising_verification_code,
     });
 
     return docRef;

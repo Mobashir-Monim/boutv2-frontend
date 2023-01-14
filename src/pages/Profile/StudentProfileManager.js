@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PrimaryButton from "../../components/Buttons/PrimaryButton";
 import BaseButton from "../../components/Buttons/BaseButton";
 import SimpleCard from "../../components/Card/SimpleCard";
-import { LineInput } from "../../components/FormInputs/LabeledInputs";
+import { LineInput, TextInput } from "../../components/FormInputs/LabeledInputs";
 import { getStudents, getStudentsInfoUpdateRequest, getStudentsInfoUpdateRequests, setStudent, deleteStudentInfoUpdateRequest } from "../../db/remote/student";
 import { deepClone } from "../../utils/functions/deepClone";
 import { borderColorStyles, pageLayoutStyles, transitioner } from "../../utils/styles/styles";
@@ -125,17 +125,28 @@ const StudentProfileManager = () => {
     }
 
     const generateStudentObject = () => ({
-        id: profileManager.studentContent[1] === "null" ? null : profileManager.studentContent[1],
-        department: profileManager.queue[profileManager.current][0].department ? profileManager.queue[profileManager.current][0].department : profileManager.studentContent[0].department,
-        lms_username: profileManager.queue[profileManager.current][0].lms_username ? profileManager.queue[profileManager.current][0].lms_username : profileManager.studentContent[0].lms_username,
-        name: profileManager.queue[profileManager.current][0].name ? profileManager.queue[profileManager.current][0].name : profileManager.studentContent[0].name,
-        official_email: profileManager.queue[profileManager.current][0].official_email ? profileManager.queue[profileManager.current][0].official_email : profileManager.studentContent[0].official_email,
-        personal_email: profileManager.queue[profileManager.current][0].personal_email ? profileManager.queue[profileManager.current][0].personal_email : profileManager.studentContent[0].personal_email,
-        phone: profileManager.queue[profileManager.current][0].phone ? profileManager.queue[profileManager.current][0].phone : profileManager.studentContent[0].phone,
-        program: profileManager.queue[profileManager.current][0].program ? profileManager.queue[profileManager.current][0].program : profileManager.studentContent[0].program,
-        school: profileManager.queue[profileManager.current][0].school ? profileManager.queue[profileManager.current][0].school : profileManager.studentContent[0].school,
-        student_id: profileManager.queue[profileManager.current][0].student_id ? profileManager.queue[profileManager.current][0].student_id : profileManager.studentContent[0].student_id,
-        discord_id: profileManager.queue[profileManager.current][0].discord_id ? profileManager.queue[profileManager.current][0].discord_id : profileManager.studentContent[0].discord_id
+        id: profileManager.studentContent[1] === "null" ?
+            null : profileManager.studentContent[1],
+        department: profileManager.queue[profileManager.current][0].department ?
+            profileManager.queue[profileManager.current][0].department : profileManager.studentContent[0].department,
+        lms_username: profileManager.queue[profileManager.current][0].lms_username ?
+            profileManager.queue[profileManager.current][0].lms_username : profileManager.studentContent[0].lms_username,
+        name: profileManager.queue[profileManager.current][0].name ?
+            profileManager.queue[profileManager.current][0].name : profileManager.studentContent[0].name,
+        official_email: profileManager.queue[profileManager.current][0].official_email ?
+            profileManager.queue[profileManager.current][0].official_email : profileManager.studentContent[0].official_email,
+        personal_email: profileManager.queue[profileManager.current][0].personal_email ?
+            profileManager.queue[profileManager.current][0].personal_email : profileManager.studentContent[0].personal_email,
+        phone: profileManager.queue[profileManager.current][0].phone ?
+            profileManager.queue[profileManager.current][0].phone : profileManager.studentContent[0].phone,
+        program: profileManager.queue[profileManager.current][0].program ?
+            profileManager.queue[profileManager.current][0].program : profileManager.studentContent[0].program,
+        school: profileManager.queue[profileManager.current][0].school ?
+            profileManager.queue[profileManager.current][0].school : profileManager.studentContent[0].school,
+        student_id: profileManager.queue[profileManager.current][0].student_id ?
+            profileManager.queue[profileManager.current][0].student_id : profileManager.studentContent[0].student_id,
+        discord_id: profileManager.queue[profileManager.current][0].discord_id ?
+            profileManager.queue[profileManager.current][0].discord_id : profileManager.studentContent[0].discord_id
     });
 
     const approveStudentProfile = async () => {

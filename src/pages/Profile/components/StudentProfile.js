@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
 import PrimaryButton from "../../../components/Buttons/PrimaryButton";
 import SimpleCard from "../../../components/Card/SimpleCard";
-import { bgColorStyles, borderColorStyles, pageLayoutStyles, transitioner } from "../../../utils/styles/styles";
+import { bgColorStyles, borderColorStyles, pageLayoutStyles, transitioner, textColorStyles } from "../../../utils/styles/styles";
 import { deleteStudentInfoUpdateRequest, getStudents, getStudentsInfoUpdateRequest } from "../../../db/remote/student";
 import { useLoadingScreen } from "../../../utils/contexts/LoadingScreenContext";
 import StudentInfoUpdateForm from "./StudentInfoUpdateForm";
 import { useParams } from "react-router-dom";
-
+import SecondaryButton from "../../../components/Buttons/SecondaryButton";
+import { useModal } from "../../../utils/contexts/ModalContext";
+import { domainKey, staffDomainValue } from "../../../utils/contants";
+import { getStoredUser } from "../../../db/local/user";
 
 const StudentProfile = ({ user }) => {
     const params = useParams();
+    const authUser = getStoredUser();
+    const { showModal } = useModal();
     const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
     const [student, setStudent] = useState({});
     const [updateRequest, setUpdateRequest] = useState({
@@ -17,18 +22,22 @@ const StudentProfile = ({ user }) => {
         showRequestForm: false,
     });
 
+
     useEffect(() => {
         (async () => {
             showLoadingScreen("Loading Profile...");
             loadProfile();
-            if (user)
-                loadProfileUpdateRequests();
+            loadProfileUpdateRequests();
             hideLoadingScreen();
         })();
     }, []);
 
     const loadProfile = async () => {
-        let email = user ? user.email : params.email;
+        let email = user?.email;
+
+        if (authUser[domainKey] === staffDomainValue && params.email)
+            email = params.email
+
         const profile = await getStudents({ official_emails: [email] });
 
         if (profile[0][1])
@@ -36,7 +45,12 @@ const StudentProfile = ({ user }) => {
     }
 
     const loadProfileUpdateRequests = async () => {
-        const infoUpdateReq = await getStudentsInfoUpdateRequest(user.email);
+        let email = user?.email;
+
+        if (authUser[domainKey] === staffDomainValue && params.email)
+            email = params.email
+
+        const infoUpdateReq = await getStudentsInfoUpdateRequest(email);
 
         if (infoUpdateReq[0][1]) {
             setUpdateRequest({ ...updateRequest, pendingRequest: infoUpdateReq[0][1] });
@@ -80,6 +94,57 @@ const StudentProfile = ({ user }) => {
         }
     }
 
+    const getAdvisingVerificationCode = () => {
+        if (updateRequest.pendingRequest) {
+            showModal("Profile Approval Pending", <div className="flex flex-col justify-center w-[100%]">
+                <div className="mx-auto">
+                    You have a pending profile update request.
+                </div>
+                <div className="mx-auto text-red-400 font-bold text-[1.1rem] text-center">
+                    Please have an advisor approve your profile update request to generate your advising verification code.
+                </div>
+            </div>);
+        } else if (
+            student.name === ""
+            || student.program === ""
+            || student.official_email === ""
+            || student.personal_email === ""
+            || student.student_id === ""
+            || student.phone === ""
+        ) {
+            showModal("Incomplete Profile", <div className="flex flex-col justify-center w-[100%]">
+                <div className="mx-auto">
+                    Your profile is incomplete.
+                </div>
+                <div className="mx-auto text-red-400 font-bold text-[1.1rem] text-center">
+                    Please update your profile first to get your advising verification code.
+                </div>
+            </div>);
+        } else {
+            let advising_verification_code = student.advising_verification_code
+            if (!advising_verification_code)
+                advising_verification_code = `${student.student_id}-APRTCF`;
+
+            showModal("Advising Verification Code", <div className="flex flex-col justify-center w-[100%]">
+                <div className="mx-auto">
+                    Your Advising Verification Code is:
+                </div>
+                <div className="mx-auto text-red-400 font-bold text-[1.1rem] text-center">
+                    <SecondaryButton
+                        customStyle={`flex justify-center cursor-copy ${transitioner.simple} font-['Source_Code_Pro']`}
+                        clickFunction={() => navigator.clipboard.writeText(advising_verification_code)}
+                        text={
+                            <div className="flex flex-row gap-2">
+                                <span className="material-icons-round mr-3">content_copy</span>
+                                <span className="my-auto">{advising_verification_code}</span>
+                            </div>
+                        }
+                    />
+                </div>
+            </div>);
+        }
+    }
+
     return <div className={`${pageLayoutStyles.scrollable}`}>
         <div className="flex flex-col md:flex-row gap-10">
             <SimpleCard title="Student Profile" customStyle={`w-[100%] mx-auto`}>
@@ -92,34 +157,37 @@ const StudentProfile = ({ user }) => {
                             <div className="flex flex-col md:flex-row gap-2.5 md:gap-5 md:p-2 rounded-3xl">
                                 <div className={getInfoContainerClasses("sm")}>
                                     <span className={getIconClasses("patternA")}>badge</span>
-                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{student.student_id ? student.student_id : "\u00A0"}</span>
+                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{student.student_id ?? "\u00A0"}</span>
                                 </div>
                                 <div className={getInfoContainerClasses("md")}>
                                     <span className={getIconClasses("patternB")}>person</span>
-                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{user ? user.displayName : student.name}</span>
+                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{user?.displayName ?? student.name}</span>
                                 </div>
                             </div>
                             <div className="flex flex-col md:flex-row gap-2.5 md:gap-5 md:p-2 rounded-3xl">
                                 <div className={getInfoContainerClasses("sm")}>
                                     <span className={getIconClasses("patternC")}>school</span>
-                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{student.program ? student.program : "\u00A0"}</span>
+                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{student.program ?? "\u00A0"}</span>
                                 </div>
                                 <div className={getInfoContainerClasses("md")}>
                                     <span className={getIconClasses("patternA")}>email</span>
-                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{user ? user.email : student.official_email}</span>
+                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{user?.email ?? student.official_email}</span>
                                 </div>
                             </div>
                             <div className="flex flex-col md:flex-row gap-2.5 md:gap-5 md:p-2 rounded-3xl">
                                 <div className={getInfoContainerClasses("sm")}>
                                     <span className={getIconClasses("patternB")}>phone</span>
-                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{student.phone ? student.phone : "\u00A0"}</span>
+                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{student.phone ?? "\u00A0"}</span>
                                 </div>
                                 <div className={getInfoContainerClasses("md")}>
                                     <span className={getIconClasses("patternC")}>discord</span>
-                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{student.discord_id ? student.discord_id : "\u00A0"}</span>
+                                    <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{student.discord_id ?? "\u00A0"}</span>
                                 </div>
                             </div>
                             <div className="flex flex-col md:flex-row gap-5 md:gap-5 md:p-2 rounded-3xl">
+                                <div className={getInfoContainerClasses("sm")}>
+                                    <SecondaryButton customStyle={"w-100% "} text={"Advising Verification Code"} clickFunction={getAdvisingVerificationCode} />
+                                </div>
                                 <div className={getInfoContainerClasses("md")}>
                                     <span className={getIconClasses("patternA")}>alternate_email</span>
                                     <span className={`px-3 my-auto text-[0.9rem] w-[100%]`}>{student.personal_email ? student.personal_email : "\u00A0"}</span>

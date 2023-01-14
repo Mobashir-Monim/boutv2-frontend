@@ -70,12 +70,12 @@ const App = () => {
 
                     <Route path="/" element={<Middleware checks={["hasRole:student-profile-manager"]} />}>
                         <Route path="/profile/manage/students" element={<StudentProfileManager />} />
-                        <Route path="/profile/view/:email/student" element={<StudentProfile />} />
+                        <Route path="/profile/view/student/:email" element={<StudentProfile />} />
                     </Route>
 
                     <Route path="/" element={<Middleware checks={["hasRole:faculty-profile-manager"]} />}>
                         <Route path="/profile/manage/faculty" element={<FacultyProfileManager />} />
-                        <Route path="/profile/view/:email/faculty" element={<FacultyProfile />} />
+                        <Route path="/profile/view/faculty/:email" element={<FacultyProfile />} />
                     </Route>
 
                     <Route path="/" element={<Middleware checks={["faculty"]} />}>

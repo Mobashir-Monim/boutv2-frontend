@@ -86,7 +86,7 @@ const StudentInfoUpdateForm = ({ updateRequest, setUpdateRequest, student, proce
         { check: validPersonalEmail, error: "Invalid Personal Email Address" },
         { check: validStudentProgram, error: "Invalid Program" },
         { check: validPhone, error: "Invalid Phone Number" },
-        { check: validDiscordID, error: <p>Invalid Discord ID, read more <span className={`${textColorStyles.clickable} cursor-pointer`} onClick={displayDiscordInfo}>here</span></p> },
+        // { check: validDiscordID, error: <p>Invalid Discord ID, read more <span className={`${textColorStyles.clickable} cursor-pointer`} onClick={displayDiscordInfo}>here</span></p> },
     ];
 
     const validateInformationUpdate = () => {
