@@ -149,12 +149,10 @@ const StudentProfileManager = () => {
     const approveStudentProfile = async () => {
         showLoadingScreen("Approving changes, please wait");
         let queue = [...profileManager.queue];
-        queue.splice(profileManager.current, 1);
-        console.log(generateStudentObject());
-        // await setStudent(generateStudentObject())
-        // await setStudent(generateStudentObject());
-        // await deleteStudentInfoUpdateRequest(profileManager.queue[profileManager.current][1]);
-        // setProfileManager({ ...profileManager, queue: queue, studentContent: [{}, null] })
+        await setStudent(generateStudentObject())
+        await setStudent(generateStudentObject());
+        await deleteStudentInfoUpdateRequest(profileManager.queue[profileManager.current][1]);
+        setProfileManager({ ...profileManager, queue: queue, studentContent: [{}, null] })
         hideLoadingScreen();
     }
 
