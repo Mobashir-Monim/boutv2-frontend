@@ -185,8 +185,8 @@ const StudentProfile = ({ user }) => {
                                 </div>
                             </div>
                             <div className="flex flex-col md:flex-row gap-5 md:gap-5 md:p-2 rounded-3xl">
-                                <div className={getInfoContainerClasses("sm")}>
-                                    <SecondaryButton customStyle={"w-100% "} text={"Advising Verification Code"} clickFunction={getAdvisingVerificationCode} />
+                                <div className={`w-[100%] md:w-[35%] flex flex-col justify-center bg-[#171717]/[0.1] dark:bg-[#fff]/[0.3] rounded-3xl`}>
+                                    <SecondaryButton customStyle="text-[0.9rem] mx-auto w-[90%]" text={"Advising Verification Code"} clickFunction={getAdvisingVerificationCode} />
                                 </div>
                                 <div className={getInfoContainerClasses("md")}>
                                     <span className={getIconClasses("patternA")}>alternate_email</span>
