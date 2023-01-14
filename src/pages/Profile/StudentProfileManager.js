@@ -176,11 +176,12 @@ const StudentProfileManager = () => {
 
     const fetchStudentInfoUpdateRequest = async () => {
         let queue = await getStudentsInfoUpdateRequest(profileManager.searchAddress);
-
-        if (!queue[0][1])
-            queue = [];
-
-        setProfileManager({ ...profileManager, queue: queue });
+        setProfileManager({
+            ...profileManager,
+            queue: queue[0][1] ? queue : [],
+            current: null,
+            studentContent: [{}, null],
+        });
     }
 
     return <div className={`${pageLayoutStyles.scrollable}`}>
@@ -206,3 +207,5 @@ const StudentProfileManager = () => {
 }
 
 export default StudentProfileManager;
+
+// md.ali.razin@g.bracu.ac.bd
