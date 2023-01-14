@@ -51,7 +51,9 @@ const StudentInfoUpdateForm = ({ updateRequest, setUpdateRequest, student, proce
         setInformationUpdate(studentClone);
     }, [student]);
 
-    const validPersonalEmail = () => isEmail({ value: informationUpdate.personal_email });
+    const validPersonalEmail = () => isEmail({ value: informationUpdate.personal_email })
+        && !informationUpdate.personal_email.endsWith("@g.bracu.ac.bd")
+        && !informationUpdate.personal_email.endsWith("@bracu.ac.bd");
     const validPhone = () => informationUpdate.phone.length === 11 && informationUpdate.phone.startsWith("01");
     const validStudentID = () =>
         informationUpdate.student_id.length === 8 &&

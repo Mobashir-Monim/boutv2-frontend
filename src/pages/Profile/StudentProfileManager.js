@@ -171,6 +171,7 @@ const StudentProfileManager = () => {
             profileManager.studentContent[0].discord_id,
         department: "CSE",
         school: "SDS",
+        advising_verification_code: profileManager.studentContent[0].advising_verification_code
     });
 
     const approveStudentProfile = async () => {
@@ -230,5 +231,3 @@ const StudentProfileManager = () => {
 }
 
 export default StudentProfileManager;
-
-// md.ali.razin@g.bracu.ac.bd
