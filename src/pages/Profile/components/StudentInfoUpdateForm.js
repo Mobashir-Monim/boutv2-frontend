@@ -80,6 +80,15 @@ const StudentInfoUpdateForm = ({ updateRequest, setUpdateRequest, student, proce
 
         return flag;
     }
+    const validateInfoDifference = () => {
+        let flag = informationUpdate.student_id === student.student_id;
+        flag &= informationUpdate.personal_email === student.personal_email;
+        flag &= informationUpdate.discord_id === student.discord_id;
+        flag &= informationUpdate.phone === student.phone;
+        flag &= informationUpdate.program === student.program;
+
+        return !flag;
+    }
 
     const submitValidations = [
         { check: validStudentID, error: "Invalid Student ID" },
@@ -87,6 +96,7 @@ const StudentInfoUpdateForm = ({ updateRequest, setUpdateRequest, student, proce
         { check: validStudentProgram, error: "Invalid Program" },
         { check: validPhone, error: "Invalid Phone Number" },
         // { check: validDiscordID, error: <p>Invalid Discord ID, read more <span className={`${textColorStyles.clickable} cursor-pointer`} onClick={displayDiscordInfo}>here</span></p> },
+        { check: validateInfoDifference, error: "No change in information, cannot request profile update" }
     ];
 
     const validateInformationUpdate = () => {

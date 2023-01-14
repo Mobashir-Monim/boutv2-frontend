@@ -5,7 +5,7 @@ import SimpleCard from "../../components/Card/SimpleCard";
 import { LineInput, TextInput } from "../../components/FormInputs/LabeledInputs";
 import { getStudents, getStudentsInfoUpdateRequest, getStudentsInfoUpdateRequests, setStudent, deleteStudentInfoUpdateRequest } from "../../db/remote/student";
 import { deepClone } from "../../utils/functions/deepClone";
-import { borderColorStyles, pageLayoutStyles, transitioner } from "../../utils/styles/styles";
+import { bgColorStyles, borderColorStyles, pageLayoutStyles, transitioner } from "../../utils/styles/styles";
 import { useLoadingScreen } from "../../utils/contexts/LoadingScreenContext";
 
 const StudentProfileManager = () => {
@@ -102,16 +102,43 @@ const StudentProfileManager = () => {
             </div>
             {updateIterables.map(item => <div className={`flex flex-row rounded-xl bg-blue-300/[0.5] dark:bg-violet-500/[0.5]`} key={item.key}>
                 <span className={`material-icons-round w-[calc(2.5rem-4px)] my-auto flex justify-center !h-[calc(2.5rem-5px)] p-2 text-[calc(1.5rem-4px)] text-black/[0.5] dark:text-white`}>{item.icon}</span>
-                <div className="w-[100%]">
-                    <div className={`rounded-tr-xl rounded-l-none my-auto text-[0.8rem] bg-[rgba(255,51,51,0.7)] dark:bg-[rgba(255,51,51,0.5)] py-1 text-center font-bold`}>{profileManager.studentContent[0][item.key] ? profileManager.studentContent[0][item.key] : "\u00A0"}</div>
-                    <div className={`rounded-br-xl rounded-l-none my-auto text-[0.8rem] bg-[rgba(51,255,51,0.5)] dark:bg-[rgba(51,255,51,0.3)] py-1 text-center font-bold`}>{profileManager.queue[profileManager.current][0][item.key] ? profileManager.queue[profileManager.current][0][item.key] : "\u00A0"}</div>
-                </div>
+                {displayRowInfo(item)}
             </div>)}
             <div className="flex flex-row justify-evenly">
-                <BaseButton style={`bg-rose-600/[0.7] hover:bg-rose-600 !rounded-full w-[42px] h-[42px] !p-0 flex flex-col justify-center ${transitioner.simple}`} clickFunction={declineStudentProfile} text={<span className="material-icons-round mx-auto">clear</span>} />
-                <BaseButton style={`bg-teal-600/[0.7] hover:bg-teal-600 !rounded-full w-[42px] h-[42px] !p-0 flex flex-col justify-center ${transitioner.simple}`} clickFunction={approveStudentProfile} text={<span className="material-icons-round mx-auto">check</span>} />
+                <BaseButton
+                    style={`bg-rose-600/[0.7] hover:bg-rose-600 !rounded-full w-[42px] h-[42px] !p-0 flex flex-col justify-center ${transitioner.simple}`}
+                    clickFunction={declineStudentProfile}
+                    text={<span className="material-icons-round mx-auto">clear</span>}
+                />
+                <BaseButton
+                    style={`bg-teal-600/[0.7] hover:bg-teal-600 !rounded-full w-[42px] h-[42px] !p-0 flex flex-col justify-center ${transitioner.simple}`}
+                    clickFunction={approveStudentProfile}
+                    text={<span className="material-icons-round mx-auto">check</span>}
+                />
             </div>
         </div>
+    }
+
+    const displayRowInfo = item => {
+        if (profileManager.studentContent[0][item.key] === profileManager.queue[profileManager.current][0][item.key]) {
+            return <div className="w-[100%]">
+                <div
+                    className={`rounded-r-xl rounded-l-none my-auto text-[0.8rem] ${bgColorStyles.inverse} py-4 text-center font-bold`}>
+                    {profileManager.studentContent[0][item.key] ? profileManager.studentContent[0][item.key] : "\u00A0"}
+                </div>
+            </div>
+        } else {
+            return <div className="w-[100%]">
+                <div
+                    className={`rounded-tr-xl rounded-l-none my-auto text-[0.8rem] bg-[rgba(255,51,51,0.7)] dark:bg-[rgba(255,51,51,0.5)] py-1 text-center font-bold`}>
+                    {profileManager.studentContent[0][item.key] ? profileManager.studentContent[0][item.key] : "\u00A0"}
+                </div>
+                <div
+                    className={`rounded-br-xl rounded-l-none my-auto text-[0.8rem] bg-[rgba(51,255,51,0.5)] dark:bg-[rgba(51,255,51,0.3)] py-1 text-center font-bold`}>
+                    {profileManager.queue[profileManager.current][0][item.key] ? profileManager.queue[profileManager.current][0][item.key] : "\u00A0"}
+                </div>
+            </div>
+        }
     }
 
     const displayRequestInfo = () => {
@@ -149,8 +176,8 @@ const StudentProfileManager = () => {
     const approveStudentProfile = async () => {
         showLoadingScreen("Approving changes, please wait");
         let queue = [...profileManager.queue];
+        queue.splice(profileManager.current, 1);
         await setStudent(generateStudentObject())
-        await setStudent(generateStudentObject());
         await deleteStudentInfoUpdateRequest(profileManager.queue[profileManager.current][1]);
         setProfileManager({ ...profileManager, queue: queue, studentContent: [{}, null] })
         hideLoadingScreen();
