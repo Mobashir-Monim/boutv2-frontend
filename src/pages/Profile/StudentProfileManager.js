@@ -127,35 +127,34 @@ const StudentProfileManager = () => {
     const generateStudentObject = () => ({
         id: profileManager.studentContent[1] === "null" ?
             null : profileManager.studentContent[1],
-        department: profileManager.queue[profileManager.current][0].department ?
-            profileManager.queue[profileManager.current][0].department : profileManager.studentContent[0].department,
-        lms_username: profileManager.queue[profileManager.current][0].lms_username ?
-            profileManager.queue[profileManager.current][0].lms_username : profileManager.studentContent[0].lms_username,
-        name: profileManager.queue[profileManager.current][0].name ?
-            profileManager.queue[profileManager.current][0].name : profileManager.studentContent[0].name,
-        official_email: profileManager.queue[profileManager.current][0].official_email ?
-            profileManager.queue[profileManager.current][0].official_email : profileManager.studentContent[0].official_email,
-        personal_email: profileManager.queue[profileManager.current][0].personal_email ?
-            profileManager.queue[profileManager.current][0].personal_email : profileManager.studentContent[0].personal_email,
-        phone: profileManager.queue[profileManager.current][0].phone ?
-            profileManager.queue[profileManager.current][0].phone : profileManager.studentContent[0].phone,
-        program: profileManager.queue[profileManager.current][0].program ?
-            profileManager.queue[profileManager.current][0].program : profileManager.studentContent[0].program,
-        school: profileManager.queue[profileManager.current][0].school ?
-            profileManager.queue[profileManager.current][0].school : profileManager.studentContent[0].school,
-        student_id: profileManager.queue[profileManager.current][0].student_id ?
-            profileManager.queue[profileManager.current][0].student_id : profileManager.studentContent[0].student_id,
-        discord_id: profileManager.queue[profileManager.current][0].discord_id ?
-            profileManager.queue[profileManager.current][0].discord_id : profileManager.studentContent[0].discord_id
+        lms_username: profileManager.queue[profileManager.current][0].lms_username ??
+            profileManager.studentContent[0].lms_username,
+        name: profileManager.queue[profileManager.current][0].name ??
+            profileManager.studentContent[0].name,
+        official_email: profileManager.queue[profileManager.current][0].email,
+        personal_email: profileManager.queue[profileManager.current][0].personal_email ??
+            profileManager.studentContent[0].personal_email,
+        phone: profileManager.queue[profileManager.current][0].phone ??
+            profileManager.studentContent[0].phone,
+        program: profileManager.queue[profileManager.current][0].program ??
+            profileManager.studentContent[0].program,
+        student_id: profileManager.queue[profileManager.current][0].student_id ??
+            profileManager.studentContent[0].student_id,
+        discord_id: profileManager.queue[profileManager.current][0].discord_id ??
+            profileManager.studentContent[0].discord_id,
+        department: "CSE",
+        school: "SDS",
     });
 
     const approveStudentProfile = async () => {
         showLoadingScreen("Approving changes, please wait");
         let queue = [...profileManager.queue];
         queue.splice(profileManager.current, 1);
-        await setStudent(generateStudentObject());
-        await deleteStudentInfoUpdateRequest(profileManager.queue[profileManager.current][1]);
-        setProfileManager({ ...profileManager, queue: queue, studentContent: [{}, null] })
+        console.log(generateStudentObject());
+        // await setStudent(generateStudentObject())
+        // await setStudent(generateStudentObject());
+        // await deleteStudentInfoUpdateRequest(profileManager.queue[profileManager.current][1]);
+        // setProfileManager({ ...profileManager, queue: queue, studentContent: [{}, null] })
         hideLoadingScreen();
     }
 
@@ -179,7 +178,6 @@ const StudentProfileManager = () => {
         setProfileManager({
             ...profileManager,
             queue: queue[0][1] ? queue : [],
-            current: null,
             studentContent: [{}, null],
         });
     }
