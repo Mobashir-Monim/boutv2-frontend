@@ -133,7 +133,7 @@ export const getStudentsInfoUpdateRequest = async email => {
 
 export const getStudentsInfoUpdateRequests = async () => {
     let results = [];
-    const snapshots = await getDocs(query(studentInfoUpdateRequestColRef, orderBy("email"), limit(5)));
+    const snapshots = await getDocs(query(studentInfoUpdateRequestColRef, orderBy("email", "desc"), limit(5)));
 
     return firestoreSnapshotFormatter(snapshots, results);
 }
