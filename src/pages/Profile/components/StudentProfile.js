@@ -73,7 +73,7 @@ const StudentProfile = ({ user }) => {
     }
 
     const getInfoUpdateForm = () => {
-        if (user) {
+        if (user && Object.keys(student).length > 0) {
             if (updateRequest.pendingRequest === null)
                 return <Spinner dimensions={"h-10 w-10"} />;
 

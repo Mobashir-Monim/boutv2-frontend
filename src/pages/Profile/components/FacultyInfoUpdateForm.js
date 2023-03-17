@@ -1,13 +1,13 @@
 import { useState } from "react";
-import PrimaryButton from "../../components/Buttons/PrimaryButton";
-import SecondaryButton from "../../components/Buttons/SecondaryButton";
-import { LineInput, SelectInput } from "../../components/FormInputs/LabeledInputs";
-import { setFacultyInfoUpdateRequest } from "../../db/remote/faculty";
-import { useAuth } from "../../utils/contexts/AuthContext";
-import { useLoadingScreen } from "../../utils/contexts/LoadingScreenContext";
-import { useModal } from "../../utils/contexts/ModalContext";
-import { deepClone } from "../../utils/functions/deepClone";
-import { transitioner } from "../../utils/styles/styles";
+import PrimaryButton from "../../../components/Buttons/PrimaryButton";
+import SecondaryButton from "../../../components/Buttons/SecondaryButton";
+import { LineInput, SelectInput } from "../../../components/FormInputs/LabeledInputs";
+import { setFacultyInfoUpdateRequest } from "../../../db/remote/faculty";
+import { useAuth } from "../../../utils/contexts/AuthContext";
+import { useLoadingScreen } from "../../../utils/contexts/LoadingScreenContext";
+import { useModal } from "../../../utils/contexts/ModalContext";
+import { deepClone } from "../../../utils/functions/deepClone";
+import { transitioner } from "../../../utils/styles/styles";
 
 const FacultyInfoUpdateForm = ({ updateRequest, setUpdateRequest, faculty, processSubmittedUpdateRequest }) => {
     const { user } = useAuth();

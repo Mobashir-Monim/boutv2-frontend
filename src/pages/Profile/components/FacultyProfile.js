@@ -7,7 +7,7 @@ import { deleteFacultyInfoUpdateRequest, getFacultyInfoUpdateRequest, getFaculty
 import { useAuth } from "../../../utils/contexts/AuthContext";
 import Spinner from "../../../components/Utils/Spinner";
 import { userHasRole } from "../../../db/remote/user";
-import FacultyInfoUpdateForm from "../FacultyInfoUpdateForm";
+import FacultyInfoUpdateForm from "./FacultyInfoUpdateForm";
 import { useParams } from "react-router-dom";
 import { getStoredUser } from "../../../db/local/user";
 import { domainKey, staffDomainValue } from "../../../utils/contants";
@@ -51,7 +51,6 @@ const FacultyProfile = ({ user }) => {
             default: user.email,
             width: "md",
         },
-
         {
             id: "degree",
             icon: "workspace_premium",
@@ -106,10 +105,10 @@ const FacultyProfile = ({ user }) => {
         (async () => {
             if (studentProfileManager === null || facultyProfileManager === null) {
                 showLoadingScreen("Loading Profile...");
-                loadProfile();
+                await loadProfile();
                 await isStudentProfileManager();
                 await isFacultyProfileManager();
-                loadProfileUpdateRequests();
+                await loadProfileUpdateRequests();
                 hideLoadingScreen();
             }
         })();
@@ -161,7 +160,7 @@ const FacultyProfile = ({ user }) => {
     const processSubmittedUpdateRequest = () => setUpdateRequest({ showRequestForm: false, pendingRequest: true });
 
     const getInfoUpdateForm = () => {
-        if (user) {
+        if (user && Object.keys(faculty).length > 0) {
             if (updateRequest.pendingRequest === null)
                 return <Spinner dimensions={"h-10 w-10 mx-auto"} />;
 
