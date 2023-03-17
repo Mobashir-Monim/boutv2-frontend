@@ -43,7 +43,7 @@ const SideNav = ({ showNav, toggleNav, collapseNav }) => {
         });
     }
 
-    return <nav className={`${widthClasses} flex flex-col py-2 lg:py-10 gap-1 z-[50] fixed top-0 overflow-hidden bg-blue-700 dark:bg-blue-800 ${transitioner.simple} drop-shadow-lg`}>
+    return <nav className={`${widthClasses} flex flex-col py-2 lg:py-10 gap-1 z-[50] fixed top-0 overflow-hidden bg-blue-700 dark:bg-blue-800 ${transitioner.simple} drop-shadow-lg !tracking-tight`}>
         <div className={`flex flex-row justify-start ${transitioner.simple} mt-1 lg:w-[100%] mx-auto ${showNav ? "bg-[#fff]/[0.3] hover:bg-[#171717]/[0.4]" : "bg-[#171717]/[0.4] hover:bg-[#fff]/[0.3]"} rounded-full lg:rounded-xl cursor-pointer`} onClick={toggleNav}>
             <span className={`mx-auto relative px-3 py-3 lg:py-2 inline text-center material-icons-round font-bold transition-all duration-500 ease-linear ${arrowContainerClasses}`}>
                 <span className={`material-icons-round font-bold ${transitioner.simple} text-white ${arrowClasses}`} onClick={toggleNav}>arrow_forward_ios</span>

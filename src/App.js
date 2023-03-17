@@ -55,10 +55,10 @@ const App = () => {
     return <>
         <SideNav showNav={sideNavStatus.showNav} toggleNav={toggleSideNav} collapseNav={collapseNav} />
 
-        <div className={textColorStyles.simple}>
+        <div className={textColorStyles.simple + " font-normal tracking-wide"}>
             <Modal navShown={sideNavStatus.showNav} />
         </div>
-        <div className={`w-[100%] min-h-[100vh] bg-[#FDFBF9] dark:bg-[#28282B] ${user ? `lg:ml-auto pt-[calc(70px+1rem)] pb-5 lg:py-5 ${sideNavStatus.showNav ? "lg:w-[calc(100vw-250px)]" : "lg:w-[calc(100vw-70px-1rem)]"}` : "lg:mx-auto"} text-[#171717]/[0.7] font-bold dark:text-white ${transitioner.simple}`}>
+        <div className={`w-[100%] min-h-[100vh] bg-[#FDFBF9] dark:bg-[#28282B] font-normal tracking-tight ${user ? `lg:ml-auto pt-[calc(70px+1rem)] pb-5 lg:py-5 ${sideNavStatus.showNav ? "lg:w-[calc(100vw-250px)]" : "lg:w-[calc(100vw-70px-1rem)]"}` : "lg:mx-auto"} text-[#171717]/[0.7] font-bold dark:text-white ${transitioner.simple}`}>
             <Routes>
                 <Route path="/" element={<Middleware checks={["auth"]} />}>
                     <Route path="/" element={<Dashboard />} />
@@ -99,7 +99,8 @@ const App = () => {
                         </Route>
 
                         <Route path="/routine" element={<UnderDevelopment />} />
-                        <Route path="/course-config" element={<UnderDevelopment />} />
+                        {/* <Route path="/course-config" element={<UnderDevelopment />} /> */}
+                        <Route path="/course-config" element={<CourseConfig />} />
                         <Route path="/obe" element={<UnderDevelopment />} />
                     </Route>
 

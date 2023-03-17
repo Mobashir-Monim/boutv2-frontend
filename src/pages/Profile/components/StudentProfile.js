@@ -10,6 +10,7 @@ import SecondaryButton from "../../../components/Buttons/SecondaryButton";
 import { useModal } from "../../../utils/contexts/ModalContext";
 import { domainKey, staffDomainValue } from "../../../utils/contants";
 import { getStoredUser } from "../../../db/local/user";
+import Spinner from "../../../components/Utils/Spinner";
 
 const StudentProfile = ({ user }) => {
     const params = useParams();
@@ -18,7 +19,7 @@ const StudentProfile = ({ user }) => {
     const { showLoadingScreen, hideLoadingScreen } = useLoadingScreen();
     const [student, setStudent] = useState({});
     const [updateRequest, setUpdateRequest] = useState({
-        pendingRequest: true,
+        pendingRequest: null,
         showRequestForm: false,
     });
 
@@ -59,7 +60,7 @@ const StudentProfile = ({ user }) => {
         }
     }
 
-    const processSubmittedUpdateRequest = () => setUpdateRequest({ ...updateRequest, pendingRequest: true });
+    const processSubmittedUpdateRequest = () => setUpdateRequest({ showRequestForm: false, pendingRequest: true });
 
     const getInfoContainerClasses = width => `flex flex-row w-[100%] ${width === "sm" ? "md:w-[35%]" : "md:w-[50%]"} justify-start bg-[#171717]/[0.1] dark:bg-[#fff]/[0.3] rounded-3xl`;
     const getIconClasses = bgColor => `material-icons-round ${bgColorStyles[bgColor]} w-[44px] flex justify-center border-2 ${borderColorStyles.simple} rounded-full p-2 text-black/[0.5] dark:text-white`;
@@ -73,6 +74,9 @@ const StudentProfile = ({ user }) => {
 
     const getInfoUpdateForm = () => {
         if (user) {
+            if (updateRequest.pendingRequest === null)
+                return <Spinner dimensions={"h-10 w-10"} />;
+
             if (updateRequest.pendingRequest) {
                 return <div className="flex flex-col gap-5">
                     <h1 className="text-center">You have an existing update request, please visit your thesis supervisor/a full-time faculty member/DCO for approval.</h1>
@@ -81,7 +85,7 @@ const StudentProfile = ({ user }) => {
             } else {
                 return <>
                     <div className={`flex justify-center ${(updateRequest.showRequestForm) ? "h-[0px]" : "h-[40px]"} ${transitioner.simple} overflow-hidden`}>
-                        <PrimaryButton text="Need to update your info?" customStyle="w-[100%] md:w-[50%]" clickFunction={() => setUpdateRequest({ ...updateRequest, showRequestForm: true })} />
+                        <PrimaryButton text="Update Profile" customStyle="w-[100%] md:w-[50%]" clickFunction={() => setUpdateRequest({ ...updateRequest, showRequestForm: true })} />
                     </div>
                     <StudentInfoUpdateForm
                         updateRequest={updateRequest}

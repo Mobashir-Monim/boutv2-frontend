@@ -1,10 +1,12 @@
 import { db } from "./firebase";
-import { collection, query, where, getDocs, addDoc, updateDoc, doc, orderBy } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, updateDoc, doc, orderBy, limit, deleteDoc } from "firebase/firestore";
 
 import { firestoreSnapshotFormatter } from "../../utils/functions/firestoreSnapshotFormatter";
 
 const facultyCollection = "faculty_members";
+const facultyInfoUpdateRequestCollection = "faculty_info_update_requests";
 const facultyColRef = collection(db, facultyCollection);
+const facultyInfoUpdateRequestColRef = collection(db, facultyInfoUpdateRequestCollection);
 
 export const getFacultyMember = async ({ email }) => {
     let results = []
@@ -141,4 +143,33 @@ const updateFaculty = async ({
     });
 
     return docRef;
+}
+
+export const getFacultyInfoUpdateRequest = async email => {
+    let results = [];
+    const snapshots = await getDocs(query(facultyInfoUpdateRequestColRef, where("email", "==", email)));
+
+    return firestoreSnapshotFormatter(snapshots, results);
+}
+
+export const getFacultyInfoUpdateRequests = async () => {
+    let results = [];
+    const snapshots = await getDocs(query(facultyInfoUpdateRequestColRef, orderBy("email", "desc"), limit(5)));
+
+    return firestoreSnapshotFormatter(snapshots, results);
+}
+
+export const setFacultyInfoUpdateRequest = async updateRequest => {
+    const existingReq = await getFacultyInfoUpdateRequest(updateRequest.email);
+
+    if (!existingReq[0][1]) {
+        await addDoc(facultyInfoUpdateRequestColRef, { ...updateRequest });
+        return "Successfully placed update request.";
+    } else {
+        return "You already have an existing request, please wait for it to be processed."
+    }
+}
+
+export const deleteFacultyInfoUpdateRequest = async id => {
+    await deleteDoc(doc(db, facultyInfoUpdateRequestCollection, id));
 }

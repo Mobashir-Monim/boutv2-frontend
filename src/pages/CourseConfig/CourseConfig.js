@@ -7,13 +7,22 @@ import SecondaryButton from "../../components/Buttons/SecondaryButton";
 import { LineInput, TextInput } from "../../components/FormInputs/MinifiedInputs";
 import { setOfferedSection } from "../../db/remote/course";
 import { v4 as uuidv4 } from "uuid";
+import { useSemesterSelect } from "../../utils/hooks/useSemesterSelect";
+import { useState } from "react";
 
 const CourseConfig = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const charList = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    const [selectedSemester, setSelectedSemester] = useState({ semester: "", year: "" });
 
     if (user.uid !== "36QlTRZox2Oc6QEqVFdSSK8eg4y1") navigate("/");
+
+    const setSemester = () => {
+        setSelectedSemester(semesterSelect.values);
+    }
+
+    const semesterSelect = useSemesterSelect(setSemester);
 
     const randGen = (idList = []) => {
         let id = "";
@@ -33,8 +42,8 @@ const CourseConfig = () => {
         return {
             code: code,
             section: section,
-            year: "2022",
-            semester: "Summer",
+            year: selectedSemester.year,
+            semester: selectedSemester.semester,
         }
     }
 
@@ -103,7 +112,7 @@ const CourseConfig = () => {
                     <LineInput customStyle={"w-[7%]"} />
                     <LineInput customStyle={"w-[23%]"} />
                 </div>
-                {/* <TextInput onChangeFn={tempFunc} /> */}
+                <TextInput onChangeFn={tempFunc} />
             </div>
         </SimpleCard>
     </div>
